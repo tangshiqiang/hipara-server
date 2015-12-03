@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Hipara | Users</title>
+    <meta name="robots" content="no-follow,no-index">
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.5 -->
+    <link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="../bootstrap/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- DataTables -->
+    <link rel="stylesheet" href="../plugins/datatables/dataTables.bootstrap.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="../dist/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="../dist/css/style.css">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="../dist/css/skins/_all-skins.min.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
+
+<body class="hold-transition skin-blue layout-top-nav">
+    <div class="wrapper">
+
+        <header class="main-header">
+            <nav class="navbar navbar-static-top">
+                <div class="container">
+                    <div class="navbar-header">
+                        <a href="home.html" class="navbar-brand"><b>Hipara</b></a>
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                    </div>
+
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
+                        <ul class="nav navbar-nav">
+                            <li>
+                                <a href="home.html">
+                                    <i class="glyphicon glyphicon-home"></i>
+                                    <span>Home</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="about.html">
+                                    <i class="glyphicon glyphicon-play"></i>
+                                    <span>About</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="glyphicon glyphicon-hdd"></i>
+                                    <span>APIs</span>
+                                </a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Rules <span class="caret"></span></a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a href="rule-extract.html">Extract</a></li>
+                                    <li><a href="rule-upload.html">Upload</a></li>
+                                </ul>
+                            </li>
+                            <li class="active">
+                                <a href="users.html">
+                                    <i class="glyphicon glyphicon-user"></i>
+                                    <span>Users</span>
+                                </a>
+                            </li>
+                        </ul>
+
+                    </div>
+                    <!-- /.navbar-collapse -->
+                    <!-- Navbar Right Menu -->
+                    <div class="navbar-custom-menu">
+                        <ul class="nav navbar-nav">
+                            <li class="dropdown user user-menu">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <img src="../dist/img/hip-logo.png" class="user-image img-circle" alt="User Image">
+                                    <span class="hidden-xs">Abs Lmn</span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li class="user-header">
+                                        <img src="../dist/img/hip-logo.png" class="img-circle" alt="User Image">
+                                        <p>
+                                            ABC Lmn - sometning title
+                                            <small>Lorem ipsum potem dorec djsh</small>
+                                        </p>
+                                    </li>
+                                    <li class="user-body">
+                                        <div class="col-xs-4 text-center">
+                                            <a href="#">Edit</a>
+                                        </div>
+                                        <div class="col-xs-4 text-center">
+                                            <a href="invite.html">Invite</a>
+                                        </div>
+                                        <div class="col-xs-4 text-center">
+                                            <a href="../index.html">Logout</a>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- /.navbar-custom-menu -->
+                </div>
+                <!-- /.container-fluid -->
+            </nav>
+        </header>
+        <!-- Full Width Column -->
+        <div class="content-wrapper">
+            <div class="container padding-lr-zero">
+                <!-- Content Header (Page header) -->
+                <section class="content-header">
+                    <h1>
+                        Users
+                    </h1>
+                    <ol class="breadcrumb">
+                        <li><a href="home.html"><i class="fa fa-dashboard"></i>Home</a></li>
+                        <li>Users</li>
+                    </ol>
+                </section>
+
+                <section class="content apis">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="box box-primary">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">Users</h3>
+                                </div>
+                                <div class="box-body">
+                                    <table id="example1" class="table table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Email</th>
+                                                <th>Role</th>
+                                                <th width="100">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Pratik Sahindrakar</td>
+                                                <td>pratik@bitroots.co</td>
+                                                <td>Technical head</td>
+                                                <td>
+                                                    <a href="#"><i class="glyphicon glyphicon-edit"></i></a>
+                                                    <a href="#"><i class="glyphicon glyphicon-trash"></i></a>
+                                                    <a href="#"><i class="glyphicon glyphicon-eye-open"></i></a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Pratik Sahindrakar</td>
+                                                <td>pratik@bitroots.co</td>
+                                                <td>Technical head</td>
+                                                <td>
+                                                    <a href="#"><i class="glyphicon glyphicon-edit"></i></a>
+                                                    <a href="#"><i class="glyphicon glyphicon-trash"></i></a>
+                                                    <a href="#"><i class="glyphicon glyphicon-eye-open"></i></a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Pratik Sahindrakar</td>
+                                                <td>pratik@bitroots.co</td>
+                                                <td>Technical head</td>
+                                                <td>
+                                                    <a href="#"><i class="glyphicon glyphicon-edit"></i></a>
+                                                    <a href="#"><i class="glyphicon glyphicon-trash"></i></a>
+                                                    <a href="#"><i class="glyphicon glyphicon-eye-open"></i></a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Pratik Sahindrakar</td>
+                                                <td>pratik@bitroots.co</td>
+                                                <td>Technical head</td>
+                                                <td>
+                                                    <a href="#"><i class="glyphicon glyphicon-edit"></i></a>
+                                                    <a href="#"><i class="glyphicon glyphicon-trash"></i></a>
+                                                    <a href="#"><i class="glyphicon glyphicon-eye-open"></i></a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Pratik Sahindrakar</td>
+                                                <td>pratik@bitroots.co</td>
+                                                <td>Technical head</td>
+                                                <td>
+                                                    <a href="#"><i class="glyphicon glyphicon-edit"></i></a>
+                                                    <a href="#"><i class="glyphicon glyphicon-trash"></i></a>
+                                                    <a href="#"><i class="glyphicon glyphicon-eye-open"></i></a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Pratik Sahindrakar</td>
+                                                <td>pratik@bitroots.co</td>
+                                                <td>Technical head</td>
+                                                <td>
+                                                    <a href="#"><i class="glyphicon glyphicon-edit"></i></a>
+                                                    <a href="#"><i class="glyphicon glyphicon-trash"></i></a>
+                                                    <a href="#"><i class="glyphicon glyphicon-eye-open"></i></a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Pratik Sahindrakar</td>
+                                                <td>pratik@bitroots.co</td>
+                                                <td>Technical head</td>
+                                                <td>
+                                                    <a href="#"><i class="glyphicon glyphicon-edit"></i></a>
+                                                    <a href="#"><i class="glyphicon glyphicon-trash"></i></a>
+                                                    <a href="#"><i class="glyphicon glyphicon-eye-open"></i></a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Pratik Sahindrakar</td>
+                                                <td>pratik@bitroots.co</td>
+                                                <td>Technical head</td>
+                                                <td>
+                                                    <a href="#"><i class="glyphicon glyphicon-edit"></i></a>
+                                                    <a href="#"><i class="glyphicon glyphicon-trash"></i></a>
+                                                    <a href="#"><i class="glyphicon glyphicon-eye-open"></i></a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Pratik Sahindrakar</td>
+                                                <td>pratik@bitroots.co</td>
+                                                <td>Technical head</td>
+                                                <td>
+                                                    <a href="#"><i class="glyphicon glyphicon-edit"></i></a>
+                                                    <a href="#"><i class="glyphicon glyphicon-trash"></i></a>
+                                                    <a href="#"><i class="glyphicon glyphicon-eye-open"></i></a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Pratik Sahindrakar</td>
+                                                <td>pratik@bitroots.co</td>
+                                                <td>Technical head</td>
+                                                <td>
+                                                    <a href="#"><i class="glyphicon glyphicon-edit"></i></a>
+                                                    <a href="#"><i class="glyphicon glyphicon-trash"></i></a>
+                                                    <a href="#"><i class="glyphicon glyphicon-eye-open"></i></a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Pratik Sahindrakar</td>
+                                                <td>pratik@bitroots.co</td>
+                                                <td>Technical head</td>
+                                                <td>
+                                                    <a href="#"><i class="glyphicon glyphicon-edit"></i></a>
+                                                    <a href="#"><i class="glyphicon glyphicon-trash"></i></a>
+                                                    <a href="#"><i class="glyphicon glyphicon-eye-open"></i></a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Pratik Sahindrakar</td>
+                                                <td>pratik@bitroots.co</td>
+                                                <td>Technical head</td>
+                                                <td>
+                                                    <a href="#"><i class="glyphicon glyphicon-edit"></i></a>
+                                                    <a href="#"><i class="glyphicon glyphicon-trash"></i></a>
+                                                    <a href="#"><i class="glyphicon glyphicon-eye-open"></i></a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Pratik Sahindrakar</td>
+                                                <td>pratik@bitroots.co</td>
+                                                <td>Technical head</td>
+                                                <td>
+                                                    <a href="#"><i class="glyphicon glyphicon-edit"></i></a>
+                                                    <a href="#"><i class="glyphicon glyphicon-trash"></i></a>
+                                                    <a href="#"><i class="glyphicon glyphicon-eye-open"></i></a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Pratik Sahindrakar</td>
+                                                <td>pratik@bitroots.co</td>
+                                                <td>Technical head</td>
+                                                <td>
+                                                    <a href="#"><i class="glyphicon glyphicon-edit"></i></a>
+                                                    <a href="#"><i class="glyphicon glyphicon-trash"></i></a>
+                                                    <a href="#"><i class="glyphicon glyphicon-eye-open"></i></a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Pratik Sahindrakar</td>
+                                                <td>pratik@bitroots.co</td>
+                                                <td>Technical head</td>
+                                                <td>
+                                                    <a href="#"><i class="glyphicon glyphicon-edit"></i></a>
+                                                    <a href="#"><i class="glyphicon glyphicon-trash"></i></a>
+                                                    <a href="#"><i class="glyphicon glyphicon-eye-open"></i></a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Pratik Sahindrakar</td>
+                                                <td>pratik@bitroots.co</td>
+                                                <td>Technical head</td>
+                                                <td>
+                                                    <a href="#"><i class="glyphicon glyphicon-edit"></i></a>
+                                                    <a href="#"><i class="glyphicon glyphicon-trash"></i></a>
+                                                    <a href="#"><i class="glyphicon glyphicon-eye-open"></i></a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Pratik Sahindrakar</td>
+                                                <td>pratik@bitroots.co</td>
+                                                <td>Technical head</td>
+                                                <td>
+                                                    <a href="#"><i class="glyphicon glyphicon-edit"></i></a>
+                                                    <a href="#"><i class="glyphicon glyphicon-trash"></i></a>
+                                                    <a href="#"><i class="glyphicon glyphicon-eye-open"></i></a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Email</th>
+                                                <th>Role</th>
+                                                <th width="100">Actions</th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                        <!-- /.box -->
+                    </div>
+                </section>
+                <!-- /.content -->
+            </div>
+        </div>
+        <!-- /.content-wrapper -->
+        <footer class="main-footer">
+            <div class="container">
+                <div class="pull-right">
+                    <b>Designed by <a href="http://www.bitroots.co">Bitroots</a></b>
+                </div>
+                <strong>Copyright &copy; <a href="#">Hipara</a></strong> All rights reserved.
+            </div>
+        </footer>
+
+        <!-- jQuery 2.1.4 -->
+        <script src="../plugins/jQuery/jQuery-2.1.4.min.js"></script>
+        <!-- Bootstrap 3.3.5 -->
+        <script src="../bootstrap/js/bootstrap.min.js"></script>
+        <!-- DataTables -->
+        <script src="../plugins/datatables/jquery.dataTables.min.js"></script>
+        <script src="../plugins/datatables/dataTables.bootstrap.min.js"></script>
+        <!-- SlimScroll -->
+        <script src="../plugins/slimScroll/jquery.slimscroll.min.js"></script>
+        <!-- FastClick -->
+        <script src="../plugins/fastclick/fastclick.min.js"></script>
+        <!-- AdminLTE App -->
+        <script src="../dist/js/app.min.js"></script>
+        <!-- AdminLTE for demo purposes -->
+        <script src="../dist/js/demo.js"></script>
+        <!-- page script -->
+        <script>
+            $(function() {
+                // $("#example1").DataTable();
+                $('#example1').DataTable({
+                    "paging": true,
+                    "lengthChange": false,
+                    "searching": false,
+                    "ordering": true,
+                    "info": true,
+                    "autoWidth": false
+                });
+            });
+        </script>
+</body>
+
+</html>
