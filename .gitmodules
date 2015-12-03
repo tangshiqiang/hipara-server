@@ -1,0 +1,3 @@
+[submodule "spikes/hipara-views"]
+	path = spikes/hipara-views
+	url = https://pratibhap@bitbucket.org/bitroots/hipara-views.git
