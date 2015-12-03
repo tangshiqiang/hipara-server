@@ -124,6 +124,8 @@ def logout_page(request):
 def get_index(request):
     from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
     from rule_manager.models import Rule
+    from rule_manager.forms import ImportFile
+    import_file_form = ImportFile()
     page = request.GET.get('page')
     if not page:
         page = 1
@@ -141,13 +143,11 @@ def get_index(request):
         rules = paginator.page(1)
     except EmptyPage:
         rules = paginator.page(paginator.num_pages)
-    return ['index.html', {'rule_list': rules, 'rule_count': rule_count, 'rules': [first_rule, last_rule]}]
+    return ['index.html', {'rule_list': rules, 'rule_count': rule_count, 'rules': [first_rule, last_rule], 'importFile': import_file_form}]
 
 
 # Main Page
 def index_view(request):
-    # print(request.GET.get('error'))
-    # print("Hi")
     if request.user.is_authenticated():
         data = get_index(request)
     else:

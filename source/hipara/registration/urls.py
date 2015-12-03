@@ -1,8 +1,7 @@
-from django.conf.urls import patterns, url
-
+from django.conf.urls import url
 from . import views
 
-urlpatterns = patterns('',
+urlpatterns = [
 
     # SignUp Page
     url(r'^register/(?P<token>\w+)/$', views.register, name='register'),
@@ -21,4 +20,4 @@ urlpatterns = patterns('',
 
     url(r'^invites/$', views.invite_page, name='invite_page'),
 
-)
+]

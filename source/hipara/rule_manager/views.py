@@ -1,19 +1,11 @@
-# Django Imports
-from django.db import transaction
+# from django.db import transaction
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404
-
-
-# Import Database Classes
 from .models import Rule, MetaData, RuleString, Condition, Category
 from registration.views import return_response
-
-# Import Rule Parser
-
 from . import rule_parser
 
 
-# Search
 def search(request):
     if not request.user.is_authenticated():
         error_line = "You need to be logged in to perform that action"
@@ -61,7 +53,9 @@ def search(request):
 
 
 def import_rules(request):
-    if(request.method == 'POST' and request.user.is_authenticated()):
+    from registration.views import get_index
+    data = get_index(request)[1]
+    if request.method == 'POST' and request.user.is_authenticated():
         from .forms import ImportFile
         import_file_form = ImportFile(request.POST, request.FILES)
         if import_file_form.is_valid():
@@ -74,45 +68,48 @@ def import_rules(request):
                     check = False
                     for rule_data in parsed_rules:
                         rule = Rule.objects.create(
-                            name = rule_data.get('name'),
-                            description = "",
-                            category = import_file_form.get('category'),
-                            source = import_file_form.get('source'),
-                            created_by = user,
-                            updated_by = user
+                            name=rule_data.get('name'),
+                            description="",
+                            category=import_file_form.get('category'),
+                            source=import_file_form.get('source'),
+                            created_by=user,
+                            updated_by=user
                         )
                         value = rule_data.get('value')
                         metas = value.get('meta')
                         for meta in metas:
                             MetaData.objects.create(
-                                rule = rule,
-                                key = meta.get('key'),
-                                value = meta.get('value')
+                                rule=rule,
+                                key=meta.get('key'),
+                                value=meta.get('value')
                             )
                         strings = value.get('strings')
                         for string in strings:
                             RuleString.objects.create(
-                                rule = rule,
-                                type = string.get('type'),
-                                name = string.get('name'),
-                                value = string.get('value'),
-                                is_nocase = string.get('is_nocase'),
-                                is_wide = string.get('is_wide'),
-                                is_full = string.get('is_full'),
-                                is_ascii = string.get('is_ascii')
+                                rule=rule,
+                                type=string.get('type'),
+                                name=string.get('name'),
+                                value=string.get('value'),
+                                is_nocase=string.get('is_nocase'),
+                                is_wide=string.get('is_wide'),
+                                is_full=string.get('is_full'),
+                                is_ascii=string.get('is_ascii')
                             )
                         Condition.objects.create(
-                            rule = rule,
-                            condition = value.get('condition')
+                            rule=rule,
+                            condition=value.get('condition')
                         )
-                    return redirect('/')
+                        check = True
+                    if check:
+                        return redirect('/')
+
             except:
                 transaction.rollback()
                 import_file_form.add_error('rule_file', 'Unable to save Rule file')
-                return return_response(request, 'index.html', {'form':import_file_form})
+                data.update({'importFile': import_file_form})
         else:
-            return return_response(request, 'index.html',{'form':import_file_form})
-    return return_response(request, 'index.html')
+            data.update({'importFile': import_file_form})
+    return return_response(request, 'index.html', data)
 
 
 def export_rule(request, rule_id):

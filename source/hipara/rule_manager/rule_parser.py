@@ -18,14 +18,13 @@ def split_rules(rule_file_data):
 
 
 def parse_rule(rule):
-    #name
     name = rule.split(b'{')[0].replace(b'rule ', b'').strip().decode()
     if len(name) == 0:
         raise forms.ValidationError("Name is required for the rules")
     else:
-        from  django.core.exceptions import MultipleObjectsReturned
+        from django.core.exceptions import MultipleObjectsReturned
+        from .models import Rule
         try:
-            from .models import Rule
             rule = Rule.objects.get(name__iexact=name)
             raise forms.ValidationError("Name for rule is already been taken : "+name)
         except MultipleObjectsReturned:
@@ -33,8 +32,6 @@ def parse_rule(rule):
         except Rule.DoesNotExist:
             pass
 
-
-    #Meta
     meta_result = []
     meta_list = re.findall(b'meta:(.*)strings:', rule, re.DOTALL)
     if len(meta_list) > 0:
@@ -48,7 +45,6 @@ def parse_rule(rule):
                     value = meta_lines[1]
                 meta_result = meta_result + [{'key': key.strip().decode(), 'value': value.strip().decode()}]
 
-    # Strings
     string_list_result = []
     string_list = re.findall(b'strings:(.*)condition:', rule, re.DOTALL)
     if len(string_list) > 0:
@@ -60,6 +56,7 @@ def parse_rule(rule):
                 line_split = line.split(b'=')
                 key = line_split[0].strip().decode()
                 string_data = line_split[1]
+                string_value = ''
                 string_nocase = string_wide = string_full = string_ascii = False
                 if string_data.strip().startswith(b'"'):
                     standard_string = re.findall(b'"(.*)"', line)
@@ -76,15 +73,12 @@ def parse_rule(rule):
                             string_full = True
                         if b'ascii' in line.split(b'"')[-1]:
                             string_ascii = True
-                # Check for a hex string
                 if not string_type and string_data.strip().startswith(b'{'):
                     hex_string = re.findall(b'{(.*)}', line)
                     if len(hex_string) != 0:
                         string_type = 'Hex'
                         string_value = hex_string[0].decode()
 
-                # Check for a regex
-                # This has an annoying habbit of matching comments
                 if not string_type and string_data.strip().startswith(b'/'):
                     reg_string = re.findall(b'/(.*)/', line)
                     if len(reg_string) != 0:
@@ -114,11 +108,10 @@ def parse_rule(rule):
                     }
                     string_list_result = string_list_result + [string_result]
 
-    # Condition
     condition = re.findall(b'condition:(.*)}', rule, re.DOTALL)
     condition_result = condition[0].strip().decode()
     if len(condition_result) == 0:
-        raise forms.ValidationError("Condition is required for rule : "+ name)
+        raise forms.ValidationError("Condition is required for rule : " + name)
 
     return {
         'name': name,
@@ -167,7 +160,7 @@ def remove_comments(text):
              [^/"'\\]*      ##  Chars which doesn't start a comment, string
            )                ##    or escape
     """
-    regex = re.compile(pattern, re.VERBOSE|re.MULTILINE|re.DOTALL)
+    regex = re.compile(pattern, re.VERBOSE | re.MULTILINE | re.DOTALL)
     noncomments = [m.group(2) for m in regex.finditer(text) if m.group(2)]
     return "".join(noncomments)
 
@@ -239,6 +232,7 @@ def export_category_rule(category):
         raw = export_single_rule(rule)
         final_rule += '{0}'.format(raw)
     return final_rule
+
 
 def export_all_rule():
     final_rule = ''
