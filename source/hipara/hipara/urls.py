@@ -8,5 +8,5 @@ urlpatterns = [
     url(r'^', include('rule_manager.urls')),
     url(r'^admin/', include(admin.site.urls)),
 
-    url('^.*$', views.notfound, name='not_found'),
+    url('^.*$', views.not_found, name='not_found'),
 ]

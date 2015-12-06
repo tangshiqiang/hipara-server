@@ -28,7 +28,7 @@ def login_view(request):
                     login(request, user)
                     return redirect('index')
                 else:
-                    form.add_error(None, "This account has been disabled")
+                    form.add_error(None, "This account has been disabled contact to admin")
             else:
                 form.add_error(None, "Invalid Username and/or Password")
                 form.fields.password = ""
@@ -49,19 +49,23 @@ def users_view(request):
 
         from django.contrib.auth.models import User
         from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+        from django.db.models import Q
 
         page_number = request.GET.get('page_number')
         page_size = request.GET.get('page_size')
-
+        search = request.GET.get('search')
         if not page_number:
             page_number = 1
         if not page_size:
             page_size = 10
+        if not search:
+            search = ""
         users = []
 
-        user_result = User.objects.filter(is_active=True, id__gt=request.user.id)
-
-        users = user_result
+        user_result = User.objects.filter(Q(first_name__icontains=search) | Q(last_name__icontains=search) | Q(email__icontains=search)).order_by('first_name')
+        for user in user_result:
+            if user.metadata.role_id > request.user.metadata.role_id:
+                users.append(user)
 
         user_count = len(users)
         first_user = int(page_number) * int(page_size) - int(page_size) + 1
@@ -74,18 +78,17 @@ def users_view(request):
         except EmptyPage:
             users = paginator.page(paginator.num_pages)
         return render(request, 'users.html',
-                      {'users': users, 'first_user': first_user, 'last_user': last_user, 'user_count': user_count})
+                      {'users': users, 'first_user': first_user, 'last_user': last_user, 'user_count': user_count, 'search': search})
     return redirect('index')
 
 
 def invite_view(request):
-    if request.user.is_authenticated() and request.method == 'GET':
-        if request.user.metadata.role_id == 1:
-            from .models import User_invite_token
+    if request.user.is_authenticated():
+        from .models import User_invite_token
+        if request.user.metadata.role_id == 1 and request.method == 'GET':
             if request.GET.get('delete'):
                 User_invite_token.objects.filter(id=request.GET.get('delete')).delete()
-                return redirect('invite')
-            if request.GET.get('generate'):
+            elif request.GET.get('generate'):
                 from datetime import datetime, timedelta
                 import string, random
                 token = ''.join(random.sample(string.ascii_lowercase, 25))
@@ -95,7 +98,45 @@ def invite_view(request):
                     expiry_date=expiry_date,
                     created_by=request.user
                 )
-                return redirect('invite')
+        error = ""
+        if request.method == 'POST':
+            emails = request.POST.get('emails')
+            if not emails:
+                emails = ""
+            email_list = emails.split(',')
+            if len(email_list):
+                from django.core.mail import send_mail
+                from datetime import datetime, timedelta
+                import string, random
+                from django.core.urlresolvers import reverse
+
+                error = ""
+                expiry_date = datetime.now() + timedelta(days=1)
+                for email in email_list:
+                    try:
+                        token = ''.join(random.sample(string.ascii_lowercase, 25))
+                        user_invite_token = User_invite_token()
+                        user_invite_token.token = token
+                        user_invite_token.email = email
+                        user_invite_token.expiry_date = expiry_date
+                        user_invite_token.created_by = request.user
+                        subject = "Invite For Hipara"
+                        url = request.META.get('HTTP_HOST') + reverse('register', kwargs={'token': token})
+                        html_body = 'Invite url : <a href="' + url + '">link</a>'
+                        body = "Invite url : "+url
+                        from_email = "support@hipara.org"
+                        send_mail(subject, body, from_email,
+                                  [email], fail_silently=False)
+                        user_invite_token.save()
+                    except:
+                        if not error:
+                            error = "Following invites are unsuccessful : "
+                        error += email + " "
+                if not error:
+                    error = "All Invites send successful"
+            else:
+                error = 'No email to send invite'
+        if request.user.metadata.role_id == 1:
             from .models import User_invite_token
             from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
@@ -118,9 +159,9 @@ def invite_view(request):
                 invites = paginator.page(1)
             except EmptyPage:
                 invites = paginator.page(paginator.num_pages)
-            return render(request, 'invite.html', {'invites': invites, 'first_invite': first_invite, 'last_invite': last_invite, 'invite_count': invite_count})
+            return render(request, 'invite.html', {'invites': invites, 'first_invite': first_invite, 'last_invite': last_invite, 'invite_count': invite_count, 'error': error})
         else:
-            return render(request, 'invite.html', {'emails': ""})
+            return render(request, 'invite.html', {'error': error})
     return redirect('index')
 
 
@@ -190,29 +231,38 @@ def register_view(request, token):
     return redirect('index')
 
 
-def notfound(request):
+def not_found(request):
     return redirect('index')
 
 
 def users_detail_view(request, id):
-    from django.contrib.auth.models import User
-    return render(request, 'user-detail.html', {'user_detail': User.objects.get(pk=id)})
-
-
-
-
-
-
-
-
-
-
-
-def profile_update_view(request):
     if request.user.is_authenticated():
-        from django.contrib.auth import logout
-        logout(request)
+        try:
+            from django.contrib.auth.models import User
+            from .models import Role
+            user = User.objects.get(pk=id)
+            if user.metadata.role_id > request.user.metadata.role_id:
+                roles = Role.objects.filter(role_id__gt=1)
+                if request.method == 'GET':
+                    return render(request, 'user-detail.html', {'user_detail': user, 'roles': roles})
+                elif request.method == 'POST':
+                    status = int(request.POST.get('status'))
+                    role = int(request.POST.get('role'))
+                    if role > 1:
+                        user.is_active = status
+                        metatadata = user.metadata
+                        metatadata.role_id = role
+                        user.save()
+                        metatadata.save()
+                        return render(request, 'user-detail.html', {'user_detail': user, 'roles': roles})
+        except:
+            return redirect('index')
     return redirect('index')
+
+
+
+
+
 
 
 

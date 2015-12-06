@@ -82,7 +82,7 @@ def import_view(request):
                             name=rule_data.get('name'),
                             description="",
                             category=category[0],
-                            source=source,
+                            source=source[0],
                             created_by=user,
                             updated_by=user
                         )

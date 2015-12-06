@@ -143,8 +143,6 @@
 <script>
     $('#rule-search').validator().on('submit', function (e) {
         var formdata = $('#rule-search').serializeArray();
-        // everything looks good!
-        console.log($( "#title" ).val(), $( "#category" ).val());
         if($( "#title" ).val() == "" && $( "#category" ).val() == "0"){
             $('#rule-search-error').css('display','block');
             return false;
