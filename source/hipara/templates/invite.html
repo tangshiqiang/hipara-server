@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block title %}Invite{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'plugins/datatables/dataTables.bootstrap.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="content-wrapper">
+    <div class="container padding-lr-zero">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                Invite
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li>Invite</li>
+            </ol>
+        </section>
+        <section class="content apis padding-lr-zero">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Invite users</h3>
+                        </div>
+                        <form role="form" method="post" action="/invite/">
+                            {% csrf_token %}
+                            <div class="box-body">
+                                <div class="form-group col-lg-6 col-md-6">
+                                    <label for="title">Email</label>
+                                    <input type="email" class="form-control" id="title" placeholder="Enter title" autofocus="" value="{{emails}}">
+                                </div>
+                                <div class="form-group col-lg-6 col-md-6 invite-btn">
+                                    <button type="button" class="btn btn-primary">Add email</button>
+                                </div>
+
+                                <div class="form-group col-lg-12 col-md-12">
+                                    <span class="badge bg-blue">pratik@bitroots.co</span>
+                                    <span class="badge bg-blue">pratik@bitroots.co</span>
+                                    <span class="badge bg-blue">pratik@bitroots.co</span>
+                                    <span class="badge bg-blue">pratik@bitroots.co</span>
+                                </div>
+
+                                <div class="form-group col-lg-12 col-md-12 col-sm-12">
+                                    <button type="submit" class="btn btn-primary">Invite</button>
+                                </div>
+                            </div>
+                            <!-- /.box-body -->
+                        </form>
+                    </div>
+                    {% if user.metadata.role_id == 1 %}
+                    <!-- /.box-header -->
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Invite</h3>
+
+                            <a href="/invite/?generate=1">
+                                <button type="submit" class="btn btn-primary pull-right">Generate invite code</button>
+                            </a>
+                        </div>
+                        <div class="box-body">
+                            <table id="example1" class="table table-bordered table-hover">
+                                <thead>
+                                <tr>
+                                    <th>Code</th>
+                                    <th>Generated at</th>
+                                    <th>Expired at</th>
+                                    <th width="100">Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for invite in invites %}
+                                <tr>
+                                    <td>{{ request.META.HTTP_HOST }}{% url 'register' invite.token %}</td>
+                                    <td>{{invite.created_at}}</td>
+                                    <td>{{invite.expiry_date}}</td>
+                                    <td>
+                                        <a href="/invite/?delete={{invite.id}}"><i class="glyphicon glyphicon-trash"></i></a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <th>Code</th>
+                                    <th>Generated at</th>
+                                    <th>Expired at</th>
+                                    <th>Actions</th>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                    {% endif %}
+                </div>
+                <!-- /.box -->
+            </div>
+        </section>
+    </div>
+</div>
+<!-- /.content-wrapper -->
+{% endblock %}
+
+
+{% block footer %}
+<script src="{% static 'plugins/datatables/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'plugins/datatables/dataTables.bootstrap.min.js' %}"></script>
+<script src="{% static 'plugins/daterangepicker/daterangepicker.js' %}"></script>
+<script>
+        $(function() {
+            // $("#example1").DataTable();
+            $('#example1').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": false,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false
+            });
+            $('#date').daterangepicker();
+        });
+</script>
+{% endblock %}

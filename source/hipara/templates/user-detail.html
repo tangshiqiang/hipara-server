@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block title %}Users {{user_detail.first_name}}{% endblock %}
+
+{% block content %}
+<div class="content-wrapper">
+    <div class="container padding-lr-zero">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                Users
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="/"><i class="glyphicon glyphicon-home"></i>Home</a></li>
+                <li><a href="/users/"><i class="glyphicon glyphicon-user"></i>Users</a></li>
+                <li>{{ user_detail.first_name }} {{ user_detail.last_name }}</li>
+            </ol>
+        </section>
+
+        <section class="content apis">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">User Details</h3>
+                        </div>
+                        <div class="box-body">
+                           <div class="col-lg-4">
+                                <dl class="dl-horizontal">
+                                    <dt>Name :</dt>
+                                    <dd>{{user_detail.first_name}} {{user_detail.last_name}}</dd>
+                                </dl>
+                           </div>
+                           <div class="col-lg-4">
+                                <dl class="dl-horizontal">
+                                    <dt>Email :</dt>
+                                    <dd>{{user_detail.email}}</dd>
+                                </dl>
+                           </div>
+                            <div class="col-lg-4">
+                                <dl class="dl-horizontal">
+                                    <dt>Role :</dt>
+                                    <dd>{{user_detail.metadata.role}}</dd>
+                                </dl>
+                           </div>
+                           <div class="col-lg-4">
+                                <dl class="dl-horizontal">
+                                    <dt>Status :</dt>
+                                    {% if user_detail.is_active %}
+                                        <dd>Active</dd>
+                                    {% else %}
+                                        <dd>Inactive</dd>
+                                    {% endif %}
+                                </dl>
+                           </div>
+                            <div class="col-lg-4">
+                                <dl class="dl-horizontal">
+                                    <dt>Created by :</dt>
+                                    <dd>{{user_detail.metadata.created_by}}</dd>
+                                </dl>
+                           </div>
+                           <div class="col-lg-4">
+                                <dl class="dl-horizontal">
+                                    <dt>Created at :</dt>
+                                    <dd>{{user_detail.metadata.created_at}}</dd>
+                                </dl>
+                           </div>
+                            <div class="col-lg-4">
+                                <dl class="dl-horizontal">
+                                    <dt>Updated by :</dt>
+                                    <dd>{{user_detail.metadata.updated_by}}</dd>
+                                </dl>
+                           </div>
+                            <div class="col-lg-4">
+                                <dl class="dl-horizontal">
+                                    <dt>Updated at :</dt>
+                                    <dd>{{user_detail.metadata.updated_at}}</dd>
+                                </dl>
+                           </div>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+
+                <div class="col-xs-12">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Update role</h3>
+                        </div>
+                        <form role="form" data-toggle="validator" id="role-update" action="/users/{{user_detail.id}}/" method="POST" >
+                            <div class="box-body">
+                            {% csrf_token %}
+                                <div class="form-group col-lg-6 col-md-6">
+                                    <label for="status">Status</label>
+                                    <div class="form-group">
+                                        <select name="status" class="form-control" id="status">
+                                            <option value="1" {% if user_detail.is_active %} selected {% endif %}>Active</option>
+                                            <option value="0" {% if not user_detail.is_active %} selected {% endif %}>Inactive</option>
+                                           
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group col-lg-6 col-md-6">
+                                    <label for="role">Role</label>
+                                    <div class="form-group">
+                                        <select name="role" class="form-control" id="role">
+                                            <option value="0">Select</option>
+                                            {% for role in roles %}
+                                                <option value="{{ role.role_id }}" {% if role.role_id == role %} selected {% endif %}>{{ role.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group col-lg-12 col-md-12 col-sm-12">
+                                    <button type="submit" class="btn btn-primary">Update role</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- /.content -->
+    </div>
+</div>
+
+{% endblock %}

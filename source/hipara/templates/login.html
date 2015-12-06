@@ -1,0 +1,91 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Hipara | Sign in</title>
+    <meta name="robots" content="no-follow,no-index">
+
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.5 -->
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{% static 'bootstrap/css/font-awesome.min.css' %}">
+    <!-- Ionicons -->
+    <!-- <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"> -->
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{% static 'dist/css/AdminLTE.min.css' %}">
+    <link rel="stylesheet" href="{% static 'dist/css/style.css' %}">
+
+    <link rel="stylesheet" href="{% static 'dist/css/skins/_all-skins.min.css' %}">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body class="hold-transition login-page">
+    <div class="login-box">
+        <div class="login-logo">
+            <a href="/"><b>Hipara</b></a>
+        </div>
+        <!-- /.login-logo -->
+        <div class="login-box-body">
+            <p class="login-box-msg">Login</p>
+            <form action="/login/" method="post">
+                {% csrf_token %}
+                <div class="form-group has-feedback">
+                    <input type="email" name="email" value="{{form.email.value}}" class="form-control" placeholder="Email" autofocus=""  required>
+                    <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                </div>
+                {% if form.email.errors %}
+                <div>
+                    {% for error in form.email.errors %}
+                        {{error}}
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <div class="form-group has-feedback">
+                    <input type="password" name="password" class="form-control" placeholder="Password" required maxlength="75" minlength="5">
+                    <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                </div>
+                {% if form.password.errors %}
+                <div>
+                    {% for error in form.password.errors %}
+                        {{error}}
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% if form.non_field_errors %}
+                <div>
+                        {% for error in form.non_field_errors %}
+                            {{error}}
+                        {% endfor %}
+                </div>
+                {% endif %}
+                <div class="row login-action">
+                    <div class="col-xs-4 pull-left">
+                        <button type="submit" class="btn btn-primary btn-block btn-flat">Login</button>
+                    </div>
+                    <!--<div class="col-xs-4 pull-right">-->
+                        <!--<a href="register.html" class="text-center">Sign up</a>-->
+                    <!--</div>-->
+                </div>
+            </form>
+        </div>
+        <!-- /.login-box-body -->
+    </div>
+    <!-- /.login-box -->
+
+    <!-- jQuery 2.1.4 -->
+    <script src="{% static 'plugins/jQuery/jQuery-2.1.4.min.js' %}"></script>
+    <!-- Bootstrap 3.3.5 -->
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+</body>
+
+</html>

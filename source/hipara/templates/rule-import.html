@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block title %}Rule Upload{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'plugins/datatables/dataTables.bootstrap.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="content-wrapper">
+    <div class="container padding-lr-zero">
+        <section class="content-header">
+            <h1>
+                Rule
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li>Rules</li>
+                <li>Upload</li>
+            </ol>
+        </section>
+
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Upload rule</h3>
+                        </div>
+                        <form role="form" method="post" action="/import/" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="box-body">
+                                <div class="form-group col-lg-6 col-md-6">
+                                    <label for="rule-file">Select File</label>
+                                    <input type="file" id="rule-file" name="rule_file" required>
+                                    {% if form.rule_file.errors %}
+                                    <div>
+                                        {% for error in form.rule_file.errors %}
+                                            {{error}}
+                                        {% endfor %}
+                                    </div>
+                                    {% endif %}
+                                </div>
+
+
+                                <div class="form-group col-lg-6 col-md-6">
+                                    <label for="category">Category</label>
+                                    <div class="form-group">
+                                        <select class="form-control" id="category" name="category" required>
+                                            <option value="0">Select</option>
+                                            {% for cat in categories %}
+                                                <option value="{{ cat.category_id }}" {% if cat.category_id == form.category.value %} selected {% endif %}>{{ cat.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    {% if form.category.errors %}
+                                    <div>
+                                        {% for error in form.category.errors %}
+                                            {{error}}
+                                        {% endfor %}
+                                    </div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="form-group col-lg-6 col-md-6">
+                                    <label for="source">Source</label>
+                                    <input class="form-control" id="source" placeholder="Source" name="source" value="{{form.source.value}}" required>
+                                    {% if form.source.errors %}
+                                    <div>
+                                        {% for error in form.source.errors %}
+                                            {{error}}
+                                        {% endfor %}
+                                    </div>
+                                    {% endif %}
+                                </div>
+
+                                {% if form.non_field_errors %}
+                                <div>
+                                        {% for error in form.non_field_errors %}
+                                            {{error}}
+                                        {% endfor %}
+                                </div>
+                                {% endif %}
+                                <div class="form-group col-lg-12 col-md-12 col-sm-12">
+                                    <button type="submit" class="btn btn-primary">Upload rule</button>
+                                    <button type="button" class="btn btn-primary">Cancel</button>
+                                </div>
+                            </div>
+                            <!-- /.box-body -->
+                        </form>
+                    </div>
+                </div>
+                <!-- /.box -->
+            </div>
+        </section>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block footer %}
+
+{% endblock %}
