@@ -48,6 +48,11 @@
                 <div class="form-group col-lg-12 col-md-12 col-sm-12">
                   <button type="submit" class="btn btn-primary">Invite</button>
                 </div>
+                {% if error %}
+                <div>
+                  {{ error }}
+                </div>
+                {% endif %}
               </div>
               <!-- /.box-body -->
             </form>
