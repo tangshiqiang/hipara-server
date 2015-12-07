@@ -11,9 +11,9 @@ def export_view(request):
             rule_delete = int(rule_delete)
             try:
                 rule = Rule.objects.get(pk=rule_delete)
-                rule.condition_rule.delete()
-                rule.string_rule.delete()
-                rule.meta_rule.delete()
+                rule.condition_rule.all().delete()
+                rule.string_rule.all().delete()
+                rule.meta_rule.all().delete()
                 rule.delete()
             except:
                 pass
@@ -52,8 +52,6 @@ def export_view(request):
         rule_list = sorted(rule_list, key=lambda k: k.updated_at, reverse=True  )
 
         rule_count = len(rule_list)
-        first_rule = int(page_number) * int(page_size) - int(page_size) + 1
-        last_rule = int(page_number) * int(page_size)
         paginator = Paginator(rule_list, page_size)
         try:
             rules = paginator.page(page_number)
@@ -61,7 +59,7 @@ def export_view(request):
             rules = paginator.page(1)
         except EmptyPage:
             rules = paginator.page(paginator.num_pages)
-        return render(request, 'rule-export.html', {'rules': rules, 'first_rule': first_rule, 'last_rule': last_rule, 'rule_count': rule_count, 'title':title, 'categories': Category.objects.all(), 'category': category})
+        return render(request, 'rule-export.html', {'rules': rules, 'rule_count': rule_count, 'title':title, 'categories': Category.objects.all(), 'category': category})
     return redirect('index')
 
 

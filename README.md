@@ -2,7 +2,7 @@
 
 	Initial Setup
 
-		Install python > 3.4
+		Install python > 3.4 with all dependencies like setuptools
 		Install python-virtualenv
 		MySql Database
 
@@ -15,6 +15,8 @@
 
 	Update database username, password, database-name in /source/hipara/hipara/settings.py
 		Database should be available at given host and port
+
+	Also change the Mail settings Default is filebased
 
 	Then go to path in virtual environment terminal /source/hipara/
 		python manage.py migrate

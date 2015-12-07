@@ -64,7 +64,7 @@
                                 </a>
                             </li>
                             {% if user.is_authenticated %}
-                            <li class="dropdown"{% if request.path == '/export/' or  request.path = '/import/' %} class="active" {% endif %}>
+                            <li class="dropdown {% if request.path == '/export/' or  request.path = '/import/' or '/rule/' in request.path %}active{% endif %}">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Rules <span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">
                                     <li {% if request.path == '/export/' %} class="active" {% endif %}><a href="/export/">Extract</a></li>
@@ -72,7 +72,7 @@
                                 </ul>
                             </li>
                             {% if user.is_authenticated and user.metadata.role_id == 1 %}
-                            <li {% if request.path == '/users/' %} class="active" {% endif %}>
+                            <li {% if '/users/' in request.path %} class="active" {% endif %}>
                                 <a href="/users/">
                                     <i class="glyphicon glyphicon-user"></i>
                                     <span>Users</span>
