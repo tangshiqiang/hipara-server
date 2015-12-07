@@ -17,8 +17,6 @@
     <!-- <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"> -->
     <!-- Theme style -->
     <link rel="stylesheet" href="{% static 'dist/css/AdminLTE.min.css' %}">
-    <!-- iCheck -->
-    <link rel="stylesheet" href="{% static 'plugins/iCheck/square/blue.css' %}">
     <link rel="stylesheet" href="{% static 'dist/css/skins/_all-skins.min.css' %}">
     <link rel="stylesheet" href="{% static 'dist/css/style.css' %}">
 
@@ -40,7 +38,7 @@
 
         <div class="register-box-body">
             <p class="login-box-msg">Sign up</p>
-            <form action="/register/{{token}}/" method="post">
+            <form role="form" id="registration_form" data-toggle="validator" action="/register/{{token}}/" method="post">
                 {% csrf_token %}
                 <div class="form-group has-feedback">
                     <input type="text" class="form-control" placeholder="First name" autofocus="" name="first_name" value="{{form.first_name.value}}" required >
@@ -87,8 +85,10 @@
                 </div>
                 {% endif %}
                 <div class="form-group has-feedback">
-                    <input type="password" class="form-control" placeholder="Password" name="password" required maxlength="75" minlength="5">
+                    <input type="password" class="form-control" placeholder="Password"
+                    id="password" name="password" required  data-minlength="6" data-maxlength="75">
                     <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                    <!-- <span class="help-block">Minimum of 5 characters</span> -->
                 </div>
                 {% if form.password.errors %}
                 <div>
@@ -98,9 +98,12 @@
                 </div>
                 {% endif %}
                 <div class="form-group has-feedback">
-                    <input type="password" class="form-control" placeholder="Retype password" required maxlength="75" minlength="5">
+                    <input type="password" class="form-control" id="passwordConfirm"
+                    data-match="#password" data-match-error="Whoops, these don't match"
+                    placeholder="Confirm password" required data-minlength="6" data-maxlength="75">
                     <span class="glyphicon glyphicon-lock form-control-feedback"></span>
                 </div>
+                <div class="help-block with-errors"></div>
                 {% if form.non_field_errors or error %}
                 <div>
                     {{error}}
@@ -129,14 +132,18 @@
     <script src="{% static 'plugins/jQuery/jQuery-2.1.4.min.js' %}"></script>
     <!-- Bootstrap 3.3.5 -->
     <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
-    <!-- iCheck -->
-    <script src="{% static 'plugins/iCheck/icheck.min.js' %}"></script>
+    <script src="{% static 'dist/js/validator.min.js' %}"></script>
     <script>
         $(function() {
-            $('input').iCheck({
-                checkboxClass: 'icheckbox_square-blue',
-                radioClass: 'iradio_square-blue',
-                increaseArea: '20%' // optional
+            $('#registration_form').validator().on('submit', function (e) {
+                if (e.isDefaultPrevented()) {
+                    // handle the invalid form...
+                    console.log('if');
+                } else {
+                    // everything looks good!
+                    var formdata = $('#rule-search').serializeArray();
+                    console.log('else');
+                }
             });
         });
     </script>

@@ -2,10 +2,6 @@
 {% load staticfiles %}
 {% block title %}Rule Extract{% endblock %}
 
-{% block head %}
-<!-- <link rel="stylesheet" href="{% static 'plugins/datatables/dataTables.bootstrap.css' %}"> -->
-{% endblock %}
-
 {% block content %}
 <div class="content-wrapper">
     <div class="container padding-lr-zero">
@@ -79,7 +75,7 @@
                                 <div class="col-lg-12 col-md-12" id="export-rule-error" style="display:none;"><b>Provide category for extract rules.</b></div>
                                   </div>
                                   {% if not rule_count  %}
-                                  <div class="col-lg-12 col-md-12"><b>No rules founds.</b></div>
+                                  <div class="col-lg-12 col-md-12"><b>No rules found.</b></div>
                                     </div>
                                   {% endif %}
                             </form>
@@ -137,19 +133,6 @@
                             <div class="row">
                                 <div class="col-xs-12">
                                     <div id="rule_export_paginate" class="pull-right">
-                                        <!-- <ul class="pagination">
-                                            <li id="rule_export_previous" class="paginate_button previous" ng-click="previousPage()">
-                                                <a href="#" aria-controls="profiles-table" data-dt-idx="0" tabindex="0">Previous</a>
-                                            </li>
-
-                                            <li class="paginate_button" ng-class="active_page_no == pages ? 'active' : '' " ng-click="profilesPageClick(pages)">
-                                                <a href="#" aria-controls="profiles-table" data-dt-idx="1" tabindex="0">{{pages}}</a>
-                                            </li>
-
-                                            <li id="rule_export_next" class="paginate_button next" ng-click="nextPage()">
-                                                <a href="#" aria-controls="profiles-table" data-dt-idx="2" tabindex="0">Next</a>
-                                            </li>
-                                        </ul> -->
                                     </div>
                                 </div>
                             </div>
@@ -191,8 +174,6 @@
 
 
 {% block footer %}
-<!-- <script src="{% static 'plugins/datatables/jquery.dataTables.min.js' %}"></script>
-<script src="{% static 'plugins/datatables/dataTables.bootstrap.min.js' %}"></script> -->
 <script src="{% static 'dist/js/jquery.bootpag.min.js' %}"></script>
 <script src="{% static 'dist/js/validator.min.js' %}"></script>
 <script>
@@ -222,9 +203,8 @@
         {% if rule_count %}
             page_mod = {{rule_count}}%10;
             page_no = Math.floor( {{rule_count}}/10 );
-            if( page_mod > 0 ){
+            if( page_mod > 0 )
                 page_no = page_no + 1;
-            }else { console.log('else');}
         {% endif %}
 
         function qs(key) {

@@ -2,10 +2,6 @@
 {% load staticfiles %}
 {% block title %}Users{% endblock %}
 
-{% block head %}
-<link rel="stylesheet" href="{% static 'plugins/datatables/dataTables.bootstrap.css' %}">
-{% endblock %}
-
 {% block content %}
 <div class="content-wrapper">
     <div class="container padding-lr-zero">
@@ -48,6 +44,10 @@
                             <h3 class="box-title">Users</h3>
                         </div>
                         <div class="box-body">
+                            {% if not user_count  %}
+                            <div class="col-lg-12 col-md-12"><b>No users found.</b></div>
+                            {% endif %}
+                            {% if user_count  %}
                             <table id="example1" class="table table-bordered table-hover">
                                 <thead>
                                 <tr>
@@ -85,7 +85,15 @@
                                 </tr>
                                 </tfoot>
                             </table>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div id="users_paginate" class="pull-right">
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
                         </div>
+
                     </div>
                     <!-- /.box-body -->
                 </div>
@@ -100,20 +108,35 @@
 
 
 {% block footer %}
-<script src="{% static 'plugins/datatables/jquery.dataTables.min.js' %}"></script>
-<script src="{% static 'plugins/datatables/dataTables.bootstrap.min.js' %}"></script>
+<script src="{% static 'dist/js/jquery.bootpag.min.js' %}"></script>
 <script src="{% static 'dist/js/validator.min.js' %}"></script>
 <script>
     $(function() {
-        // $("#example1").DataTable();
-        $('#example1').DataTable({
-            "paging": true,
-            "lengthChange": false,
-            "searching": false,
-            "ordering": false,
-            "info": true,
-            "autoWidth": false
+        var page_no, page_mod,page;
+        {% if rule_count %}
+            page_mod = {{rule_count}}%10;
+            page_no = Math.floor( {{rule_count}}/10 );
+            if( page_mod > 0 )
+                page_no = page_no + 1;
+        {% endif %}
+
+        function qs(key) {
+            key = key.replace(/[*+?^$.\[\]{}()|\\\/]/g, "\\$&"); // escape RegEx control chars
+            var match = location.search.match(new RegExp("[?&]" + key + "=([^&]+)(&|$)"));
+            return match && decodeURIComponent(match[1].replace(/\+/g, " "));
+        }
+
+        page = qs('page_number') ? qs('page_number') : 1;
+
+        $('#users_paginate').bootpag({
+            total: page_no,
+            maxVisible: 10,
+            page: page,
+            activeClass: "active"
+        }).on("page",function(event,num){
+            window.location.href="/export/?page_number="+num+"&title="+$( "#title" ).val()+"&category="+$( "#category" ).val();
         });
+
         $('#clearResult').click(function(){
             {% if search %}
                 window.location.href="/users/";

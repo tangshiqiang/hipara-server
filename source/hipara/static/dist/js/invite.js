@@ -1,16 +1,5 @@
 $(function() {
-    // $("#example1").DataTable();
-    $('#example1').DataTable({
-        "paging": true,
-        "lengthChange": false,
-        "searching": false,
-        "ordering": true,
-        "info": true,
-        "autoWidth": false
-    });
-
     $('#email-tags').val('');
-
     var emailList = [];
 
     function onAddTag(tag) {

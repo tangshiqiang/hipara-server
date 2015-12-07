@@ -8,7 +8,6 @@ $('#rule-upload').validator().on('submit', function(e) {
         // everything looks good!
         e.isDefaultPrevented();
         var formdata = $('#rule-upload').serializeArray();
-        console.log($('#rule-upload').serializeArray());
         if (formdata[1].value == "0") {
             $('#rule-upload-error b').text('All fields mandatory.');
             return false;
