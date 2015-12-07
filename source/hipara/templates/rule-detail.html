@@ -100,6 +100,75 @@
                            </div>
                         </div>
                     </div>
+
+
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Rule Metadata</h3>
+                        </div>
+                        <div class="box-body">
+                            {% for metadata in rule.meta_rule.all %}
+                            <div class="col-lg-6">
+                                <dl class="dl-horizontal">
+                                    <dt>{{metadata.key}} :</dt>
+                                    <dd>{{metadata.value}}</dd>
+                                </dl>
+                           </div>
+                           {% endfor %}
+                       </div>
+                   </div>
+
+                   <div class="box box-primary">
+                       <div class="box-header with-border">
+                           <h3 class="box-title">Rule Strings</h3>
+                       </div>
+                       <div class="box-body">
+                           <div class="col-lg-12">
+                               <table class="table table-bordered table-hover">
+                                   <thead>
+                                   <tr>
+                                       <th width="70">Type</th>
+                                       <th width="100">Name</th>
+                                       <th>Value</th>
+                                       <th width="60">Nocase</th>
+                                       <th width="60">Wide</th>
+                                       <th width="60">Fullword</th>
+                                       <th width="60">ASCII</th>
+                                   </tr>
+                                   </thead>
+                                   <tbody>
+                                       {% for string in rule.string_rule.all %}
+                                       <tr>
+                                           <td>{{string.type}}</td>
+                                           <td>{{string.name}}</td>
+                                           <td>{{string.value}}</td>
+                                           <td>{{string.is_nocase}}</td>
+                                           <td>{{string.is_wide}}</td>
+                                           <td>{{string.is_full}}</td>
+                                           <td>{{string.is_ascii}}</td>
+                                       </tr>
+                                       {% endfor %}
+                                   </tbody>
+                               </table>
+                          </div>
+                      </div>
+                  </div>
+
+                  <div class="box box-primary">
+                      <div class="box-header with-border">
+                          <h3 class="box-title">Rule Condition</h3>
+                      </div>
+                      <div class="box-body">
+                          {% for condition in rule.condition_rule.all %}
+                          <div class="col-lg-6">
+                              <dl class="dl-horizontal">
+                                  <dt>Condition :</dt>
+                                  <dd>{{condition.condition}}</dd>
+                              </dl>
+                         </div>
+                         {% endfor %}
+                     </div>
+                 </div>
                     <!-- /.box-body -->
                 </div>
 
