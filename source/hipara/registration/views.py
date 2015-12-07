@@ -68,8 +68,6 @@ def users_view(request):
                 users.append(user)
 
         user_count = len(users)
-        first_user = int(page_number) * int(page_size) - int(page_size) + 1
-        last_user = int(page_number) * int(page_size)
         paginator = Paginator(users, page_size)
         try:
             users = paginator.page(page_number)
@@ -78,7 +76,7 @@ def users_view(request):
         except EmptyPage:
             users = paginator.page(paginator.num_pages)
         return render(request, 'users.html',
-                      {'users': users, 'first_user': first_user, 'last_user': last_user, 'user_count': user_count, 'search': search})
+                      {'users': users, 'user_count': user_count, 'search': search})
     return redirect('index')
 
 
@@ -150,8 +148,6 @@ def invite_view(request):
 
             invites = User_invite_token.objects.filter(email=None).order_by('-created_at')
             invite_count = len(invites)
-            first_invite = int(page_number) * int(page_size) - int(page_size) + 1
-            last_invite = int(page_number) * int(page_size)
             paginator = Paginator(invites, page_size)
             try:
                 invites = paginator.page(page_number)
@@ -159,7 +155,7 @@ def invite_view(request):
                 invites = paginator.page(1)
             except EmptyPage:
                 invites = paginator.page(paginator.num_pages)
-            return render(request, 'invite.html', {'invites': invites, 'first_invite': first_invite, 'last_invite': last_invite, 'invite_count': invite_count, 'error': error})
+            return render(request, 'invite.html', {'invites': invites, 'invite_count': invite_count, 'error': error})
         else:
             return render(request, 'invite.html', {'error': error})
     return redirect('index')
@@ -181,8 +177,11 @@ def register_view(request, token):
             invite = User_invite_token.objects.get(token=token)
             if invite.expiry_date >= timezone.now():
                 if request.method == 'GET':
+                    email = ""
+                    if invite.email:
+                        email = invite.email
                     form = SignUpForm(
-                        initial={'email': invite.email,
+                        initial={'email': email,
                                  'first_name': "",
                                  'last_name': "",
                                  'username': ""}
@@ -236,7 +235,7 @@ def not_found(request):
 
 
 def users_detail_view(request, id):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated() and request.user.metadata.role_id == 1:
         try:
             from django.contrib.auth.models import User
             from .models import Role
@@ -252,12 +251,14 @@ def users_detail_view(request, id):
                         user.is_active = status
                         metatadata = user.metadata
                         metatadata.role_id = role
+                        metatadata.updated_by = request.user
                         user.save()
                         metatadata.save()
                         return render(request, 'user-detail.html', {'user_detail': user, 'roles': roles})
         except:
             return redirect('index')
     return redirect('index')
+
 
 
 

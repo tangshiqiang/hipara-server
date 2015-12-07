@@ -45,34 +45,34 @@
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
                         <ul class="nav navbar-nav">
-                            <li class="active">
+                            <li {% if request.path == '/' %} class="active" {% endif %}>
                                 <a href="/">
                                     <i class="glyphicon glyphicon-home"></i>
                                     <span>Home</span>
                                 </a>
                             </li>
-                            <li>
+                            <li {% if request.path == '/about/' %} class="active" {% endif %}>
                                 <a href="/about/">
                                     <i class="glyphicon glyphicon-play"></i>
                                     <span>About</span>
                                 </a>
                             </li>
-                            <li>
+                            <li {% if request.path == '/apis/' %} class="active" {% endif %}>
                                 <a href="/apis/">
                                     <i class="glyphicon glyphicon-hdd"></i>
                                     <span>APIs</span>
                                 </a>
                             </li>
                             {% if user.is_authenticated %}
-                            <li class="dropdown">
+                            <li class="dropdown"{% if request.path == '/export/' or  request.path = '/import/' %} class="active" {% endif %}>
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Rules <span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">
-                                    <li><a href="/export/">Extract</a></li>
-                                    <li><a href="/import/">Upload</a></li>
+                                    <li {% if request.path == '/export/' %} class="active" {% endif %}><a href="/export/">Extract</a></li>
+                                    <li {% if request.path == '/import/' %} class="active" {% endif %}><a href="/import/">Upload</a></li>
                                 </ul>
                             </li>
-                            {% if user.is_authenticated and user.metadata.role_id < 3 %}
-                            <li>
+                            {% if user.is_authenticated and user.metadata.role_id == 1 %}
+                            <li {% if request.path == '/users/' %} class="active" {% endif %}>
                                 <a href="/users/">
                                     <i class="glyphicon glyphicon-user"></i>
                                     <span>Users</span>
