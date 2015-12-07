@@ -91,7 +91,7 @@
                                     <th>Category</th>
                                     <th>Source</th>
                                     <th>Version</th>
-                                    <th>State</th>
+                                    <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                                 </thead>
@@ -111,8 +111,10 @@
                                     </td>
                                     <td>
                                       <a href="/export/rule/{{rule.rule_id}}/"><i class="glyphicon glyphicon-download"></i></a>
-                                      <a href="/export/rule_detail/{{rule.rule_id}}/"><i class="glyphicon glyphicon-eye-open"></i></a>
+                                      <a href="/rule/{{rule.rule_id}}/"><i class="glyphicon glyphicon-eye-open"></i></a>
+                                      {% if user.metadata.role_id == 1 %}
                                       <a onclick="setDeleteRuleId({{rule.rule_id}})" data-toggle="modal" data-target="#delete-rule-Modal" data-id="{{rule.rule_id}}"><i class="glyphicon glyphicon-trash"></i></a>
+                                      {% endif %}
                                     </td>
                                 </tr>
                                 {% endfor %}
@@ -124,7 +126,7 @@
                                     <th>Category</th>
                                     <th>Source</th>
                                     <th>Version</th>
-                                    <th>State</th>
+                                    <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                                 </tfoot>

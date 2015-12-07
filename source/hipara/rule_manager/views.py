@@ -7,7 +7,7 @@ def export_view(request):
         from .models import Category, Rule, RuleString, MetaData
         from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
         rule_delete = request.GET.get('delete')
-        if rule_delete and request.user.metadata.rule_id == 1:
+        if rule_delete and request.user.metadata.role_id == 1:
             rule_delete = int(rule_delete)
             try:
                 rule = Rule.objects.get(pk=rule_delete)
@@ -183,17 +183,17 @@ def rule_view(request, rule_id):
             rule = Rule.objects.get(pk=rule_id)
         except:
             return redirect('export')
-        if request.method == 'POST' and request.user.metadata.rule_id < 3:
+        if request.method == 'POST' and request.user.metadata.role_id < 3:
             status = request.POST.get('status')
             if status == "0":
-                rule.status = 0
+                rule.status = False
                 rule.version += 1
                 rule.save()
             elif status == "1":
-                rule.status = 1
+                rule.status = True
                 rule.version += 1
                 rule.save()
-        return render(request, 'rule-detail.html', {'rule_detail': rule})
+        return render(request, 'rule-detail.html', {'rule': rule})
     return redirect('index')
 
 
