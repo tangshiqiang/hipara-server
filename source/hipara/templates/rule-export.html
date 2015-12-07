@@ -64,7 +64,7 @@
                                             <option value="0">All</option>
                                             {% for cat in categories %}
                                             <!--cat.rule_category.all|length-->
-                                                <option value="{{ cat.category_id }}" {% if cat.category_id == category %} selected {% endif %}>{{ cat.name }}</option>
+                                                <option value="{{ cat.category_id }}" >{{ cat.name }}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
@@ -72,7 +72,7 @@
                                 <div class="form-group col-lg-3 col-md-3" style="margin-top:1.8em;">
                                     <button type="submit" class="btn btn-primary">Extract All Rules</button>
                                 </div>
-                                <div class="col-lg-12 col-md-12" id="export-rule-error" style="display:none;"><b>Provide category for extract rules.</b></div>
+                                <div class="col-lg-12 col-md-12" id="export-rule-error"><b></b></div>
                                   </div>
                                   {% if not rule_count  %}
                                   <div class="col-lg-12 col-md-12"><b>No rules found.</b></div>
@@ -153,21 +153,17 @@
 <div class="modal fade" id="delete-rule-Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
-      <form role="form" method="POST">
-        {% csrf_token %}
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="myModalLabel">Delete rule</h4>
       </div>
       <div class="modal-body">
-        <input type="hidden" id="delete-rule-id" name="rule_id">
         <b>Do you really want to delete selected rule?</b>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="Submit" class="btn btn-primary">Delete</button>
+        <a id="delete-rule-href" href=""><button type="Submit" class="btn btn-primary">Delete</button></a>
       </div>
-    </form>
     </div>
   </div>
 </div>
@@ -182,7 +178,7 @@
     $('#rule-search').validator().on('submit', function (e) {
         var formdata = $('#rule-search').serializeArray();
         if($( "#title" ).val() == "" && $( "#category" ).val() == "0"){
-            $('#rule-search-error').css('display','block');
+            $('#rule-search-error b').css('display','block');
             return false;
         }else{
             $('#rule-search-error').css('display','none');
@@ -191,12 +187,41 @@
 
     $('#export-rule').validator().on('submit', function (e) {
         if($( "#extract_category" ).val() == "select"){
-            $('#export-rule-error').css('display','block');
+            $('#export-rule-error b').text('Provide category for extract rules.');
             return false;
         }else{
-            $('#export-rule-error').css('display','none');
-            $('#export-rule').attr('action','/export/category/'+$( "#extract_category" ).val()+'/');
-            $('#rule-search').validator('destroy');
+            $('#export-rule-error b').text('');
+            var total = 0;
+            {% for cat in categories %}
+                var count = {{cat.rule_category.all|length}};
+                total = total + count;
+                if($( "#extract_category" ).val() == {{cat.category_id}})
+                {
+                    if(count)
+                    {
+                        $('#export-rule').attr('action','/export/category/'+$( "#extract_category" ).val()+'/');
+                        $('#rule-search').validator('destroy');
+                        return;
+                    }
+                    else {
+                        $('#export-rule-error b').text("No rules belongs to selected category.");
+                        return false;
+                    }
+                }
+
+            {% endfor %}
+            if(total)
+            {
+                $('#export-rule').attr('action','/export/category/'+$( "#extract_category" ).val()+'/');
+                $('#rule-search').validator('destroy');
+                return;
+            }
+            else {
+                $('#export-rule-error b').text("No rules belongs to selected category.");
+                return false;
+            }
+
+
         }
     });
 
@@ -228,7 +253,7 @@
     });
 
     function setDeleteRuleId(rule_id){
-      $('#delete-rule-id').val(rule_id);
+      $('#delete-rule-href').attr("href"," /export/?delete="+rule_id+"&title="+ $( "#title" ).val()+"&category="+$( "#category" ).val() );
     }
 
     $('#clearResult').click(function(){
