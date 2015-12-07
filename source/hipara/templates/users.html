@@ -27,7 +27,7 @@
                         <div class="box-header with-border">
                             <h3 class="box-title">Search users</h3>
                         </div>
-                        <form role="form" data-toggle="validator" action="" method="">
+                        <form role="form" action="" method="">
                             <div class="box-body">
                                 <div class="form-group col-lg-6 col-md-6">
                                     <label for="title">Search</label>
@@ -35,7 +35,7 @@
                                 </div>
                                 <div class="form-group col-lg-12 col-md-12 col-sm-12">
                                     <button type="submit" class="btn btn-primary">Search Results</button>
-                                    <button type="button" class="btn btn-primary">Clear Results</button>
+                                    <button type="button" id="clearResult" class="btn btn-primary">Clear Results</button>
                                 </div>
                             </div>
                             <!-- /.box-body -->
@@ -110,11 +110,18 @@
             "paging": true,
             "lengthChange": false,
             "searching": false,
-            "ordering": true,
+            "ordering": false,
             "info": true,
             "autoWidth": false
+        });
+        $('#clearResult').click(function(){
+            {% if search %}
+                window.location.href="/users/";
+            {% else %}
+                $( "#title" ).val('');
+            {% endif %}
         });
     });
 </script>
 
-{% endblock %} 
+{% endblock %}

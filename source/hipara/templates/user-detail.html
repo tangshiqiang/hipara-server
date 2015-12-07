@@ -96,7 +96,6 @@
                                         <select name="status" class="form-control" id="status">
                                             <option value="1" {% if user_detail.is_active %} selected {% endif %}>Active</option>
                                             <option value="0" {% if not user_detail.is_active %} selected {% endif %}>Inactive</option>
-                                           
                                         </select>
                                     </div>
                                 </div>
@@ -104,7 +103,7 @@
                                     <label for="role">Role</label>
                                     <div class="form-group">
                                         <select name="role" class="form-control" id="role">
-                                            <option value="0">Select</option>
+                                            user_detail.metadata.role
                                             {% for role in roles %}
                                                 <option value="{{ role.role_id }}" {% if role.role_id == user_detail.metadata.role_id %} selected {% endif %}>{{ role.name }}</option>
                                             {% endfor %}

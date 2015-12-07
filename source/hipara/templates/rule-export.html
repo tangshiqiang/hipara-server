@@ -3,7 +3,7 @@
 {% block title %}Rule Extract{% endblock %}
 
 {% block head %}
-<link rel="stylesheet" href="{% static 'plugins/datatables/dataTables.bootstrap.css' %}">
+<!-- <link rel="stylesheet" href="{% static 'plugins/datatables/dataTables.bootstrap.css' %}"> -->
 {% endblock %}
 
 {% block content %}
@@ -14,7 +14,7 @@
                 Rule
             </h1>
             <ol class="breadcrumb">
-                <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li><a href="/"><i class="glyphicon glyphicon-home"></i> Home</a></li>
                 <li>Rules</li>
                 <li>Extract</li>
             </ol>
@@ -47,7 +47,7 @@
                                 <div class="form-group col-lg-6 col-md-6" id="rule-search-error" style="display:none;"><b>Provide atleast one field for search.</b></div>
                                 <div class="form-group col-lg-12 col-md-12 col-sm-12">
                                     <button type="submit" class="btn btn-primary">Search Results</button>
-                                    <button type="button" class="btn btn-primary">Clear Results</button>
+                                    <button type="button" id="clearResult" class="btn btn-primary">Clear Results</button>
                                 </div>
                             </div>
                             <!-- /.box-body -->
@@ -58,12 +58,12 @@
                         <div class="box-header with-border">
                             <h3 class="box-title">Rules</h3>
 
-                            <form role="form" method="GET" id="export-rule" >
+                            <form role="form" method="GET" action="" data-toggle="validator" id="export-rule" >
                                 <div class="pull-right col-lg-6">
                                 <div class="form-group col-lg-9 col-md-9">
                                     <label for="extract_category">Category</label>
                                     <div class="form-group">
-                                        <select name="category" class="form-control" id="extract_category">
+                                        <select name="category" class="form-control" id="extract_category" required="">
                                             <option value="select">Select</option>
                                             <option value="0">All</option>
                                             {% for cat in categories %}
@@ -73,15 +73,20 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="form-group col-lg-6 col-md-6" id="rule-search-error" style="display:none;"><b>Provide atleast one field for search.</b></div>
                                 <div class="form-group col-lg-3 col-md-3" style="margin-top:1.8em;">
-                                    <button type="button" class="btn btn-primary">Extract All Rules</button>
+                                    <button type="submit" class="btn btn-primary">Extract All Rules</button>
                                 </div>
+                                <div class="col-lg-12 col-md-12" id="export-rule-error" style="display:none;"><b>Provide category for extract rules.</b></div>
+                                  </div>
+                                  {% if not rule_count  %}
+                                  <div class="col-lg-12 col-md-12"><b>No rules founds.</b></div>
                                     </div>
+                                  {% endif %}
                             </form>
 
                         </div>
-                        <div class="box-body">
+                        {% if rule_count  %}
+                        <div class="box-body" >
                             <table id="example1" class="table table-bordered table-hover">
                                 <thead>
                                 <tr>
@@ -91,7 +96,7 @@
                                     <th>Source</th>
                                     <th>Version</th>
                                     <th>State</th>
-                                    <th>Extract</th>
+                                    <th>Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -108,7 +113,11 @@
                                         {% elif rule.status == False %} Not deployed
                                         {% endif %}
                                     </td>
-                                    <td><a href="/export/rule/{{rule.rule_id}}/"><i class="glyphicon glyphicon-download"></i></a></td>
+                                    <td>
+                                      <a href="/export/rule/{{rule.rule_id}}/"><i class="glyphicon glyphicon-download"></i></a>
+                                      <a href="/export/rule_detail/{{rule.rule_id}}/"><i class="glyphicon glyphicon-eye-open"></i></a>
+                                      <a onclick="setDeleteRuleId({{rule.rule_id}})" data-toggle="modal" data-target="#delete-rule-Modal" data-id="{{rule.rule_id}}"><i class="glyphicon glyphicon-trash"></i></a>
+                                    </td>
                                 </tr>
                                 {% endfor %}
                                 </tbody>
@@ -120,11 +129,32 @@
                                     <th>Source</th>
                                     <th>Version</th>
                                     <th>State</th>
-                                    <th>Extract</th>
+                                    <th>Action</th>
                                 </tr>
                                 </tfoot>
                             </table>
+
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div id="rule_export_paginate" class="pull-right">
+                                        <!-- <ul class="pagination">
+                                            <li id="rule_export_previous" class="paginate_button previous" ng-click="previousPage()">
+                                                <a href="#" aria-controls="profiles-table" data-dt-idx="0" tabindex="0">Previous</a>
+                                            </li>
+
+                                            <li class="paginate_button" ng-class="active_page_no == pages ? 'active' : '' " ng-click="profilesPageClick(pages)">
+                                                <a href="#" aria-controls="profiles-table" data-dt-idx="1" tabindex="0">{{pages}}</a>
+                                            </li>
+
+                                            <li id="rule_export_next" class="paginate_button next" ng-click="nextPage()">
+                                                <a href="#" aria-controls="profiles-table" data-dt-idx="2" tabindex="0">Next</a>
+                                            </li>
+                                        </ul> -->
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+                        {% endif %}
                     </div>
                     <!-- /.box-body -->
                 </div>
@@ -135,10 +165,35 @@
     </div>
 </div>
 
+<div class="modal fade" id="delete-rule-Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <form role="form" method="POST">
+        {% csrf_token %}
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Delete rule</h4>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="delete-rule-id" name="rule_id">
+        <b>Do you really want to delete selected rule?</b>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="Submit" class="btn btn-primary">Delete</button>
+      </div>
+    </form>
+    </div>
+  </div>
+</div>
+
 {% endblock %}
 
 
 {% block footer %}
+<!-- <script src="{% static 'plugins/datatables/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'plugins/datatables/dataTables.bootstrap.min.js' %}"></script> -->
+<script src="{% static 'dist/js/jquery.bootpag.min.js' %}"></script>
 <script src="{% static 'dist/js/validator.min.js' %}"></script>
 <script>
     $('#rule-search').validator().on('submit', function (e) {
@@ -152,15 +207,55 @@
     });
 
     $('#export-rule').validator().on('submit', function (e) {
-        var formdata = $('#rule-search').serializeArray();
-        // everything looks good!
-        console.log($( "#extract_category" ).val());
         if($( "#extract_category" ).val() == "select"){
             $('#export-rule-error').css('display','block');
             return false;
         }else{
             $('#export-rule-error').css('display','none');
+            $('#export-rule').attr('action','/export/category/'+$( "#extract_category" ).val()+'/');
+            $('#rule-search').validator('destroy');
         }
+    });
+
+    $(function() {
+        var page_no, page_mod,page;
+        {% if rule_count %}
+            page_mod = {{rule_count}}%10;
+            page_no = Math.floor( {{rule_count}}/10 );
+            if( page_mod > 0 ){
+                page_no = page_no + 1;
+            }else { console.log('else');}
+        {% endif %}
+
+        function qs(key) {
+            key = key.replace(/[*+?^$.\[\]{}()|\\\/]/g, "\\$&"); // escape RegEx control chars
+            var match = location.search.match(new RegExp("[?&]" + key + "=([^&]+)(&|$)"));
+            return match && decodeURIComponent(match[1].replace(/\+/g, " "));
+        }
+
+        page = qs('page_number') ? qs('page_number') : 1;
+
+        $('#rule_export_paginate').bootpag({
+            total: page_no,
+            maxVisible: 10,
+            page: page,
+            activeClass: "active"
+        }).on("page",function(event,num){
+            window.location.href="/export/?page_number="+num+"&title="+$( "#title" ).val()+"&category="+$( "#category" ).val();
+        });
+    });
+
+    function setDeleteRuleId(rule_id){
+      $('#delete-rule-id').val(rule_id);
+    }
+
+    $('#clearResult').click(function(){
+        {% if category or title %}
+            window.location.href="/export/";
+        {% else %}
+            $( "#title" ).val('');
+            $( "#category" ).val('0')
+        {% endif %}
     });
 </script>
 {% endblock %}

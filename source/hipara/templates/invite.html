@@ -1,6 +1,6 @@
 {% extends "base.html" %} {% load staticfiles %} {% block title %}Invite{% endblock %} {% block head %}
 <link rel="stylesheet" href="{% static 'plugins/datatables/dataTables.bootstrap.css' %}">
-<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/themes/start/jquery-ui.css" />
+<link rel="stylesheet" type="text/css" href="{% static 'dist/css/jquery-ui.min.css' %}"/>
 <link rel="stylesheet" type="text/css" href="{% static 'dist/css/jquery.tagsinput.css' %}" />
 
 {% endblock %} {% block content %}
@@ -12,7 +12,7 @@
         Invite
       </h1>
       <ol class="breadcrumb">
-        <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="/"><i class="glyphicon glyphicon-home"></i> Home</a></li>
         <li>Invite</li>
       </ol>
     </section>
@@ -26,7 +26,7 @@
             <form role="form" method="post" action="/invite/" id="send-invite">
               {% csrf_token %}
               <div class="box-body">
-                <div class="form-group col-lg-6 col-md-6">
+                <div class="form-group col-lg-12 col-md-12">
                   <label for="title">Email</label>
                   <input id="email-tags" type="text" class="tags form-control"
                   name="emails" class="form-control" placeholder="Hit enter to add emails" autofocus="">
@@ -46,11 +46,11 @@
                 </div> -->
 
                 <div class="form-group col-lg-12 col-md-12 col-sm-12">
-                  <button type="submit" class="btn btn-primary">Invite</button>
+                  <button type="submit" class="btn btn-primary">Send Invite</button>
                 </div>
                 {% if error %}
-                <div>
-                  {{ error }}
+                <div class="form-group col-lg-12 col-md-12 col-sm-12" id="email-error">
+                  <b>{{ error }}</b>
                 </div>
                 {% endif %}
               </div>
@@ -112,8 +112,8 @@
 {% endblock %} {% block footer %}
 <script src="{% static 'plugins/datatables/jquery.dataTables.min.js' %}"></script>
 <script src="{% static 'plugins/datatables/dataTables.bootstrap.min.js' %}"></script>
-<script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js'></script>
-<script type="text/javascript" src="{% static 'dist/js/jquery.tagsinput.js' %} "></script>
+<script type='text/javascript' src="{% static 'dist/js/jquery-ui.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'dist/js/jquery.tagsinput.min.js' %} "></script>
 <script src="{% static 'dist/js/validator.min.js' %}"></script>
 <script src="{% static 'dist/js/invite.js' %}"></script>
 {% endblock %}
