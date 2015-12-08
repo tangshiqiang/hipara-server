@@ -23,7 +23,7 @@
                         <div class="box-header with-border">
                             <h3 class="box-title">Search users</h3>
                         </div>
-                        <form role="form" action="" method="">
+                        <form role="form" action="" method="" id="users-form">
                             <div class="box-body">
                                 <div class="form-group col-lg-6 col-md-6">
                                     <label for="title">Search</label>
@@ -136,6 +136,8 @@
         }).on("page",function(event,num){
             window.location.href="/export/?page_number="+num+"&title="+$( "#title" ).val()+"&category="+$( "#category" ).val();
         });
+
+        $('#users-form').validator();
 
         $('#clearResult').click(function(){
             {% if search %}

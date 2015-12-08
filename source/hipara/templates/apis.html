@@ -2,10 +2,6 @@
 {% load staticfiles %}
 {% block title %}Apis{% endblock %}
 
-{% block head %}
-<link rel="stylesheet" href="{% static 'plugins/datatables/dataTables.bootstrap.css' %}">
-{% endblock %}
-
 {% block content %}
 <div class="content-wrapper">
     <div class="container">
@@ -101,23 +97,4 @@
         <!-- /.content -->
     </div>
 </div>
-{% endblock %}
-
-
-{% block footer %}
-<script src="{% static 'plugins/datatables/jquery.dataTables.min.js' %}"></script>
-<script src="{% static 'plugins/datatables/dataTables.bootstrap.min.js' %}"></script>
-<script>
-                $(function() {
-                    // $("#example1").DataTable();
-                    $('#example1').DataTable({
-                        "paging": true,
-                        "lengthChange": false,
-                        "searching": false,
-                        "ordering": true,
-                        "info": true,
-                        "autoWidth": false
-                    });
-                });
-</script>
 {% endblock %}
