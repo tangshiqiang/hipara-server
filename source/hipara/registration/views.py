@@ -1,17 +1,18 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
+from .utils import get_page
 
 
 def index_view(request):
-    return render(request, 'index.html')
+    return render(request, 'index.html', {'page': get_page('index')})
 
 
 def about_view(request):
-    return render(request, 'about.html')
+    return render(request, 'about.html', {'page': get_page('about')})
 
 
 def apis_view(request):
-    return render(request, 'apis.html')
+    return render(request, 'apis.html', {'page': get_page('apis')})
 
 
 def login_view(request):
@@ -34,7 +35,7 @@ def login_view(request):
                 form.fields.password = ""
     else:
         form = LoginForm(initial={'email': ""})
-    return render(request, 'login.html', {'form': form})
+    return render(request, 'login.html', {'form': form, 'page': get_page('login')})
 
 
 def logout_view(request):
@@ -76,7 +77,7 @@ def users_view(request):
         except EmptyPage:
             users = paginator.page(paginator.num_pages)
         return render(request, 'users.html',
-                      {'users': users, 'user_count': user_count, 'search': search})
+                      {'users': users, 'user_count': user_count, 'search': search, 'page': get_page('users')})
     return redirect('index')
 
 
@@ -155,9 +156,9 @@ def invite_view(request):
                 invites = paginator.page(1)
             except EmptyPage:
                 invites = paginator.page(paginator.num_pages)
-            return render(request, 'invite.html', {'invites': invites, 'invite_count': invite_count, 'error': error})
+            return render(request, 'invite.html', {'invites': invites, 'invite_count': invite_count, 'error': error, 'page': get_page('invite')})
         else:
-            return render(request, 'invite.html', {'error': error})
+            return render(request, 'invite.html', {'error': error, 'page': get_page('invite')})
     return redirect('index')
 
 
@@ -226,7 +227,7 @@ def register_view(request, token):
                 error = 'This invite is Expired'
         except:
             error = "Sorry You are not Invited"
-        return render(request, 'register.html', {'form': form, 'token': token, 'error': error})
+        return render(request, 'register.html', {'form': form, 'token': token, 'error': error, 'page': get_page('register')})
     return redirect('index')
 
 
@@ -243,7 +244,7 @@ def users_detail_view(request, id):
             if user.metadata.role_id > request.user.metadata.role_id:
                 roles = Role.objects.filter(role_id__gt=1)
                 if request.method == 'GET':
-                    return render(request, 'user-detail.html', {'user_detail': user, 'roles': roles})
+                    return render(request, 'user-detail.html', {'user_detail': user, 'roles': roles, 'page': get_page('user-detail')})
                 elif request.method == 'POST':
                     status = int(request.POST.get('status'))
                     role = int(request.POST.get('role'))
@@ -254,7 +255,7 @@ def users_detail_view(request, id):
                         metatadata.updated_by = request.user
                         user.save()
                         metatadata.save()
-                        return render(request, 'user-detail.html', {'user_detail': user, 'roles': roles})
+                        return render(request, 'user-detail.html', {'user_detail': user, 'roles': roles, 'page': get_page('user-detail')})
         except:
             return redirect('index')
     return redirect('index')

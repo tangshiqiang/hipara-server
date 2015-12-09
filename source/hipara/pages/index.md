@@ -1,0 +1,46 @@
+- title: Home
+- robots: True
+- metadata:
+    - description:
+        - name: description
+        - content: Home
+    - keywords: 
+        - name: keywords
+        - content: Bitroots software, angularjs, php, nodejs, html, css
+- content:
+    - top_banner:
+        - title: Hipara
+        - sub_header: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+        - oneliner: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor. Lorem ipsum dolor sit amet, consectetur.
+        - image: 
+            - path: dist/img/mac_banner.jpg
+            - title: banner image
+            - alt: banner image
+    - tile_section:
+        - title: Services
+        - tiles:
+            - tile1: 
+                - title: Title1
+                - description: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                - image: 
+                    - path: dist/img/placeholder-user.png
+                    - title: tile image
+                    - alt: tile image
+            - tile3: 
+                - title: Title3
+                - description: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                - image: 
+                    - path: dist/img/placeholder-user.png
+                    - title: tile image
+                    - alt: tile image
+            - tile2: 
+                - title: Title2
+                - description: Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                - image: 
+                    - path: dist/img/placeholder-user.png
+                    - title: tile image
+                    - alt: tile image
+    - about_section:
+        - title: About
+        - header: loremipsumpotem dolor sitamet!
+        - description: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.

@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
+from registration.utils import get_page
 
 
 def export_view(request):
@@ -60,7 +61,7 @@ def export_view(request):
             rules = paginator.page(1)
         except EmptyPage:
             rules = paginator.page(paginator.num_pages)
-        return render(request, 'rule-export.html', {'rules': rules, 'first_rule': first_rule, 'rule_count': rule_count, 'title':title, 'categories': Category.objects.all(), 'category': category})
+        return render(request, 'rule-export.html', {'rules': rules, 'first_rule': first_rule, 'rule_count': rule_count, 'title':title, 'categories': Category.objects.all(), 'category': category, 'page': get_page('rule-export')})
     return redirect('index')
 
 
@@ -69,7 +70,7 @@ def import_view(request):
         from .forms import ImportFile
         from .models import Category
         form = ImportFile(initial={'source':""})
-        return render(request, 'rule-import.html', {'form': form, 'categories': Category.objects.all()})
+        return render(request, 'rule-import.html', {'form': form, 'categories': Category.objects.all(), 'page': get_page('rule-import')})
     elif request.user.is_authenticated() and request.method == 'POST':
         from .forms import ImportFile
         from .models import Category
@@ -130,8 +131,8 @@ def import_view(request):
                 transaction.rollback()
                 form.add_error(None, 'Unable to import Rule file')
         else:
-            return render(request, 'rule-import.html', {'form': form, 'categories': Category.objects.all()})
-        return render(request, 'rule-import.html', {'form': form, 'categories': Category.objects.all()})
+            return render(request, 'rule-import.html', {'form': form, 'categories': Category.objects.all(), 'page': get_page('rule-import')})
+        return render(request, 'rule-import.html', {'form': form, 'categories': Category.objects.all(), 'page': get_page('rule-import')})
     return redirect('index')
 
 
@@ -192,6 +193,6 @@ def rule_view(request, rule_id):
                 rule.status = True
                 rule.version += 1
                 rule.save()
-        return render(request, 'rule-detail.html', {'rule': rule})
+        return render(request, 'rule-detail.html', {'rule': rule, 'page': get_page('rule-detail')})
     return redirect('index')
 

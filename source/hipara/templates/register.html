@@ -3,12 +3,20 @@
 <html>
 
 <head>
+    <title>Hipara | {{ page.title }}</title>
+    
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Hipara | Registration</title>
-    <meta name="robots" content="no-follow,no-index">
-    <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+    {% if page.robots = "True" %}
+    <meta name="robots" content="no-follow,no-index">
+    {% endif %}
+
+    {% for key, meta in page.metadata.items %}
+    <meta {% if meta.name %}name="{{ meta.name }}" {% endif %}{% if meta.http_equiv %}http-equiv="{{ meta.http_equiv }}" {% endif %}{% if meta.charset %}charset="{{ meta.charset }}" {% endif %}{% if meta.property %}property="{{ meta.property }}" {% endif %}{% if meta.content %}content="{{ meta.content }}" {% endif %}/>
+    {% endfor %}
+    
     <!-- Bootstrap 3.3.5 -->
     <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
     <!-- Font Awesome -->
@@ -32,12 +40,12 @@
 <body class="hold-transition register-page">
     <div class="register-box">
         <div class="register-logo">
-            <a href="/"><b>Hipara</b></a>
-            <p>Lorem ipsum dolor sit amet.</p>
+            <a href="/"><b>{{ page.content.header }}</b></a>
+            <p>{{ page.content.sub_header }}</p>
         </div>
 
         <div class="register-box-body">
-            <p class="login-box-msg">Sign up</p>
+            <p class="login-box-msg">{{ page.content.title }}</p>
             <form role="form" id="registration_form" data-toggle="validator" action="/register/{{token}}/" method="post">
                 {% csrf_token %}
                 <div class="form-group has-feedback">

@@ -1,8 +1,12 @@
-{% extends "base.html" %} {% load staticfiles %} {% block title %}Invite{% endblock %} {% block head %}
+{% extends "base.html" %} 
+{% load staticfiles %}
+
+{% block head %}
 <link rel="stylesheet" type="text/css" href="{% static 'dist/css/jquery-ui.min.css' %}"/>
 <link rel="stylesheet" type="text/css" href="{% static 'dist/css/jquery.tagsinput.css' %}" />
+{% endblock %} 
 
-{% endblock %} {% block content %}
+{% block content %}
 <div class="content-wrapper">
   <div class="container padding-lr-zero">
     <!-- Content Header (Page header) -->
@@ -30,20 +34,9 @@
                   <input id="email-tags" type="text" class="tags form-control"
                   name="emails" class="form-control" placeholder="Hit enter to add emails" autofocus="">
                 </div>
-                <!-- <div class="form-group col-lg-6 col-md-6 invite-btn">
-                  <button type="button" class="btn btn-primary">Add email</button>
-                </div> -->
                 <div class="form-group col-lg-12 col-md-12" id="send-invite-error">
                   <b></b>
                 </div>
-
-                <!-- <div class="form-group col-lg-12 col-md-12">
-                  <span class="badge bg-blue">pratik@bitroots.co</span>
-                  <span class="badge bg-blue">pratik@bitroots.co</span>
-                  <span class="badge bg-blue">pratik@bitroots.co</span>
-                  <span class="badge bg-blue">pratik@bitroots.co</span>
-                </div> -->
-
                 <div class="form-group col-lg-12 col-md-12 col-sm-12">
                   <button type="submit" class="btn btn-primary">Send Invite</button>
                 </div>
