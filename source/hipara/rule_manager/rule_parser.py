@@ -164,18 +164,6 @@ def remove_comments(text):
     noncomments = [m.group(2) for m in regex.finditer(text) if m.group(2)]
     return "".join(noncomments)
 
-# Create Rules from Database
-blank_rule = '''rule [[name]]
-{
-    meta:
-[[meta]]
-    strings:
-[[strings]]
-    condition:
-        [[condition]]
-}
-'''
-
 
 def export_single_rule(rule):
     meta_list = rule.meta_rule.all()
@@ -215,12 +203,12 @@ def export_single_rule(rule):
     # get condition
     condition = rule.condition_rule.all()[0]
 
-    # Compile Rule
-    final_rule = blank_rule.replace('[[name]]', rule.name)
-    final_rule = final_rule.replace('[[meta]]', meta_string)
-    final_rule = final_rule.replace('[[strings]]', strings_string)
-    final_rule = final_rule.replace('[[condition]]', condition.condition)
-
+    final_rule = 'rule '+rule.name + '\n{'
+    if len(meta_string):
+        final_rule = final_rule + '\n\tmeta:\n' + meta_string
+    if len(strings_string):
+        final_rule = final_rule + '\n\tstrings:\n' + strings_string
+    final_rule = final_rule + '\n\tcondition:\n\t\t' + condition.condition + '\n}'
     # Return The rule
     return final_rule
 

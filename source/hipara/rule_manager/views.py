@@ -30,17 +30,22 @@ def export_view(request):
         if not page_size:
             page_size = 10
 
-        rule_list = []
+        rule_list = Rule.objects.filter(name__icontains=title).order_by('-updated_at')
 
-        rule_result = Rule.objects.filter(name__icontains=title)
-        for rule in rule_result:
-            rule_list.append(rule)
-        search_rows = RuleString.objects.filter(value__icontains=title)
-        for row in search_rows:
-            rule_list.append(row.rule)
-        search_rows = MetaData.objects.filter(value__icontains=title)
-        for row in search_rows:
-            rule_list.append(row.rule)
+        if len(title):
+            rule_result = rule_list
+            rule_list = []
+            for rule in rule_result:
+                rule_list.append(rule)
+            search_rows = RuleString.objects.filter(value__icontains=title)
+            for row in search_rows:
+                rule_list.append(row.rule)
+            search_rows = MetaData.objects.filter(value__icontains=title)
+            for row in search_rows:
+                rule_list.append(row.rule)
+            rule_list = list({v.rule_id: v for v in rule_list}.values())
+            rule_list = sorted(rule_list, key=lambda k: k.updated_at, reverse=True)
+
         if category and category != "0":
             category = int(category)
             rule_result = []
@@ -48,9 +53,6 @@ def export_view(request):
                 if rule.category_id == category:
                     rule_result.append(rule)
             rule_list = rule_result
-
-        rule_list = list({v.rule_id: v for v in rule_list}.values())
-        rule_list = sorted(rule_list, key=lambda k: k.updated_at, reverse=True  )
 
         rule_count = len(rule_list)
         first_rule = int(page_number) * int(page_size) - int(page_size) + 1
@@ -187,11 +189,11 @@ def rule_view(request, rule_id):
             status = request.POST.get('status')
             if status == "0":
                 rule.status = False
-                rule.version += 1
+                # rule.version += 1
                 rule.save()
             elif status == "1":
                 rule.status = True
-                rule.version += 1
+                # rule.version += 1
                 rule.save()
         return render(request, 'rule-detail.html', {'rule': rule, 'page': get_page('rule-detail')})
     return redirect('index')

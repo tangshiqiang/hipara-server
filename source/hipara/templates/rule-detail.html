@@ -100,7 +100,7 @@
                         </div>
                     </div>
 
-
+                    {% if rule.meta_rule.all|length %}
                     <div class="box box-primary">
                         <div class="box-header with-border">
                             <h3 class="box-title">Rule Metadata</h3>
@@ -116,7 +116,8 @@
                            {% endfor %}
                        </div>
                    </div>
-
+                   {% endif %}
+                   {% if rule.string_rule.all|length %}
                    <div class="box box-primary">
                        <div class="box-header with-border">
                            <h3 class="box-title">Rule Strings</h3>
@@ -152,6 +153,7 @@
                           </div>
                       </div>
                   </div>
+                  {% endif %}
 
                   <div class="box box-primary">
                       <div class="box-header with-border">
