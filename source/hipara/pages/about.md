@@ -1,0 +1,42 @@
+- title: About
+- robots: True
+- metadata:
+    - description:
+        - name: description
+        - content: About
+    - keywords: 
+        - name: keywords
+        - content: Bitroots software, angularjs, php, nodejs, html, css
+- content:
+    - title: About us
+    - top_banner:
+        - title: Hipara
+        - sub_header: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+        - oneliner: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor. Lorem ipsum dolor sit amet, consectetur.
+        - image: 
+            - path: dist/img/mac_banner.jpg
+            - title: banner image
+            - alt: banner image
+    - about_section:
+        - title: Hipara
+        - description: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    - team_section: 
+        - title: Team
+        - oneliner: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt.
+        - members:
+            - member1:
+                - name: Abc lmn
+                - designation: Technical head
+                - description: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum unt in culpa qui officia deserunt mollit anim id est laborum.
+                - image:
+                    - path: dist/img/placeholder-user.png
+                    - title: title
+                    - alt: alt
+            - member2:
+                - name: Abc lmn
+                - designation: Technical head
+                - description: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum unt in culpa qui officia deserunt mollit anim id est laborum.
+                - image:
+                    - path: dist/img/placeholder-user.png
+                    - title: title
+                    - alt: alt

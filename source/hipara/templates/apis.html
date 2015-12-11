@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+<div class="content-wrapper">
+    <div class="container">
+        <!-- Content Header (Page header) -->
+        <section class="content-header padding-lr-zero">
+            <h1>
+                Users endpoints
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="/"><i class="glyphicon glyphicon-home"></i> Home</a></li>
+                <li>API's</li>
+            </ol>
+        </section>
+
+        <section class="content apis padding-lr-zero">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">GET</h3>
+                        </div>
+                        <div class="box-body">
+                            <ul>
+                                <li>lorem ipsum potem</li>
+                                <li>lorem ipsum potem</li>
+                                <li>lorem ipsum potem</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">GET &nbsp;&nbsp;&nbsp;
+                                <strong>/api/v1/users</strong>
+                            </h3>
+                        </div>
+                        <div class="box-body">
+                            <b>Description</b>
+                            <p>Get basic information about users.</p>
+                        </div>
+
+
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Parameters</h3>
+                        </div>
+                        <div class="box-body parameters">
+                            <dl class="dl-horizontal">
+                                <dt class="text-left">page_no</dt>
+                                <dd>The page number of the results, always starting with 1.</dd>
+                                <dt>page_size</dt>
+                                <dd>page containing no.of results.</dd>
+                            </dl>
+                        </div>
+
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Response</h3>
+                        </div>
+                        <div class="box-body response">
+                            {
+                            <br>
+                            <code>"name":</code>{
+                            <dl class="dl-horizontal margin-zero">
+                                <dt>
+                                    <code>"first_name":</code>
+                                </dt>
+                                <dd>Abc</dd>
+                                <dt>
+                                    <code>"last_name":</code>
+                                </dt>
+                                <dd>Lmn</dd>
+                                <dt>
+                                    <code>"Role":</code>
+                                </dt>
+                                <dd>Admin</dd>
+                                <dt>
+                                    <code>"created_by":</code>
+                                </dt>
+                                <dd>Xyz ssa</dd>
+                                <dt>
+                                    <code>"created_at":</code>
+                                </dt>
+                                <dd>2015-11-19</dd>
+                            </dl>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+                            <br> }
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+            </div>
+        </section>
+        <!-- /.content -->
+    </div>
+</div>
+{% endblock %}
