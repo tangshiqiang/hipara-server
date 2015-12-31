@@ -76,7 +76,7 @@
                 <tbody>
                   {% for invite in invites %}
                   <tr>
-                    <td>{{ request.META.HTTP_HOST }}{% url 'register' invite.token %}</td>
+                    <td>HTTP{% if request.is_secure %}S{% endif %}://{{ request.get_host }}{% url 'register' invite.token %}</td>
                     <td>{{invite.created_at}}</td>
                     <td>{{invite.expiry_date}}</td>
                     <td>

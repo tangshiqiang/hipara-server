@@ -74,7 +74,7 @@ DATABASES = {
 }
 
 LANGUAGE_CODE = 'en-us'
-
+#Update timezone
 TIME_ZONE = 'UTC'
 
 USE_I18N = True
@@ -98,21 +98,18 @@ STATICFILES_FINDERS = (
     'compressor.finders.CompressorFinder',
 )
 
-EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
-EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'email')
+#test SMTP
+EMAIL_BACKEND = "djrill.mail.backends.djrill.DjrillBackend"
+MANDRILL_API_KEY = "NdSCtKw7lEn77e9dtvfEQw"
 
+##use following SMTP for PRODUCTION 
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # DEFAULT_FROM_EMAIL = 'no-reply@hipara.org'
 # SERVER_EMAIL = 'brettcu@gmail.com'
-# EMAIL_HOST = 'smtp.mandrillapp.com'
-# EMAIL_PORT = 587
-# EMAIL_HOST_USER = <HOST_EMAIL>
-# EMAIL_HOST_PASSWORD = <HOST_EMAIL_PASSWORD>
-# # EMAIL_USE_TLS =
-# # EMAIL_USE_SSL
-# # EMAIL_TIMEOUT
-# # EMAIL_SSL_KEYFILE
-# # EMAIL_SSL_CERTFILE
+# EMAIL_HOST = '<EMAIL_HOST>'
+# EMAIL_PORT = <PORT>
+# EMAIL_HOST_USER = '<HOST_EMAIL>'
+# EMAIL_HOST_PASSWORD = '<HOST_EMAIL_PASSWORD>'
 
 SESSION_COOKIE_NAME = 'bitroots_hipara'
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True

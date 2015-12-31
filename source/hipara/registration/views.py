@@ -104,7 +104,7 @@ def invite_view(request):
                 emails = ""
             email_list = emails.split(',')
             if len(email_list):
-                from django.core.mail import send_mail
+                from django.core.mail import EmailMultiAlternatives
                 from datetime import datetime, timedelta
                 import string, random
                 from django.core.urlresolvers import reverse
@@ -119,13 +119,15 @@ def invite_view(request):
                         user_invite_token.email = email
                         user_invite_token.expiry_date = expiry_date
                         user_invite_token.created_by = request.user
-                        subject = "Invite For Hipara"
-                        url = request.META.get('HTTP_HOST') + reverse('register', kwargs={'token': token})
+                        subject = "Invite From Hipara"
+                        url = request.build_absolute_uri(reverse('register', kwargs={'token': token}))
                         html_body = 'Invite url : <a href="' + url + '">link</a>'
                         body = "Invite url : "+url
-                        from_email = "support@hipara.org"
-                        send_mail(subject, body, from_email,
-                                  [email], fail_silently=False)
+                        from_email = "Hipara Support <support@hipara.org>"
+                        headers = {'Reply-To': 'Hipara Support <no-reply@hipara.org>'}
+                        msg = EmailMultiAlternatives(subject=subject, body=body, from_email=from_email, to=[email], headers = headers)
+                        msg.attach_alternative(html_body, "text/html")
+                        msg.send()
                         user_invite_token.save()
                     except:
                         if not error:
