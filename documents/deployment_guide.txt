@@ -1,0 +1,137 @@
+sudo apt-get update
+sudo apt-get install git
+sudo apt-get install nginx
+sudo apt-get install mysql-server libmysqlclient-dev    //current password is root
+sudo mysql_install_db
+sudo mysql_secure_installation    //You'll be asked for the administrative password you set for MySQL during installation. Afterwards, you'll be asked a series of questions. Besides the first question which asks you to choose another administrative password, select yes for each question.
+
+create database name 'hipara'
+
+sudo apt-get install python3-pip
+sudo pip3 install virtualenv virtualenvwrapper
+
+echo "export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3" >> ~/.bashrc
+echo "export WORKON_HOME=~/Env" >> ~/.bashrc
+echo "source '/usr/local/bin/virtualenvwrapper.sh'" >> ~/.bashrc
+source ~/.bashrc
+mkvirtualenv hipara
+
+cd /var/www/html
+
+sudo git clone https://github.com/jbc22/YaraManager.git
+
+cd /var/www/html/YaraManager/source/
+
+pip install -r requirements.txt
+
+sudo nano /var/www/html/YaraManager/source/hipara/hipara/settings.py
+
+	Update :
+	
+	DATABASES = {
+	    'sqlite': {
+		'ENGINE': 'django.db.backends.sqlite3',
+		'NAME': os.path.join(BASE_DIR, 'hipara.sqlite3'),
+	    },
+	    'default': {
+		'ENGINE': 'django.db.backends.mysql',
+		'NAME': 'hipara',
+		'USER': 'root',
+		'PASSWORD': 'root',
+		'HOST': 'localhost',
+		'PORT': '',
+	    }
+	}
+	
+	#Comment following which is test SMTP or leave as it is for development but it will stop working after some time
+	
+	#EMAIL_BACKEND = "djrill.mail.backends.djrill.DjrillBackend"
+	#MANDRILL_API_KEY = "sdgdghdrhdrhbdhrhdrh"
+
+	#Uncomment following and use proper smtp settings for production
+	EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+	DEFAULT_FROM_EMAIL = 'no-reply@hipara.org'   	#user proper email
+	SERVER_EMAIL = 'brettcu@gmail.com'            	#place any email to report site failure
+	EMAIL_HOST = '<EMAIL_HOST>'			#host of smtp service (eg. google)
+	EMAIL_PORT = <PORT>         			#port
+	EMAIL_HOST_USER = '<HOST_EMAIL>'		#host username
+	EMAIL_HOST_PASSWORD = '<HOST_EMAIL_PASSWORD>'  	#host password
+
+
+	#UPDATE Timezone currntly it is UTC
+	
+sudo chmod -R 777 /var/www/html/YaraManager/source/hipara
+python manage.py migrate
+python manage.py collectstatic
+
+deactivate
+
+sudo apt-get install python-dev
+sudo pip3 install uwsgi 		//if uwsgi installed previously then remove it and install with python3
+
+sudo mkdir -p /etc/uwsgi/sites
+cd /etc/uwsgi/sites
+sudo nano hipara.ini
+
+	add following content
+	
+	[uwsgi]
+	project = hipara
+	base = /var/www/html/YaraManager/source
+
+	chdir = %(base)/%(project)
+	home = /home/user/Env/%(project)
+	module = %(project).wsgi:application
+
+	master = true
+	processes = 5
+
+	socket = %(base)/%(project)/%(project).sock
+	chmod-socket = 664
+	vacuum = true
+	
+sudo nano /etc/init/uwsgi.conf
+	add following content in it
+	
+	description "uWSGI application server in Emperor mode"
+
+	start on runlevel [2345]
+	stop on runlevel [!2345]
+
+	setuid www-data
+	setgid www-data
+
+	exec /usr/local/bin/uwsgi --emperor /etc/uwsgi/sites
+
+sudo nano /etc/nginx/sites-available/hipara
+
+	add following content in it
+	
+	server {
+	    listen 80;
+	    server_name hipara.org www.hipara.org;
+
+	    access_log /var/www/html/YaraManager/source/hipara/hipara_access.log;
+    	    error_log  /var/www/html/YaraManager/source/hipara/hipara_error.log;
+		    
+	    location = /favicon.ico { access_log off; log_not_found off; }
+		    
+	    location /static/ {
+		root /var/www/html/YaraManager/source/hipara;
+	    }
+	    location /media/ {
+		root /var/www/html/YaraManager/source/hipara;
+	    }
+
+	    location / {
+		include         /etc/nginx/uwsgi_params;
+		uwsgi_pass      unix:/var/www/html/YaraManager/source/hipara/hipara.sock;
+	    }
+	}
+	
+sudo ln -s /etc/nginx/sites-available/hipara /etc/nginx/sites-enabled
+
+sudo service nginx configtest
+sudo service nginx restart
+sudo service uwsgi restart
+

@@ -1,4 +1,5 @@
-source/env/
+/source/env/
 **/__pycache__/
 **/.idea/
-source/hipara/secret_key.py
+/source/hipara/secret_key.py
+/source/hipara/staticfiles/
