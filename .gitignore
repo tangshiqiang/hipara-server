@@ -3,3 +3,4 @@
 **/.idea/
 /source/hipara/secret_key.py
 /source/hipara/staticfiles/
+/source/hipara/hipara/settings.py
