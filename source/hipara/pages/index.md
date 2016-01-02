@@ -6,7 +6,7 @@
         - content: Home
     - keywords: 
         - name: keywords
-        - content: Bitroots software, angularjs, php, nodejs, html, css
+        - content: antivirus, anti-virus, antimalware, anti-malware, adversary, TTP, tactics, techniques, procedures, APT, ransomeware, scareware
 - content:
     - top_banner:
         - title: Hipara
