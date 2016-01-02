@@ -42,5 +42,5 @@
                     - alt: tile image
     - about_section:
         - title: About
-        - header: loremipsumpotem dolor sitamet!
-        - description: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        - header: Excellence through experience!
+        - description: Hipara was truly created by the experience and wisdom of the InfoSec community. It comes from the needs identified through over a decade of fighting advanced adversaries and targeted threats. It combines the power, industry-standard Yara framework to identify known malware and extendable modules that aim to detect the unknown adversary tactics, techniques and procedures including malware and exploits.
