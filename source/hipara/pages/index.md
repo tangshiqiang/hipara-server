@@ -11,7 +11,7 @@
     - top_banner:
         - title: Hipara
         - sub_header: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-        - oneliner: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor. Lorem ipsum dolor sit amet, consectetur.
+        - oneliner: Let's try it.
         - image: 
             - path: dist/img/mac_banner.jpg
             - title: banner image
