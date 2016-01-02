@@ -6,7 +6,7 @@
         - content: About
     - keywords: 
         - name: keywords
-        - content: Bitroots software, angularjs, php, nodejs, html, css
+        - content: antivirus, anti-virus, antimalware, anti-malware, adversary, TTP, tactics, techniques, procedures, APT, ransomeware, scareware, Yara, Yara signatures
 - content:
     - title: About us
     - top_banner:
@@ -19,23 +19,23 @@
             - alt: banner image
     - about_section:
         - title: Hipara
-        - description: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        - description: We are a team of network defenders. Having spent more than a decade in the information security industry performing incident response and cyber intelligence, we created Hipara to address the gaps we identified in the current capabilities of the market place. Anti-Virus vendors largely stop after performing pattern-matching (aka signatures), Host Intrusion Detection/Prevention Systems (HIDS/HIPS) stop after identifying "odd" behavior. We subscribe to the Network Security Monitoring (NSM) model for network detection, but understood there is nothing like this model for the host. When an analyst receives an alert, they should be able to immediately pivot to gather necessary information to perform timely triage. We want the analyst to have all this information including the file in question, Live Response (host log) information, and potentially a memory dump. 
     - team_section: 
         - title: Team
-        - oneliner: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt.
+        - oneliner: I am pleased to introduce to you the Hipara team:
         - members:
             - member1:
-                - name: Abc lmn
+                - name: J Brett Cunningham (@jbc22)
                 - designation: Technical head
-                - description: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum unt in culpa qui officia deserunt mollit anim id est laborum.
+                - description: Hipara is Brett's brain child. Responding to numerous intrustions left him wanting more to be able to detect and monitor threat actors, both known and unknown. Out of that, Hipara was born.
                 - image:
                     - path: dist/img/placeholder-user.png
                     - title: title
                     - alt: alt
             - member2:
-                - name: Abc lmn
-                - designation: Technical head
-                - description: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum unt in culpa qui officia deserunt mollit anim id est laborum.
+                - name: To Be Announced
+                - designation: TBA
+                - description: Other team members are committing in private at the moment.
                 - image:
                     - path: dist/img/placeholder-user.png
                     - title: title
