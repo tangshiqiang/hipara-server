@@ -10,8 +10,8 @@
 - content:
     - top_banner:
         - title: Hipara
-        - sub_header: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-        - oneliner: Let's try it.
+        - sub_header: Changing the game in favor of the network defender.
+        - oneliner: Download the client today and start being protected from advanced threats.
         - image: 
             - path: dist/img/mac_banner.jpg
             - title: banner image
