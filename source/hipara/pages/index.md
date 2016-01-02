@@ -28,7 +28,7 @@
                     - alt: tile image
             - tile3: 
                 - title: Hipara Modules
-                - description: Modules are an extension of Hipara's capabilities. They are aimed at detecting adversary TTPs and alerting network defenders. Such modules include: cmd.exe centralized logging, worm(s) spreading across the network, USB writes within moments of plugging in.
+                - description: Perhaps the most exciting and strongest feature in Hipara, modules are an extension of Hipara's capabilities. They are aimed at detecting adversary TTPs and alerting network defenders. Such modules include: cmd.exe centralized logging, worm(s) spreading across the network, USB writes within moments of plugging in.
                 - image: 
                     - path: dist/img/placeholder-user.png
                     - title: tile image
