@@ -6,7 +6,7 @@
         - content: Home
     - keywords: 
         - name: keywords
-        - content: antivirus, anti-virus, antimalware, anti-malware, adversary, TTP, tactics, techniques, procedures, APT, ransomeware, scareware
+        - content: antivirus, anti-virus, antimalware, anti-malware, adversary, TTP, tactics, techniques, procedures, APT, ransomeware, scareware, Yara, Yara signatures
 - content:
     - top_banner:
         - title: Hipara
