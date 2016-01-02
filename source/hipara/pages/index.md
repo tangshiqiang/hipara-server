@@ -20,22 +20,22 @@
         - title: Services
         - tiles:
             - tile1: 
-                - title: Title1
-                - description: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                - title: Hipara Desktop Client
+                - description: End users can download the client and receive timely signatures that protect against Nation-State, Scareware and Ransonware malware.
                 - image: 
                     - path: dist/img/placeholder-user.png
                     - title: tile image
                     - alt: tile image
             - tile3: 
-                - title: Title3
-                - description: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                - title: Hipara Modules
+                - description: Modules are an extension of Hipara's capabilities. They are aimed at detecting adversary TTPs and alerting network defenders. Such modules include: cmd.exe centralized logging, worm(s) spreading across the network, USB writes within moments of plugging in.
                 - image: 
                     - path: dist/img/placeholder-user.png
                     - title: tile image
                     - alt: tile image
             - tile2: 
-                - title: Title2
-                - description: Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                - title: Hipara Web Server
+                - description: Organizations can deploy their own internal web server to push signatures to their enterprise, receive alerts from endpoints and perform initial response actions.
                 - image: 
                     - path: dist/img/placeholder-user.png
                     - title: tile image
