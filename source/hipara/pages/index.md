@@ -26,14 +26,14 @@
                     - path: dist/img/placeholder-user.png
                     - title: tile image
                     - alt: tile image
-            - tile3: 
+            - tile2:
                 - title: Hipara Modules
                 - description: Perhaps the most exciting and strongest feature in Hipara, modules are an extension of Hipara's capabilities. They are aimed at detecting adversary TTPs and alerting network defenders. Such modules include: cmd.exe centralized logging, worm(s) spreading across the network, USB writes within moments of plugging in.
                 - image: 
                     - path: dist/img/placeholder-user.png
                     - title: tile image
                     - alt: tile image
-            - tile2: 
+            - tile3:
                 - title: Hipara Web Server
                 - description: Organizations can deploy their own internal web server to push signatures to their enterprise, receive alerts from endpoints and perform initial response actions.
                 - image: 
