@@ -22,6 +22,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'registration',
     'rule_manager',
 )
@@ -112,7 +113,7 @@ MANDRILL_API_KEY = "NdSCtKw7lEn77e9dtvfEQw"
 # EMAIL_HOST_PASSWORD = '<HOST_EMAIL_PASSWORD>'
 
 SESSION_COOKIE_NAME = 'bitroots_hipara'
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 SESSION_COOKIE_AGE = 86400
 
 AUTHENTICATION_BACKENDS = ['django-dual-authentication.backends.DualAuthentication']

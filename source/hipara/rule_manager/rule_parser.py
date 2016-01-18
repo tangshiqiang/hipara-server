@@ -227,6 +227,8 @@ def export_all_rule():
     from .models import Rule
     rules = Rule.objects.all()
     for rule in rules:
+        if final_rule:
+            final_rule += '\n'
         raw = export_single_rule(rule)
         final_rule += '{0}'.format(raw)
     return final_rule

@@ -1,0 +1,154 @@
+---------------------------------------------------------------------
+Title : Login
+URL : /api/v1/auth/login
+Method : POST
+Header :
+    Content-Type: application/json
+
+Data Params :
+    {
+        "email"     :   <alphanumeric>,
+        "password"  :   <alphanumeric>
+    }
+
+Success Response :
+    Code: 200
+    Content :"Login Successful"
+
+    OR
+
+    Code: 200
+    Content :"Already Logged In"
+
+Error Response :
+    Code: 422
+    Content: "Invalid Username and/or Password"
+
+    OR
+
+    Code: 403
+    Content: "This account has been disabled contact to admin"
+
+    OR
+
+    Code: 422
+    Content: {
+      "email": [
+        "This field is required."
+      ],
+      "password": [
+        "This field is required."
+      ]
+    }
+
+    OR
+
+    Code: 422
+    Content: {
+      "password": [
+        "This field is required."
+      ]
+    }
+
+---------------------------------------------------------------------
+
+
+Title : Logout
+URL : /api/v1/auth/logout
+Method : GET
+
+Success Response :
+
+    Code: 200
+    Content :"Logout successful"
+
+Error Response :
+
+    Code: 403
+    Content: "You have to login First"
+
+---------------------------------------------------------------------
+
+
+Title : Export All signature rule
+URL : /api/v1/export/all
+Method : GET
+
+Success Response :
+    Code: 200
+    Content : File will be downloaded forcefully
+
+Error Response :
+
+    Code: 404
+    Content: "Nothing To Download"
+
+    OR
+
+    Code: 403
+    Content: "You have to login First"
+
+---------------------------------------------------------------------
+Title : Upload signature rule file
+URL : /api/v1/import
+Method : POST
+Header :
+    Content-Type: multipart/form-data
+
+Data Params :
+    {
+        "rule_file" :   <file>,
+        "category"  :   <numeric from (1,2)>,
+        "source"    :   <alphanumeric>
+    }
+
+Success Response :
+    Code: 200
+    Content :"Successfully import rule file"
+
+Error Response :
+
+    Code: 422
+    Content: {
+      "rule_file": [
+        "This field is required."
+      ],
+      "category": [
+        "This field is required."
+      ],
+      "source": [
+        "This field is required."
+      ]
+    }
+
+    OR
+
+    Code: 422
+    Content: {
+      "rule_file": [
+        "Name for rule is already been taken : Bioazih_RAT"
+      ]
+    }
+
+    OR
+
+    Code: 403
+    Content: "You have to login First"
+
+
+Example :
+    EXAMPLE REQUEST : http://hipara.org/api/v1/import
+    Method : POST
+    Header :
+        Content-Type: multipart/form-data
+    Data Params :
+        {
+            "rule_file" :   "apt_bioazih_rat.yara",
+            "category"  :   1,
+            "source"    :   "test"
+        }
+    Response :
+        Code: 200
+        Content :"Successfully import rule file"
+
+---------------------------------------------------------------------

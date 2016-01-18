@@ -75,7 +75,6 @@ def import_view(request):
         return render(request, 'rule-import.html', {'form': form, 'categories': Category.objects.all(), 'page': get_page('rule-import')})
     elif request.user.is_authenticated() and request.method == 'POST':
         from .forms import ImportFile
-        from .models import Category
         form = ImportFile(request.POST, request.FILES)
 
         if form.is_valid():
