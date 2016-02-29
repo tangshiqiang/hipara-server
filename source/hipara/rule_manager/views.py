@@ -68,9 +68,9 @@ def export_view(request):
 
 
 def import_view(request):
+    from .models import Category
     if request.user.is_authenticated() and request.method == 'GET':
         from .forms import ImportFile
-        from .models import Category
         form = ImportFile(initial={'source':""})
         return render(request, 'rule-import.html', {'form': form, 'categories': Category.objects.all(), 'page': get_page('rule-import')})
     elif request.user.is_authenticated() and request.method == 'POST':

@@ -7,11 +7,18 @@ sudo mysql_secure_installation    //You'll be asked for the administrative passw
 
 create database name 'hipara'
 
+sudo apt-get install python-dev
+sudo apt-get install python3.4-dev
+sudo apt-get install libjpeg-progs
+
+sudo apt-get install libtiff5-dev libjpeg8-dev zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python-tk
 sudo apt-get install python3-pip
 sudo pip3 install virtualenv virtualenvwrapper
 
+sudo chmod -R 777 /opt
+
 echo "export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3" >> ~/.bashrc
-echo "export WORKON_HOME=~/Env" >> ~/.bashrc
+echo "export WORKON_HOME=/opt/Env" >> ~/.bashrc
 echo "source '/usr/local/bin/virtualenvwrapper.sh'" >> ~/.bashrc
 source ~/.bashrc
 mkvirtualenv hipara
@@ -27,6 +34,10 @@ pip install -r requirements.txt
 sudo nano /var/www/html/YaraManager/source/hipara/hipara/settings.py
 
 	Update :
+	
+	DEBUG = False
+
+	ALLOWED_HOSTS = ['hipara.org','www.hipara.org', 'hipara.com', 'www.hipara.com', '139.162.213.160']
 	
 	DATABASES = {
 	    'sqlite': {
@@ -61,6 +72,7 @@ sudo nano /var/www/html/YaraManager/source/hipara/hipara/settings.py
 	#UPDATE Timezone currntly it is UTC
 	
 sudo chmod -R 777 /var/www/html/YaraManager/source/hipara
+cd hipara
 python manage.py migrate
 python manage.py collectstatic
 
@@ -80,7 +92,7 @@ sudo nano hipara.ini
 	base = /var/www/html/YaraManager/source
 
 	chdir = %(base)/%(project)
-	home = /home/user/Env/%(project)
+	home = /opt/Env/%(project)
 	module = %(project).wsgi:application
 
 	master = true
@@ -109,7 +121,7 @@ sudo nano /etc/nginx/sites-available/hipara
 	
 	server {
 	    listen 80;
-	    server_name hipara.org www.hipara.org;
+	    server_name hipara.org www.hipara.org hipara.com www.hipara.com 139.162.213.160;
 
 	    access_log /var/www/html/YaraManager/source/hipara/hipara_access.log;
     	    error_log  /var/www/html/YaraManager/source/hipara/hipara_error.log;
