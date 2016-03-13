@@ -66,9 +66,9 @@ DATABASES = {
     },
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'hipara',
-        'USER': 'bitroots',
-        'PASSWORD': 'bitroots',
+        'NAME': 'mysql',
+        'USER': 'root',
+        'PASSWORD': '',
         'HOST': 'localhost',
         'PORT': '',
     }
