@@ -1,0 +1,41 @@
+yaramanager (1.1-1ubuntu9) trusty; urgency=medium
+
+  * move build to i386 
+
+ -- Brett Cunningham <brettcu@gmail.com>  Sun, 13 Mar 2016 18:24:49 +0000
+
+yaramanager (1.1-1ubuntu8) trusty; urgency=medium
+
+  * repackage 
+
+ -- Brett Cunningham <brettcu@gmail.com>  Sun, 13 Mar 2016 18:19:45 +0000
+
+yaramanager (1.1-1ubuntu7) trusty; urgency=medium
+
+  * repackage 
+
+ -- Brett Cunningham <brettcu@gmail.com>  Sat, 12 Mar 2016 18:15:55 +0000
+
+yaramanager (1.1-1ubuntu6) trusty; urgency=medium
+
+  * repackaging 
+
+ -- Brett Cunningham <brettcu@gmail.com>  Sat, 12 Mar 2016 17:05:21 +0000
+
+yaramanager (1.0-1ubuntu5) trusty; urgency=medium
+
+  * repackaging 
+
+ -- Brett Cunningham <brettcu@gmail.com>  Sat, 12 Mar 2016 17:03:25 +0000
+
+yaramanager (1.0-1ubuntu4) trusty; urgency=medium
+
+  * first release
+
+ -- J. Brett Cunningham <brettcu@gmail.com>  Mon, 29 Feb 2016 14:21:23 +0000
+
+yaramanager (0.1-1) trusty; urgency=low
+
+  * Initial release (Closes: #nnnn)  <nnnn is the bug number of your ITP>
+
+ -- J. Brett Cunningham <brettcu@gmail.com>  Sun, 28 Feb 2016 22:24:58 +0000

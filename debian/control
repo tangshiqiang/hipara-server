@@ -1,0 +1,15 @@
+Source: yaramanager
+Section: misc
+Priority: optional
+Maintainer: J. Brett Cunningham <brettcu@gmail.com>
+Build-Depends: 
+Standards-Version: 3.9.4
+#Homepage: <insert the upstream URL, if relevant>
+#Vcs-Git: git://
+#Vcs-Browser: http://
+
+Package: yaramanager
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: YaraManager, forked and customized for Hipara 
+ <insert long description, indented with spaces>
