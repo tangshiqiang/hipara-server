@@ -2,14 +2,14 @@ Source: yaramanager
 Section: misc
 Priority: optional
 Maintainer: J. Brett Cunningham <brettcu@gmail.com>
-Build-Depends: 
+Build-Depends: deb-helper
 Standards-Version: 3.9.4
-#Homepage: <insert the upstream URL, if relevant>
-#Vcs-Git: git://
+Homepage: https://www.hipara.org/
+#Vcs-Git: git://github.com:jbc22/YaraManager.git
 #Vcs-Browser: http://
 
 Package: yaramanager
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}, python3.4, python-virtualenv, mysql-server, python3-pip
 Description: YaraManager, forked and customized for Hipara 
- <insert long description, indented with spaces>
+ YaraManager was created kevthehermit, and forked by jbc22 in order to add funtionality for the Hipara endpoint client. This web application will centralize Yara signatures that can be deployed to endpoints, retrieve files and logs from endpoints, and act as a console for incident response.

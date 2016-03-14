@@ -1,3 +1,9 @@
+yaramanager (1.1-1ubuntu10) UNRELEASED; urgency=medium
+
+  * 
+
+ -- jbc <jbc@mightymouse-dev>  Mon, 14 Mar 2016 01:28:50 +0000
+
 yaramanager (1.1-1ubuntu9) trusty; urgency=medium
 
   * move build to i386 
