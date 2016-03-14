@@ -2,7 +2,7 @@ Source: yaramanager
 Section: misc
 Priority: optional
 Maintainer: J. Brett Cunningham <brettcu@gmail.com>
-Build-Depends: deb-helper
+Build-Depends: debhelper (>= 8.0.0)
 Standards-Version: 3.9.4
 Homepage: https://www.hipara.org/
 #Vcs-Git: git://github.com:jbc22/YaraManager.git
