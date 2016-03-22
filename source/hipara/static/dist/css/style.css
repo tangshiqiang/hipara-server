@@ -103,7 +103,7 @@ input[type="file"] {
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
-  height: 70vh;
+  height: 100vh;
   text-align: center;
 }
 .info_sections3 h1 {
@@ -124,17 +124,22 @@ input[type="file"] {
   border-radius: 5px;
 }
 .info_sections3 > div:nth-of-type(1) {
-  background: #000 none repeat scroll 0 0;
+  /*background: #000 none repeat scroll 0 0;*/
+  background: #4495C6 none repeat scroll 0 0;
   height: 100%;
-  opacity: 0.75;
+  /*opacity: 0.75;*/
+  opacity: 1;
   position: absolute;
   top: 0;
   width: 100%;
 }
 .info_sections3 .row > div {
-  padding: 5em 2em;
+  padding: 2em;
   margin: 0 auto;
 }
+
+.info_sections3 i, .info_sections3 a { color: #fff; cursor: pointer;}
+.info_sections3 a { margin-right: 1em; cursor: pointer; }
 @media screen and (max-width: 64.0625em) {
   .info_sections3 {
     height: 80vh;

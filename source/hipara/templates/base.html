@@ -2,9 +2,9 @@
 <!DOCTYPE html>
 <html>
 
-<head> 
+<head>
     <title>Hipara | {{ page.title }}</title>
-    
+
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
@@ -62,7 +62,8 @@
                             </li>
                             <li {% if request.path = '/about/' %} class="active" {% endif %}>
                                 <a href="/about/">
-                                    <i class="glyphicon glyphicon-play"></i>
+                                    <!-- <i class="glyphicon glyphicon-play"></i> -->
+                                    <i class="fa fa-group"></i>
                                     <span>About</span>
                                 </a>
                             </li>
@@ -76,7 +77,7 @@
                             <li class="dropdown {% if request.path = '/export/' or  request.path = '/import/' or '/rule/' in request.path %}active{% endif %}">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Rules <span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">
-                                    <li {% if request.path = '/export/' %} class="active" {% endif %}><a href="/export/">Extract</a></li>
+                                    <li {% if request.path = '/export/' %} class="active" {% endif %}><a href="/export/">View all rules</a></li>
                                     <li {% if request.path = '/import/' %} class="active" {% endif %}><a href="/import/">Upload</a></li>
                                 </ul>
                             </li>
@@ -126,27 +127,28 @@
                             </li>
                             {% else %}
                             <li class="dropdown user user-menu">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <a href="/login/">
+                                <!-- <a href="#" class="dropdown-toggle" data-toggle="dropdown"> -->
                                     <img src="{% static 'dist/img/hip-logo.png' %}" class="user-image img-circle" alt="User Image">
-                                    <span class="hidden-xs">Hipara</span>
+                                    <span class="hidden-xs">Login</span>
                                 </a>
-                                <ul class="dropdown-menu">
+                                <!-- <ul class="dropdown-menu">
                                     <li class="user-header">
                                         <img src="{% static 'dist/img/hip-logo.png' %}" class="img-circle" alt="User Image">
                                         <p>
                                             Hipara
-                                            <!--<small>Lorem ipsum potem dorec djsh</small>-->
+                                            <small>Lorem ipsum potem dorec djsh</small>
                                         </p>
                                     </li>
                                     <li class="user-body text-center">
                                         <div class="col-xs-12 text-center">
                                             <a href="/login/">Sign in</a>
                                         </div>
-                                        <!--<div class="col-xs-6 text-center">-->
+                                        <div class="col-xs-6 text-center">-->
                                             <!--<a href="hiparaviews/register.html">Sign up</a>-->
-                                        <!--</div>-->
+                                        <!--</div>
                                     </li>
-                                </ul>
+                                </ul> -->
                             </li>
                             {% endif %}
                         </ul>

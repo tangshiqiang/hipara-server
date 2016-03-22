@@ -67,8 +67,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'mysql',
-        'USER': 'root',
-        'PASSWORD': '',
+        'USER': 'bitroots',
+        'PASSWORD': 'bitroots',
         'HOST': 'localhost',
         'PORT': '',
     }
@@ -103,7 +103,7 @@ STATICFILES_FINDERS = (
 EMAIL_BACKEND = "djrill.mail.backends.djrill.DjrillBackend"
 MANDRILL_API_KEY = "NdSCtKw7lEn77e9dtvfEQw"
 
-##use following SMTP for PRODUCTION 
+##use following SMTP for PRODUCTION
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # DEFAULT_FROM_EMAIL = 'no-reply@hipara.org'
 # SERVER_EMAIL = 'brettcu@gmail.com'

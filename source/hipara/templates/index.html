@@ -4,7 +4,8 @@
 {% block content %}
 
 <div class="content-wrapper">
-    <section id="home" class="info_sections3" style="background-image:url({% static page.content.top_banner.image.path %})" alt="{{page.content.top_banner.image.alt}}" title="{{page.content.top_banner.image.title}}">
+    <section id="home" class="info_sections3" alt="{{page.content.top_banner.image.alt}}" title="{{page.content.top_banner.image.title}}">
+        <!-- style="background-image:url({% static page.content.top_banner.image.path %})" -->
         <div></div>
         <div class="row">
             <div class="columns col-lg-8 col-sm-10 text-center centered">
@@ -13,6 +14,10 @@
                 </h1>
                 <h3>{{page.content.top_banner.sub_header}}</h3>
                 <p>{{page.content.top_banner.oneliner}}</p>
+
+                <iframe src="https://player.vimeo.com/video/158696349" width="500" height="284" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+                <p><a href="https://vimeo.com/158696349">hipara-intro</a> from <a href="https://vimeo.com/user49930417">J Brett Cunningham</a> on <a href="https://vimeo.com">Vimeo</a>.</p>
+                <a href="../static/downloads/deployment_guide.txt" download target="_blank"><i class="fa fa-windows"></i> Windows 32-bit Hipara</a><a href="../static/downloads/deployment_guide.txt" download target="_blank"><i class="fa fa-windows"></i> Windows 64-bit Hipara</a>
             </div>
         </div>
     </section>
