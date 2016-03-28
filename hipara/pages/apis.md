@@ -1,0 +1,104 @@
+- title: Apis
+- robots: True
+- metadata:
+    - description:
+        - name: description
+        - content: Apis
+    - keywords: 
+        - name: keywords
+        - content: Bitroots software, angularjs, php, nodejs, html, css
+- content:
+    - title: Users endpoints
+    - apis:
+        - api1:
+            - title: Login
+            - url: /api/v1/auth/login
+            - description: This is login endpoint. After successful login capture cookie (bitroots_hipara) from response header to call authenticated api's afterword.
+            - method: POST
+            - header: { Content-Type: application/json }
+            - dataparams: {"email":<alphanumeric>, "password":<alphanumeric>}
+            - response:
+                - success:
+                    - 1:
+                        - code: 200
+                        - content: "Login Successful"
+                    - 2:
+                        - code: 200
+                        - content: "Already Logged In"
+                - error:
+                    - 1:
+                        - code: 422
+                        - content: "Invalid Username and/or Password"
+                    - 2:
+                        - code: 403
+                        - content: "This account has been disabled contact to admin"
+                    - 3:
+                        - code: 422
+                        - content: {"email": ["This field is required."],"password": ["This field is required."]}
+                    - 4:
+                        - code: 422
+                        - content: {"password": ["This field is required."]}
+        - api2:
+            - title: Logout
+            - url: /api/v1/auth/logout
+            - description: This is logout endpoint. Need to send authenticated cookies with the request header.
+            - method: GET
+            - header: { Cookie: 'bitroots_hipara=CookieFromLoginResponse' }
+            - response:
+                - success:
+                    - 1:
+                        - code: 200
+                        - content: "Logout successful"
+                - error:
+                    - 1:
+                        - code: 403
+                        - content: "You have to login First"
+        - api3:
+            - title: Export All signature rule
+            - url: /api/v1/export/all
+            - description: This is Export All signature rule endpoint.
+            - method: GET
+            - header: { Cookie: 'bitroots_hipara=CookieFromLoginResponse' }
+            - response:
+                - success:
+                    - 1:
+                        - code: 200
+                        - content: File will be downloaded forcefully
+                - error:
+                    - 1:
+                        - code: 404
+                        - content: "Nothing To Download"
+                    - 2:
+                        - code: 404
+                        - content: "You have to login First"
+        - api4:
+            - title: Upload signature rule file
+            - url: /api/v1/import
+            - description: This is upload signature (yar) file. File extetion should be .yar
+            - method: POST
+            - header: { Content-Type: multipart/form-data, Cookie: 'bitroots_hipara=CookieFromLoginResponse' }
+            - dataparams: {"rule_file" :   <file or read stream>, "category"  :   <numeric from (1,2)>,"source"    :   <alphanumeric>}
+            - response:
+                - success:
+                    - 1:
+                        - code: 200
+                        - content: "Successfully import rule file
+                - error:
+                    - 1:
+                        - code: 422
+                        - content: {"rule_file": [ "This field is required."],"category": ["This field is required."],"source": ["This field is required." ] }
+                    - 2:
+                        - code: 422
+                        - content: {"rule_file": [ "Name for rule is already been taken : Bioazih_RAT" ]}
+                    - 3:
+                        - code: 403
+                        - content: "You have to login First"
+            - examples:
+                - 1:
+                    - request: http://hipara.org/api/v1/import
+                    - method: POST
+                    - header: { Content-Type: multipart/form-data,  Cookie: 'bitroots_hipara=CookieFromLoginResponse' }
+                    - dataparams: { "rule_file" : "apt_bioazih_rat.yara", "category"  :   1, "source"    :   "test" }
+                    - response:
+                        - code: 200
+                        - content: "Successfully import rule file"

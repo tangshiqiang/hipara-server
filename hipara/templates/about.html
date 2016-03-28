@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+<div class="content-wrapper">
+    <div class="container">
+        <!-- Content Header (Page header) -->
+        <section class="content-header padding-lr-zero">
+            <h1>
+                {{page.content.title}}
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="/"><i class="glyphicon glyphicon-home"></i>Home</a></li>
+                <li>About</a></li>
+            </ol>
+        </section>
+    </div>
+    <section id="home" class="info_sections3" title="{{ page.content.top_banner.image.title }}">
+        <!-- style="background-image:url({% static page.content.top_banner.image.path %})" alt="{{ page.content.top_banner.image.alt }}" -->
+        <div></div>
+        <div class="row">
+            <div class="columns col-lg-8 col-sm-10 text-center centered">
+                <h1>
+                    <strong>{{ page.content.top_banner.title }}</strong>
+                </h1>
+                <h3>{{ page.content.top_banner.sub_header }}</h3>
+                <p>{{ page.content.top_banner.oneliner }}</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="about-us text-center">
+        <div class="row">
+            <h1>
+                <strong>{{ page.content.about_section.title }}</strong>
+            </h1>
+        </div>
+        <div class="row">
+            <div class="container">
+                <div class="col-lg-12 col-sm-12 columns">
+                    <p class="text-center">{{ page.content.about_section.description }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="info_section14">
+        <div class="row">
+            <div class="col-lg-12 columns text-center">
+                <h1>
+                    <strong>{{ page.content.team_section.title }}</strong>
+                </h1>
+                <div class="col-lg-12 col-sm-12 columns text-center">
+                    <p class="text-center">{{ page.content.team_section.oneliner }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="container">
+                {% for key, member in page.content.team_section.members.items %}
+                <div class="col-sm-12 col-md-6 col-lg-6 columns small-icon-tile ">
+                    <div class=" col-lg-4 col-md-4 col-sm-12 col-xs-12 text-center columns">
+                        <img alt="{{ member.image.alt }}" title="{{ member.image.title }}" src="{% static member.image.path %}" />
+                    </div>
+                    <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12 columns">
+                        <h3>{{ member.name }}</h3>
+                        <h4>{{ member.designation }}</h4>
+                        <p class="text-left">{{ member.description }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+</div>
+
+{% endblock %}

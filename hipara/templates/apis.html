@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+<div class="content-wrapper">
+    <div class="container">
+        <!-- Content Header (Page header) -->
+        <section class="content-header padding-lr-zero">
+            <h1>
+                {{page.content.title}}
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="/"><i class="glyphicon glyphicon-home"></i> Home</a></li>
+                <li>API's</li>
+            </ol>
+        </section>
+
+        <section class="content apis padding-lr-zero">
+            <div class="row">
+                <div class="col-xs-12">
+                    {% for key, api in page.content.apis.items %}
+                    <div class="box box-primary">
+
+                        <div class="box-header with-border">
+                            <h3 class="box-title">
+                                <strong>{{ api.title }}</strong>
+                            </h3>
+                        </div>
+                        <div class="box-body with-border">
+
+                            <p>Description : {{api.description}}</p>
+                        </div>
+                        <div class="box-body with-border">
+                            <p>URL : <code>{{api.url}}</code></p>
+                            <p>Method : <code>{{api.method}}</code></p>
+                        </div>
+                        {% if api.header %}
+                        <div class="box-body with-border">
+                            <p>Header : <code>{{api.header}}</code></p>
+                        </div>
+                        {% endif %}
+                        {% if api.dataparams %}
+                        <div class="box-body with-border">
+                            <p>Data Params : <code>{{api.dataparams}}</code></p>
+                        </div>
+                        {% endif %}
+
+                        {% if api.response %}
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Response</h3>
+                        </div>
+
+
+                        <div class="box-body with-border">
+                            Success :
+                            {% for success_key, success in api.response.success.items %}
+                            <div class="box-body with-border">
+                                <p>Status Code : <code>{{success.code}}</code></p>
+                                <p>Content : <code>{{success.content}}</code></p>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="box-body with-border">
+                            Error :
+                            {% for error_key, error in api.response.error.items %}
+                            <div class="box-body with-border">
+                                <p>Status Code : <code>{{error.code}}</code></p>
+                                <p>Content : <code>{{error.content}}</code></p>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        {% if api.examples %}
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Example</h3>
+                        </div>
+
+
+                        <div class="box-body with-border">
+                            {% for example_key, example in api.examples.items %}
+                            <div class="box-body with-border">
+                                <p>Request : <code>{{example.request}}</code></p>
+                                <p>Method : <code>{{example.method}}</code></p>
+                            </div>
+                            {% if example.header %}
+                            <div class="box-body with-border">
+                                <p>Header : <code>{{example.header}}</code></p>
+                            </div>
+                            {% endif %}
+                            {% if example.dataparams %}
+                            <div class="box-body with-border">
+                                <p>Data Params : <code>{{example.dataparams}}</code></p>
+                            </div>
+                            {% endif %}
+                            <div class="box-body with-border">
+                                Response :
+                                <p>Status Code : <code>{{example.response.code}}</code></p>
+                                <p>Content : <code>{{example.response.content}}</code></p>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+            </div>
+        </section>
+        <!-- /.content -->
+    </div>
+</div>
+{% endblock %}
