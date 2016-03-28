@@ -22,9 +22,9 @@
 		python manage.py migrate
 
 	Super Admin Credentials :
-		Username : brettcu
-		Email : brettcu@gmail.com
-		Password : hipara_jbc22
+		Username : Admin
+		Email : user@hipara.org
+		Password : changedefaultpassword
 
 	Execute command to run server
 		python manage.py runserver ip_address:port_number

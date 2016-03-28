@@ -17,7 +17,7 @@ def data_seeder(apps, schema_editor):
         username='Admin',
         first_name='Admin',
         last_name='Admin',
-        email='user@hipara.org.com'
+        email='user@hipara.org'
     )
     UserMetaData.objects.create(
         user=superadmin,

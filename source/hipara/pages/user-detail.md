@@ -1,9 +1,0 @@
-- title: User Details
-- robots: True
-- metadata:
-    - description:
-        - name: description
-        - content: User Details
-    - keywords: 
-        - name: keywords
-        - content: Bitroots software, angularjs, php, nodejs, html, css
