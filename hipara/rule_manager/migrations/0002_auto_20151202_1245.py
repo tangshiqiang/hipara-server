@@ -7,7 +7,7 @@ from ..models import Category
 
 
 def data_seeder(apps, schema_editor):
-    superadmin = User.objects.all()[1]
+    superadmin = User.objects.all()[0]
 
     Category.objects.create(
         name="Hipara",
