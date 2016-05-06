@@ -8,6 +8,7 @@ urlpatterns = [
     url(r'^apis/$', views.apis_view, name='apis'),
     url(r'^login/$', views.login_view, name='login'),
     url(r'^logout/$', views.logout_view, name='logout'),
+    url(r'^change/password/$', views.change_password_view, name='change_password'),
     url(r'^invite/$', views.invite_view, name='invite'),
     url(r'^users/$', views.users_view, name='users'),
     url(r'^register/(?P<token>\w+)/$', views.register_view, name='register'),

@@ -9,14 +9,6 @@
         - content: antivirus, anti-virus, antimalware, anti-malware, adversary, TTP, tactics, techniques, procedures, APT, ransomeware, scareware, Yara, Yara signatures
 - content:
     - title: About us
-    - top_banner:
-        - title: Hipara
-        - sub_header: Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-        - oneliner: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor. Lorem ipsum dolor sit amet, consectetur.
-        - image: 
-            - path: dist/img/mac_banner.jpg
-            - title: banner image
-            - alt: banner image
     - about_section:
         - title: Hipara
         - description: We are a team of network defenders. Having spent more than a decade in the information security industry performing incident response and cyber intelligence, we created Hipara to address the gaps we identified in the current capabilities of the market place. Anti-Virus vendors largely stop after performing pattern-matching (aka signatures), Host Intrusion Detection/Prevention Systems (HIDS/HIPS) stop after identifying "odd" behavior. We subscribe to the Network Security Monitoring (NSM) model for network detection, but understood there is nothing like this model for the host. When an analyst receives an alert, they should be able to immediately pivot to gather necessary information to perform timely triage. We want the analyst to have all this information including the file in question, Live Response (host log) information, and potentially a memory dump. 
@@ -27,7 +19,7 @@
             - member1:
                 - name: J Brett Cunningham (@jbc22)
                 - designation: Technical head
-                - description: Hipara is Brett's brain child. Responding to numerous intrustions left him wanting more to be able to detect and monitor threat actors, both known and unknown. Out of that, Hipara was born.
+                - description: Hipara is Brett's love child. Responding to numerous intrustions left him wanting more to be able to detect and monitor threat actors, both known and unknown. Out of that, Hipara was born.
                 - image:
                     - path: dist/img/placeholder-user.png
                     - title: title

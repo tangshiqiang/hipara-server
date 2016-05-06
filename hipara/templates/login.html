@@ -47,7 +47,7 @@
             <form action="/login/" method="post">
                 {% csrf_token %}
                 <div class="form-group has-feedback">
-                    <input type="email" name="email" value="{{form.email.value}}" class="form-control" placeholder="Email" autofocus=""  required>
+                    <input type="text" name="email" value="{{form.email.value}}" class="form-control" placeholder="Email/Username" autofocus="" required>
                     <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
                 </div>
                 {% if form.email.errors %}
@@ -58,7 +58,7 @@
                 </div>
                 {% endif %}
                 <div class="form-group has-feedback">
-                    <input type="password" name="password" class="form-control" placeholder="Password" required maxlength="75" minlength="5">
+                    <input type="password" name="password" class="form-control" placeholder="Password" required data-minlength="6" data-maxlength="75">
                     <span class="glyphicon glyphicon-lock form-control-feedback"></span>
                 </div>
                 {% if form.password.errors %}

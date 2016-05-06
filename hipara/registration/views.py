@@ -44,6 +44,22 @@ def logout_view(request):
         logout(request)
     return redirect('index')
 
+def change_password_view(request):
+    from .forms import ChangePasswordForm
+    if request.user.is_authenticated() is None:
+        return redirect('/')
+    elif request.method == 'POST':
+        form = ChangePasswordForm(request.POST, user=request.user)
+        if form.is_valid():
+            request.user.set_password(form.cleaned_data.get('new_password')) 
+            request.user.save()
+            form.add_error(None, "Password Changed Successfully")
+        form.fields.old_password = ""
+        form.fields.new_password = ""
+    else:
+        form = ChangePasswordForm(initial={'old_password': ""})
+    return render(request, 'change-password.html', {'form': form, 'page': get_page('change-password')})
+
 
 def users_view(request):
     if request.user.is_authenticated() and request.user.metadata.role_id < 3:

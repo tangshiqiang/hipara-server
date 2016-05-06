@@ -1,6 +1,7 @@
-/source/env/
+/env/
 **/__pycache__/
 **/.idea/
 /hipara/secret_key.py
 /hipara/staticfiles/
-/hipara/hipara/settings.py
+/hipara/hipara/settings_development.py
+/hipara/hipara/settings_production.py

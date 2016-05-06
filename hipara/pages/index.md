@@ -6,12 +6,12 @@
         - content: Home
     - keywords: 
         - name: keywords
-        - content: antivirus, anti-virus, antimalware, anti-malware, adversary, TTP, tactics, techniques, procedures, APT, ransomeware, scareware, Yara, Yara signatures
+        - content: antivirus, anti-virus, antimalware, anti-malware, adversary, TTP, tactics, techniques, procedures, APT, ransomeware, scareware, Yara, Yara signatures, IOC scanner, IOC scanning
 - content:
     - top_banner:
         - title: Hipara
         - sub_header: Changing the game in favor of the network defender.
-        - oneliner: Download the client today and start being protected from advanced threats.
+        - oneliner: Deploy the client today and start being protected from advanced threats.
         - image: 
             - path: dist/img/mac_banner.jpg
             - title: banner image
@@ -21,21 +21,21 @@
         - tiles:
             - tile1: 
                 - title: Hipara Desktop Client
-                - description: End users can download the client and receive timely signatures that protect against Nation-State, Scareware and Ransonware malware.
+                - description: Deploy the agent across your enterprise to actively scan for IOCs (indicators of compromise), and scan files using the industry-standard Yara framework. Scan the entire hard drive with extreme speed, and be notified near-instananeous if a user opens a malicious file.
                 - image: 
                     - path: dist/img/placeholder-user.png
                     - title: tile image
                     - alt: tile image
             - tile2:
-                - title: Hipara Modules
-                - description: Perhaps the most exciting and strongest feature in Hipara, modules are an extension of Hipara's capabilities. They are aimed at detecting adversary TTPs and alerting network defenders. Such modules include: cmd.exe centralized logging, worm(s) spreading across the network, USB writes within moments of plugging in.
+                - title: Hunting Module
+                - description: Logs all file metadata using the popular exiftool library and sends the data to a centralized logging server. Gather your network defenders to go hunting for evil!
                 - image: 
                     - path: dist/img/placeholder-user.png
                     - title: tile image
                     - alt: tile image
             - tile3:
-                - title: Hipara Web Server
-                - description: Organizations can deploy their own internal web server to push signatures to their enterprise, receive alerts from endpoints and perform initial response actions.
+                - title: cmd.exe logging
+                - description: Logs all command line activity, whether issued directly through cmd.exe or through an adversary's backdoor.
                 - image: 
                     - path: dist/img/placeholder-user.png
                     - title: tile image
@@ -43,4 +43,4 @@
     - about_section:
         - title: About
         - header: Excellence through experience!
-        - description: Hipara was truly created by the experience and wisdom of the InfoSec community. It comes from the needs identified through over a decade of fighting advanced adversaries and targeted threats. It combines the power, industry-standard Yara framework to identify known malware and extendable modules that aim to detect the unknown adversary tactics, techniques and procedures including malware and exploits.
+        - description: Hipara was truly created by the experience and wisdom of the InfoSec community. It comes from the needs identified through over a decade of fighting advanced adversaries and targeted threats. It combines the powerful, industry-standard Yara framework to identify known malware and extendable modules that aim to detect the unknown adversary tactics, techniques and procedures.

@@ -13,7 +13,7 @@
         - api1:
             - title: Login
             - url: /api/v1/auth/login
-            - description: This is login endpoint. After successful login capture cookie (bitroots_hipara) from response header to call authenticated api's afterword.
+            - description: This is login endpoint. After successful login capture cookie (hipara) from response header to call authenticated api's afterword.
             - method: POST
             - header: { Content-Type: application/json }
             - dataparams: {"email":<alphanumeric>, "password":<alphanumeric>}
@@ -43,7 +43,7 @@
             - url: /api/v1/auth/logout
             - description: This is logout endpoint. Need to send authenticated cookies with the request header.
             - method: GET
-            - header: { Cookie: 'bitroots_hipara=CookieFromLoginResponse' }
+            - header: { Cookie: 'hipara=CookieFromLoginResponse' }
             - response:
                 - success:
                     - 1:
@@ -58,7 +58,7 @@
             - url: /api/v1/export/all
             - description: This is Export All signature rule endpoint.
             - method: GET
-            - header: { Cookie: 'bitroots_hipara=CookieFromLoginResponse' }
+            - header: { Cookie: 'hipara=CookieFromLoginResponse' }
             - response:
                 - success:
                     - 1:
@@ -76,7 +76,7 @@
             - url: /api/v1/import
             - description: This is upload signature (yar) file. File extetion should be .yar
             - method: POST
-            - header: { Content-Type: multipart/form-data, Cookie: 'bitroots_hipara=CookieFromLoginResponse' }
+            - header: { Content-Type: multipart/form-data, Cookie: 'hipara=CookieFromLoginResponse' }
             - dataparams: {"rule_file" :   <file or read stream>, "category"  :   <numeric from (1,2)>,"source"    :   <alphanumeric>}
             - response:
                 - success:
@@ -97,7 +97,7 @@
                 - 1:
                     - request: http://hipara.org/api/v1/import
                     - method: POST
-                    - header: { Content-Type: multipart/form-data,  Cookie: 'bitroots_hipara=CookieFromLoginResponse' }
+                    - header: { Content-Type: multipart/form-data,  Cookie: 'hipara=CookieFromLoginResponse' }
                     - dataparams: { "rule_file" : "apt_bioazih_rat.yara", "category"  :   1, "source"    :   "test" }
                     - response:
                         - code: 200
