@@ -1,0 +1,109 @@
+sudo apt-get update
+sudo apt-get install git
+
+sudo apt-get install apache2
+sudo apt-get install apache2-dev
+
+sudo apt-get install mysql-server libmysqlclient-dev  //Set Password
+sudo mysql_install_db
+sudo mysql_secure_installation    //You'll be asked for the administrative password you set for MySQL during installation. Afterwards, you'll be asked a series of questions. Besides the first question which asks you to choose another administrative password, select yes for each question.
+
+create database name 'hipara'
+
+# if you want to use sendmail as a SMTP mail service
+sudo apt-get install sendmail     
+
+sudo apt-get install python-dev
+sudo apt-get install python3.4-dev
+sudo apt-get install libjpeg-progs
+
+sudo apt-get install libtiff5-dev libjpeg8-dev zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python-tk
+sudo apt-get install python3-pip
+sudo pip3 install virtualenv virtualenvwrapper
+
+echo "export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3" >> ~/.bashrc
+echo "export WORKON_HOME=/opt/Env" >> ~/.bashrc
+echo "source '/usr/local/bin/virtualenvwrapper.sh'" >> ~/.bashrc
+source ~/.bashrc
+
+mkvirtualenv hipara
+
+cd /var/www/html
+
+sudo git clone https://github.com/jbc22/hipara-server.git
+
+cd /var/www/html/hipara-server/
+
+pip install -r requirements.txt
+
+pip install mod_wsgi
+
+sudo /opt/Env/hipara/bin/mod_wsgi-express install-module
+
+sudo nano /etc/apache2/mods-available/wsgi_express.load
+	add content 
+
+	LoadModule wsgi_module /usr/lib/apache2/modules/mod_wsgi-py34.cpython-34m.so
+
+sudo nano /etc/apache2/mods-available/wsgi_express.conf
+	add content
+
+	WSGIPythonHome /opt/Env/hipara
+
+sudo a2enmod wsgi_express
+sudo service apache2 restart
+
+#update settings in settings.py like ALLOWED_HOSTS, Email, Database etc.
+sudo nano /var/www/html/hipara-server/hipara/hipara/settings.py
+	#UPDATE Required settings
+
+# update superadmin user credentials in /var/www/html/hipara-server/hipara/registration/migrations/0002_auto_20151202_1245.py
+
+
+
+sudo chmod -R 777 /var/www/html/hipara-server/hipara
+
+cd hipara
+python manage.py migrate
+python manage.py collectstatic
+
+deactivate
+
+sudo nano /etc/apache2/sites-available/hipara.conf
+
+add following content in it and update if needed like ServerName, etc
+
+<VirtualHost *:80>
+    
+    ServerAdmin webmaster@localhost
+    ServerName example.com 
+    ServerAlias www.example.com 
+
+    WSGIDaemonProcess hipara python-path=/var/www/html/hipara-server/hipara:/opt/Env/hipara/lib/python3.4/site-packages
+    WSGIProcessGroup hipara
+    WSGIScriptAlias / /var/www/html/hipara-server/hipara/hipara/wsgi.py
+
+    Alias /static /var/www/html/hipara-server/hipara/staticfiles
+    <Directory /var/www/html/hipara-server/hipara/staticfiles>
+        Require all granted
+    </Directory>
+
+    Alias /media /var/www/html/hipara-server/hipara/media
+    <Directory /var/www/html/hipara-server/hipara/media>
+        Require all granted
+    </Directory>
+
+    <Directory /var/www/html/hipara-server/hipara/hipara>
+        <Files wsgi.py>
+            Require all granted
+        </Files>
+    </Directory>
+
+    ErrorLog /var/www/html/hipara-server/hipara/error.log
+    CustomLog /var/www/html/hipara-server/hipara/access.log combined
+
+</VirtualHost>
+
+sudo a2ensite hipara.conf
+
+sudo service apache2 restart

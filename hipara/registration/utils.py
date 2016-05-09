@@ -3,7 +3,8 @@ def get_page(page):
     try:
         import re
         from collections import OrderedDict
-        page = open('pages/' + page + ".md").read()
+        from django.conf import settings
+        page = open(settings.BASE_DIR + '/pages/' + page + ".md").read()
         line = re.compile(r'( *)- ([^:\n]+)(?:: ([^\n]*))?\n?')
         depth = 0
         stack = [OrderedDict()]
@@ -21,7 +22,3 @@ def get_page(page):
         return stack[0]
     except:
         return OrderedDict()
-
-
-
-

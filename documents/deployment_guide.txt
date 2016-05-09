@@ -1,11 +1,13 @@
 sudo apt-get update
 sudo apt-get install git
 sudo apt-get install nginx
-sudo apt-get install mysql-server libmysqlclient-dev    //current password is root
+sudo apt-get install mysql-server libmysqlclient-dev    //Set Password
 sudo mysql_install_db
 sudo mysql_secure_installation    //You'll be asked for the administrative password you set for MySQL during installation. Afterwards, you'll be asked a series of questions. Besides the first question which asks you to choose another administrative password, select yes for each question.
 
 create database name 'hipara'
+
+sudo apt-get install sendmail
 
 sudo apt-get install python-dev
 sudo apt-get install python3.4-dev
@@ -21,57 +23,24 @@ echo "export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3" >> ~/.bashrc
 echo "export WORKON_HOME=/opt/Env" >> ~/.bashrc
 echo "source '/usr/local/bin/virtualenvwrapper.sh'" >> ~/.bashrc
 source ~/.bashrc
+
 mkvirtualenv hipara
 
 cd /var/www/html
 
-sudo git clone https://github.com/jbc22/YaraManager.git
+sudo git clone https://github.com/jbc22/hipara-server.git
 
-cd /var/www/html/YaraManager/source/
+cd /var/www/html/hipara-server/
 
 pip install -r requirements.txt
 
-sudo nano /var/www/html/YaraManager/source/hipara/hipara/settings.py
+#update settings in settings.py like ALLOWED_HOSTS, Email, Database etc.
+sudo nano /var/www/html/hipara-server/hipara/hipara/settings.py
+	#UPDATE Required settings, Default email is File based. update it.
 
-	Update :
-	
-	DEBUG = False
+# update superadmin user credentials in /var/www/html/hipara-server/hipara/registration/migrations/0002_auto_20151202_1245.py
 
-	ALLOWED_HOSTS = ['hipara.org','www.hipara.org', 'hipara.com', 'www.hipara.com', '139.162.213.160']
-	
-	DATABASES = {
-	    'sqlite': {
-		'ENGINE': 'django.db.backends.sqlite3',
-		'NAME': os.path.join(BASE_DIR, 'hipara.sqlite3'),
-	    },
-	    'default': {
-		'ENGINE': 'django.db.backends.mysql',
-		'NAME': 'hipara',
-		'USER': 'root',
-		'PASSWORD': 'root',
-		'HOST': 'localhost',
-		'PORT': '',
-	    }
-	}
-	
-	#Comment following which is test SMTP or leave as it is for development but it will stop working after some time
-	
-	#EMAIL_BACKEND = "djrill.mail.backends.djrill.DjrillBackend"
-	#MANDRILL_API_KEY = "sdgdghdrhdrhbdhrhdrh"
-
-	#Uncomment following and use proper smtp settings for production
-	EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-	DEFAULT_FROM_EMAIL = 'no-reply@hipara.org'   	#user proper email
-	SERVER_EMAIL = 'brettcu@gmail.com'            	#place any email to report site failure
-	EMAIL_HOST = '<EMAIL_HOST>'			#host of smtp service (eg. google)
-	EMAIL_PORT = <PORT>         			#port
-	EMAIL_HOST_USER = '<HOST_EMAIL>'		#host username
-	EMAIL_HOST_PASSWORD = '<HOST_EMAIL_PASSWORD>'  	#host password
-
-
-	#UPDATE Timezone currntly it is UTC
-	
-sudo chmod -R 777 /var/www/html/YaraManager/source/hipara
+sudo chmod -R 777 /var/www/html/hipara-server/hipara
 cd hipara
 python manage.py migrate
 python manage.py collectstatic
@@ -89,7 +58,7 @@ sudo nano hipara.ini
 	
 	[uwsgi]
 	project = hipara
-	base = /var/www/html/YaraManager/source
+	base = /var/www/html/hipara-server
 
 	chdir = %(base)/%(project)
 	home = /opt/Env/%(project)
@@ -117,33 +86,33 @@ sudo nano /etc/init/uwsgi.conf
 
 sudo nano /etc/nginx/sites-available/hipara
 
-	add following content in it
+	add following content in it and update if needed
 	
 	server {
-	    listen 80;
-	    server_name hipara.org www.hipara.org hipara.com www.hipara.com 139.162.213.160;
 
-	    access_log /var/www/html/YaraManager/source/hipara/hipara_access.log;
-    	    error_log  /var/www/html/YaraManager/source/hipara/hipara_error.log;
-		    
-	    location = /favicon.ico { access_log off; log_not_found off; }
-		    
-	    location /static/ {
-		root /var/www/html/YaraManager/source/hipara;
-	    }
-	    location /media/ {
-		root /var/www/html/YaraManager/source/hipara;
-	    }
+            listen 80;
+            server_name example.com www.example.com;
+            
+            access_log /var/www/html/hipara-server/hipara/hipara_access.log;
+            error_log  /var/www/html/hipara-server/hipara/hipara_error.log;
 
-	    location / {
-		include         /etc/nginx/uwsgi_params;
-		uwsgi_pass      unix:/var/www/html/YaraManager/source/hipara/hipara.sock;
-	    }
-	}
+            location = /favicon.ico { access_log off; log_not_found off; }
+
+            location /static/ {
+                root /var/www/html/hipara-server/hipara;
+            }
+            location /media/ {
+                root /var/www/html/hipara-server/hipara;
+            }
+            location / {
+                include         /etc/nginx/uwsgi_params;
+                uwsgi_pass      unix:/var/www/html/hipara-server/hipara/hipara.sock;
+            }
+        }
+
 	
 sudo ln -s /etc/nginx/sites-available/hipara /etc/nginx/sites-enabled
 
 sudo service nginx configtest
 sudo service nginx restart
 sudo service uwsgi restart
-
