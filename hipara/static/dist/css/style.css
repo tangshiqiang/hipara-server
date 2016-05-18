@@ -139,7 +139,6 @@ input[type="file"] {
   padding: 2em;
   margin: 0 auto;
 }
-
 .info_sections3 i, .info_sections3 a { color: #fff; cursor: pointer;}
 .info_sections3 a { margin-right: 1em; cursor: pointer; }
 @media screen and (max-width: 64.0625em) {
@@ -295,6 +294,10 @@ footer a {
   padding: 10px 20px;
   font-size: 1.15em;
 }
+
+.apis h1 { margin-top: 0; }
+.sample-codes p, .sample-codes ul li { font-size: 1.2em; }
+.sample-codes .snippets-title { margin-left: 1.6em; }
 .main-header .logo,
 .main-sidebar,
 .main-header > .navbar {
@@ -305,4 +308,11 @@ footer a {
 }
 .content-wrapper {
   margin-top: 50px;
+}
+
+.sample-codes pre, .sample-codes pre code{
+    white-space: pre;
+    word-wrap: normal;
+    overflow-x: auto;
+    overflow-y: hidden;
 }

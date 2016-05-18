@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load staticfiles %}
-
+{% load getattribute %}
 {% block content %}
 <div class="content-wrapper">
     <div class="container">
@@ -17,92 +17,50 @@
 
         <section class="content apis padding-lr-zero">
             <div class="row">
-                <div class="col-xs-12">
+                <div class="col-xs-12 sample-codes">
+                    <!-- Example -->
                     {% for key, api in page.content.apis.items %}
-                    <div class="box box-primary">
 
-                        <div class="box-header with-border">
-                            <h3 class="box-title">
-                                <strong>{{ api.title }}</strong>
-                            </h3>
-                        </div>
-                        <div class="box-body with-border">
-
-                            <p>Description : {{api.description}}</p>
-                        </div>
-                        <div class="box-body with-border">
-                            <p>URL : <code>{{api.url}}</code></p>
-                            <p>Method : <code>{{api.method}}</code></p>
-                        </div>
+                    <h3><b>{{ api.title }}</b></h3>
+                    <p>Description: {{api.description}}</p>
+                    <ul>
+                        <li><strong>URL: </strong> {{api.url}}</li>
+                        <li><strong>Method: </strong> {{api.method}}</li>
                         {% if api.header %}
-                        <div class="box-body with-border">
-                            <p>Header : <code>{{api.header}}</code></p>
-                        </div>
+                        <li><strong>Header : </strong>{{api.header}}</li>
                         {% endif %}
                         {% if api.dataparams %}
-                        <div class="box-body with-border">
-                            <p>Data Params : <code>{{api.dataparams}}</code></p>
-                        </div>
+                        <li><strong>Data Params : </strong>{{api.dataparams}}</li>
                         {% endif %}
 
                         {% if api.response %}
-                        <div class="box-header with-border">
-                            <h3 class="box-title">Response</h3>
-                        </div>
+                            <h3>Response</h3>
 
-
-                        <div class="box-body with-border">
-                            Success :
+                            <b>Success</b>:
                             {% for success_key, success in api.response.success.items %}
-                            <div class="box-body with-border">
-                                <p>Status Code : <code>{{success.code}}</code></p>
-                                <p>Content : <code>{{success.content}}</code></p>
-                            </div>
+                                <ul>
+                                    <li><strong>Status Code : </strong>{{success.code}}</li>
+                                    <li><strong>Content : </strong>{{success.content}}</li>
+                                </ul>
                             {% endfor %}
-                        </div>
-                        <div class="box-body with-border">
-                            Error :
+
+                            <b>Error</b>:
                             {% for error_key, error in api.response.error.items %}
-                            <div class="box-body with-border">
-                                <p>Status Code : <code>{{error.code}}</code></p>
-                                <p>Content : <code>{{error.content}}</code></p>
-                            </div>
+                                <ul>
+                                    <li><strong>Status Code : </strong>{{error.code}}</li>
+                                    <li><strong>Content : </strong>{{error.content}}</li>
+                                </ul>
                             {% endfor %}
-                        </div>
                         {% endif %}
-                        {% if api.examples %}
-                        <div class="box-header with-border">
-                            <h3 class="box-title">Example</h3>
-                        </div>
-
-
-                        <div class="box-body with-border">
-                            {% for example_key, example in api.examples.items %}
-                            <div class="box-body with-border">
-                                <p>Request : <code>{{example.request}}</code></p>
-                                <p>Method : <code>{{example.method}}</code></p>
-                            </div>
-                            {% if example.header %}
-                            <div class="box-body with-border">
-                                <p>Header : <code>{{example.header}}</code></p>
-                            </div>
-                            {% endif %}
-                            {% if example.dataparams %}
-                            <div class="box-body with-border">
-                                <p>Data Params : <code>{{example.dataparams}}</code></p>
-                            </div>
-                            {% endif %}
-                            <div class="box-body with-border">
-                                Response :
-                                <p>Status Code : <code>{{example.response.code}}</code></p>
-                                <p>Content : <code>{{example.response.content}}</code></p>
-                            </div>
-                            {% endfor %}
-                        </div>
-                        {% endif %}
-                    </div>
+                    </ul>
+                    <h3 class="snippets-title">Code Snippets</h3>
+<pre>
+<code data-language="javascript">
+{{examples|getattribute:key}}
+</code>
+</pre>
                     {% endfor %}
-                    <!-- /.box-body -->
+                    <!-- example end -->
                 </div>
                 <!-- /.box -->
             </div>
@@ -110,4 +68,10 @@
         <!-- /.content -->
     </div>
 </div>
+{% endblock %}
+
+
+{% block footer %}
+<script src="{% static 'plugins/rainbow-dev-custom/rainbow.min.js' %}"></script>
+<script src="{% static 'plugins/rainbow-dev-custom/language/generic.js' %}"></script>
 {% endblock %}
