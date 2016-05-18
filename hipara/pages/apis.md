@@ -77,7 +77,7 @@
             - description: This is upload signature (yar) file. File extetion should be .yar
             - method: POST
             - header: { Content-Type: multipart/form-data, Cookie: 'hipara=CookieFromLoginResponse' }
-            - dataparams: {"rule_file" :   <file or read stream>, "category"  :   <numeric from (1,2)>,"source"    :   <alphanumeric>}
+            - dataparams: {"rule_file" :   <file or read stream>, "category"  :   <numeric from (1 ,2)> (Hipara, PhishFry),"source"    :   <alphanumeric>}
             - response:
                 - success:
                     - 1:
@@ -93,12 +93,3 @@
                     - 3:
                         - code: 403
                         - content: "You have to login First"
-            - examples:
-                - 1:
-                    - request: http://hipara.org/api/v1/import
-                    - method: POST
-                    - header: { Content-Type: multipart/form-data,  Cookie: 'hipara=CookieFromLoginResponse' }
-                    - dataparams: { "rule_file" : "apt_bioazih_rat.yara", "category"  :   1, "source"    :   "test" }
-                    - response:
-                        - code: 200
-                        - content: "Successfully import rule file"

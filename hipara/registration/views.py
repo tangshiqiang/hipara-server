@@ -12,7 +12,163 @@ def about_view(request):
 
 
 def apis_view(request):
-    return render(request, 'apis.html', {'page': get_page('apis')})
+    data = {
+        'api1' : """
+        import requests
+        import json
+        host = 'https://www.hipara.org'
+        login_url = '/api/v1/auth/login'
+
+        session = requests.Session()   # to manage cookies
+
+        data = {"email":"username/email", "password":"password"}
+
+        response = session.post(host + login_url, data=data)
+
+        if(response.ok) :
+            print("Login Success")
+            print("Content : "+response.content.decode())
+            print("Status Code : " + str(response.status_code))
+
+        else :
+            print("Login Failure")
+            print("Content : "+ response.content.decode())
+            print("Status Code : " + str(response.status_code))
+    """,
+
+    'api2' : """
+        import requests
+        import json
+        host = 'https://www.hipara.org'
+        login_url = '/api/v1/auth/login'
+        logout_url = '/api/v1/auth/logout'
+
+
+        session = requests.Session()
+
+        data = {"email":"username/email", "password":"password"}
+
+        response = session.post(host + login_url, data=data)
+
+        if(response.ok) :
+            print("Success")
+            print("Content : "+response.content.decode())
+            print("Status Code : " + str(response.status_code))
+
+            response = session.get(host + logout_url)
+            if(response.ok) :
+                print("Logout Success")
+                print("Content : "+response.content.decode())
+                print("Status Code : " + str(response.status_code))
+            else :
+                print("Logout Failure")
+                print("Content : "+ response.content.decode())
+                print("Status Code : " + str(response.status_code))
+
+        else :
+            print("Login Failure")
+            print("Content : "+ login_response.content.decode())
+            print("Status Code : " + str(login_response.status_code))
+    """,
+
+    'api3' : """
+        import requests
+        import json
+        host = 'https://www.hipara.org'
+        login_url = '/api/v1/auth/login'
+        logout_url = '/api/v1/auth/logout'
+        download_url = '/api/v1/export/all'
+
+
+        session = requests.Session()
+
+        data = {"email":"username/email", "password":"password"}
+
+        response = session.post(host + login_url, data=data)
+
+        if(response.ok) :
+            print("Success")
+            print("Content : "+response.content.decode())
+            print("Status Code : " + str(response.status_code))
+
+            response = session.get(host + download_url)
+            if(response.ok) :
+                print("Download Success")
+                path = "all_rules.yar"
+                with open(path, 'wb') as f :
+                    content = response.content
+                    f.write(content)    
+                print("file : "+path)
+                print("Status Code : " + str(response.status_code))
+            else :
+                print("Download Failure")
+                print("Content : "+ response.content.decode())
+                print("Status Code : " + str(response.status_code))
+
+            response = session.get(host + logout_url)
+            if(response.ok) :
+                print("Logout Success")
+                print("Content : "+response.content.decode())
+                print("Status Code : " + str(response.status_code))
+            else :
+                print("Logout Failure")
+                print("Content : "+ response.content.decode())
+                print("Status Code : " + str(response.status_code))
+        else :
+            print("Login Failure")
+            print("Content : "+ response.content.decode())
+            print("Status Code : " + str(response.status_code))
+    """,
+
+    'api4' : """
+        import requests
+        import json
+        host = 'https://www.hipara.org'
+        login_url = '/api/v1/auth/login'
+        logout_url = '/api/v1/auth/logout'
+        upload_url = '/api/v1/import'
+
+        session = requests.Session()
+
+        data = {"email":"username/email", "password":"password"}
+
+        response = session.post(host + login_url, data=data)
+
+        if(response.ok) :
+            print("Success")
+            print("Content : "+response.content.decode())
+            print("Status Code : " + str(response.status_code))
+
+            files = {'rule_file': open('apt_win_banrub_b.yar', 'rb')}
+            data =  {"category" : 1,"source" : "Public exchange"}
+            response = session.post(host + upload_url, files=files, data=data)
+            if(response.ok) :
+                print("Upload Success")
+                print("Content : "+response.content.decode())
+                print("Status Code : " + str(response.status_code))
+            else :
+                print("Upload Failure")
+                print("Content : "+ response.content.decode())
+                print("Status Code : " + str(response.status_code))
+
+            response = session.get(host + logout_url)
+            if(response.ok) :
+                print("Logout Success")
+                print("Content : "+response.content.decode())
+                print("Status Code : " + str(response.status_code))
+            else :
+                print("Logout Failure")
+                print("Content : "+ response.content.decode())
+                print("Status Code : " + str(response.status_code))
+        else :
+            print("Login Failure")
+            print("Content : "+ response.content.decode())
+            print("Status Code : " + str(response.status_code))
+    """
+
+    }
+    return render(request, 'apis.html', {'page': get_page('apis'), 'examples':data})
+
 
 
 def login_view(request):
