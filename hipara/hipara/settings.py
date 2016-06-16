@@ -25,6 +25,7 @@ INSTALLED_APPS = (
     'rest_framework',
     'registration',
     'rule_manager',
+    'logs',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -103,7 +104,7 @@ STATICFILES_FINDERS = (
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'email')
 
-SESSION_COOKIE_NAME = 'hipara'
+SESSION_COOKIE_NAME = '<cookie_name>'
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 SESSION_COOKIE_AGE = 86400
 

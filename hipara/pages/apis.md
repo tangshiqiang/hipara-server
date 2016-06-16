@@ -43,7 +43,7 @@
             - url: /api/v1/auth/logout
             - description: This is logout endpoint. Need to send authenticated cookies with the request header.
             - method: GET
-            - header: { Cookie: 'hipara=CookieFromLoginResponse' }
+            - header: { Cookie: '<cookie_name>=CookieFromLoginResponse' }
             - response:
                 - success:
                     - 1:
@@ -58,7 +58,7 @@
             - url: /api/v1/export/all
             - description: This is Export All signature rule endpoint.
             - method: GET
-            - header: { Cookie: 'hipara=CookieFromLoginResponse' }
+            - header: { Cookie: '<cookie_name>=CookieFromLoginResponse' }
             - response:
                 - success:
                     - 1:
@@ -76,7 +76,7 @@
             - url: /api/v1/import
             - description: This is upload signature (yar) file. File extetion should be .yar
             - method: POST
-            - header: { Content-Type: multipart/form-data, Cookie: 'hipara=CookieFromLoginResponse' }
+            - header: { Content-Type: multipart/form-data, Cookie: '<cookie_name>=CookieFromLoginResponse' }
             - dataparams: {"rule_file" :   <file or read stream>, "category"  :   <numeric from (1 ,2)> (Hipara, PhishFry),"source"    :   <alphanumeric>}
             - response:
                 - success:
@@ -93,3 +93,25 @@
                     - 3:
                         - code: 403
                         - content: "You have to login First"
+        - api5:
+            - title: Store Signature Detection Logs
+            - url: /api/v1/logs
+            - description: This is stores logs of signature detection on host machine
+            - method: POST
+            - header: { Content-Type: application/json, Cookie: '<cookie_name>=CookieFromLoginResponse' }
+            - dataparams: {"logs" :   [{"hostname":<string>, "fileName":<string>, "alertMessage":<string>, "timeStamp":<"hh:mm, dd/mm/yy" date> }]}
+            - response:
+                - success:
+                    - 1:
+                        - code: 200
+                        - content: { "message": "logs successfully recorded" }
+                - error:
+                    - 1:
+                        - code: 422
+                        - content: { "error": "Some error message" }
+                    - 2:
+                        - code: 422
+                        - content: {"rule_file": [ "Name for rule is already been taken : Bioazih_RAT" ]}
+                    - 3:
+                        - code: 403
+                        - content: { "error": "You have to login First" }

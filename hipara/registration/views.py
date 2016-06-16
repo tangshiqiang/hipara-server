@@ -164,6 +164,74 @@ def apis_view(request):
             print("Login Failure")
             print("Content : "+ response.content.decode())
             print("Status Code : " + str(response.status_code))
+    """,
+
+    'api5' : """
+        import requests
+        import json
+        host = 'https://www.hipara.org'
+        login_url = '/api/v1/auth/login'
+        logout_url = '/api/v1/auth/logout'
+        store_logs_url = '/api/v1/logs'
+
+
+        session = requests.Session()
+
+        data = {"email":"username/email", "password":"password"}
+
+        response = session.post(host + login_url, data=data)
+
+        if(response.ok) :
+            print("Success")
+            print("Content : "+response.content.decode())
+            print("Status Code : " + str(response.status_code))
+
+            data =  {
+                "logs":[
+                        {
+                            "hostname":"COMPUTER1",
+                            "fileName":"FILE1",
+                            "alertMessage":"Trojan Found",
+                            "timeStamp":"15:59, 31/12/48"
+                        },
+                        {
+                            "hostname":"COMPUTER1",
+                            "fileName":"FILE1",
+                            "alertMessage":"Trojan Found",
+                            "timeStamp":"11:00, 01/01/01"
+                        },
+                        {
+                            "hostname":"COMPUTER1",
+                            "fileName":"FILE1",
+                            "alertMessage":"Trojan Found",
+                            "timeStamp":"01:00, 01/01/01"
+                        }
+                    ]
+            }
+            headers = {'Content-Type': 'application/json'}
+            response = session.post(host + store_logs_url, data=json.dumps(data),  headers=headers)
+            if(response.ok) :
+                print("Store logs Success")
+                print("Content : "+response.content.decode())
+                print("Status Code : " + str(response.status_code))
+            else :
+                print("Store logs Failure")
+                print("Content : "+ response.content.decode())
+                print("Status Code : " + str(response.status_code))
+
+            response = session.get(host + logout_url)
+            if(response.ok) :
+                print("Logout Success")
+                print("Content : "+response.content.decode())
+                print("Status Code : " + str(response.status_code))
+            else :
+                print("Logout Failure")
+                print("Content : "+ response.content.decode())
+                print("Status Code : " + str(response.status_code))
+        else :
+            print("Login Failure")
+            print("Content : "+ response.content.decode())
+            print("Status Code : " + str(response.status_code))
     """
 
     }

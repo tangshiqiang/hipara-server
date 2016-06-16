@@ -151,4 +151,80 @@ Example :
         Code: 200
         Content :"Successfully import rule file"
 
+
+---------------------------------------------------------------------
+Title : Send Signature found logs to server
+URL : /api/v1/logs
+Method : POST
+Header :
+    Content-Type: application/json
+
+Data Params :
+    {
+        "logs" :   [
+            {
+                "hostname":"COMPUTER1",
+                "fileName":"FILE1",
+                "alertMessage":"Trojan Found",
+                "timeStamp":"hh:mm, dd/mm/yy" 
+            },
+            ...
+        ]
+    }
+
+Success Response :
+    Code: 200
+    Content :{
+      "message": "logs successfully recorded"
+    }
+
+Error Response :
+
+    Code: 422
+    Content: {
+      "error": "Some error message"
+    }
+
+    OR
+
+    Code: 403
+    Content: {
+      "error": "You have to login First"
+    }
+
+
+Example :
+    EXAMPLE REQUEST : http://hipara.org/api/v1/logs
+    Method : POST
+    Header :
+        Content-Type: application/json
+    Data Params :
+        {
+            "logs":[
+                    {
+                        "hostname":"COMPUTER1",
+                        "fileName":"FILE1",
+                        "alertMessage":"Trojan Found",
+                        "timeStamp":"15:59, 31/12/48"
+                    },
+                    {
+                        "hostname":"COMPUTER1",
+                        "fileName":"FILE1",
+                        "alertMessage":"Trojan Found",
+                        "timeStamp":"11:00, 01/01/01"
+                    },
+                    {
+                        "hostname":"COMPUTER1",
+                        "fileName":"FILE1",
+                        "alertMessage":"Trojan Found",
+                        "timeStamp":"01:00, 01/01/01"
+                    }
+                ]
+        }
+    Response :
+        Code: 200
+        Content :{
+          "message": "logs successfully recorded"
+        }
+
 ---------------------------------------------------------------------
