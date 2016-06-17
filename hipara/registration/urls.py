@@ -11,6 +11,7 @@ urlpatterns = [
     url(r'^change/password/$', views.change_password_view, name='change_password'),
     url(r'^invite/$', views.invite_view, name='invite'),
     url(r'^users/$', views.users_view, name='users'),
+    url(r'^alerts/$', views.alert_view, name='alert'),
     url(r'^register/(?P<token>\w+)/$', views.register_view, name='register'),
     url(r'^users/(?P<id>\w+)/$', views.users_detail_view, name='users_detail'),
     url(r'^api/v1/auth/login$', AuthenticationViewSet.as_view({'post':'login'}), name='login_api'),

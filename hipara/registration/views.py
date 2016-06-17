@@ -9,7 +9,12 @@ def index_view(request):
 
 def about_view(request):
     return render(request, 'about.html', {'page': get_page('about')})
-
+def alert_view(request):
+    if request.user.is_authenticated() is None:
+        return redirect('/')
+    if request.user.is_authenticated() and (request.user.metadata.role_id == 1 or request.user.metadata.role_id == 2) and request.method == 'GET':
+        return render(request, 'alert.html', {'page': get_page('alert')})
+    return redirect('/')
 
 def apis_view(request):
     data = {
@@ -97,7 +102,7 @@ def apis_view(request):
                 path = "all_rules.yar"
                 with open(path, 'wb') as f :
                     content = response.content
-                    f.write(content)    
+                    f.write(content)
                 print("file : "+path)
                 print("Status Code : " + str(response.status_code))
             else :
@@ -275,7 +280,7 @@ def change_password_view(request):
     elif request.method == 'POST':
         form = ChangePasswordForm(request.POST, user=request.user)
         if form.is_valid():
-            request.user.set_password(form.cleaned_data.get('new_password')) 
+            request.user.set_password(form.cleaned_data.get('new_password'))
             request.user.save()
             form.add_error(None, "Password Changed Successfully")
         form.fields.old_password = ""

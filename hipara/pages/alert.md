@@ -1,0 +1,9 @@
+- title: Alert
+- robots: True
+- metadata:
+    - description:
+        - name: description
+        - content: Alerts
+    - keywords:
+        - name: keywords
+        - content: Bitroots software, angularjs, php, nodejs, html, css

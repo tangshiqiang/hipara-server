@@ -91,6 +91,14 @@
                                 </a>
                             </li>
                             {% endif %}
+                            {% if user.is_authenticated and user.metadata.role_id = 1 or user.metadata.role_id = 2%}
+                            <li {% if '/alerts/' in request.path %} class="active" {% endif %}>
+                                <a href="/alerts/">
+                                    <i class="glyphicon glyphicon-bell"></i>
+                                    <span>Alerts</span>
+                                </a>
+                            </li>
+                            {% endif %}
                             {% endif %}
                         </ul>
 
