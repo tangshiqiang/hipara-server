@@ -9,7 +9,7 @@
 	Create virtual Envirnment at path /hipara-server/
 		virtualenv env
 
-	Use virtual Environment using command at directory /hipara-server/source/
+	Use virtual Environment using command at directory /hipara-server/
 		source env/bin/activate
 		pip install -r requirements.txt
 
