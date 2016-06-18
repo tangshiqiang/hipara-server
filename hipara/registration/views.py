@@ -177,7 +177,7 @@ def apis_view(request):
         host = 'https://www.hipara.org'
         login_url = '/api/v1/auth/login'
         logout_url = '/api/v1/auth/logout'
-        store_logs_url = '/api/v1/logs'
+        store_alerts_url = '/api/v1/alerts'
 
 
         session = requests.Session()
@@ -192,7 +192,7 @@ def apis_view(request):
             print("Status Code : " + str(response.status_code))
 
             data =  {
-                "logs":[
+                "alerts":[
                         {
                             "hostname":"COMPUTER1",
                             "fileName":"FILE1",
@@ -214,13 +214,67 @@ def apis_view(request):
                     ]
             }
             headers = {'Content-Type': 'application/json'}
-            response = session.post(host + store_logs_url, data=json.dumps(data),  headers=headers)
+            response = session.post(host + store_alerts_url, data=json.dumps(data),  headers=headers)
             if(response.ok) :
-                print("Store logs Success")
+                print("Store alerts Success")
                 print("Content : "+response.content.decode())
                 print("Status Code : " + str(response.status_code))
             else :
-                print("Store logs Failure")
+                print("Store alerts Failure")
+                print("Content : "+ response.content.decode())
+                print("Status Code : " + str(response.status_code))
+
+            response = session.get(host + logout_url)
+            if(response.ok) :
+                print("Logout Success")
+                print("Content : "+response.content.decode())
+                print("Status Code : " + str(response.status_code))
+            else :
+                print("Logout Failure")
+                print("Content : "+ response.content.decode())
+                print("Status Code : " + str(response.status_code))
+        else :
+            print("Login Failure")
+            print("Content : "+ response.content.decode())
+            print("Status Code : " + str(response.status_code))
+    """,
+
+    'api6' : """
+        import requests
+        import json
+
+        host = 'http://localhost:8000'
+        login_url = '/api/v1/auth/login'
+        logout_url = '/api/v1/auth/logout'
+        get_alerts_url = '/api/v1/alerts'
+
+
+        session = requests.Session()
+
+        data = {"email":"user@hipara.org", "password":"changedefaultpassword"}
+
+        response = session.post(host + login_url, data=data)
+
+        if(response.ok) :
+            print("Success")
+            print("Content : "+response.content.decode())
+            print("Status Code : " + str(response.status_code))
+            data = {
+                'page_number':1,
+                'page_size' :10,
+                'search'    : ''
+            }
+            response = session.get(host + get_alerts_url, params=data)
+            if(response.status_code == 200) :
+                print("Get alerts Success")
+                print("Content of first alert: "+response.content.decode())
+                print("Status Code : " + str(response.status_code))
+            elif(response.status_code == 204):
+                print("Get alerts Empty")
+                print("There is no content to show")
+                print("Status Code : " + str(response.status_code))
+            else :
+                print("Get alerts Failure")
                 print("Content : "+ response.content.decode())
                 print("Status Code : " + str(response.status_code))
 

@@ -94,24 +94,43 @@
                         - code: 403
                         - content: "You have to login First"
         - api5:
-            - title: Store Signature Detection Logs
-            - url: /api/v1/logs
-            - description: This is stores logs of signature detection on host machine
+            - title: Store Signature Detection alerts
+            - url: /api/v1/alerts
+            - description: This is stores alerts of signature detection on host machine
             - method: POST
-            - header: { Content-Type: application/json, Cookie: '<cookie_name>=CookieFromLoginResponse' }
-            - dataparams: {"logs" :   [{"hostname":<string>, "fileName":<string>, "alertMessage":<string>, "timeStamp":<"hh:mm, dd/mm/yy" date> }]}
+            - header: { Cookie: '<cookie_name>=CookieFromLoginResponse' }
+            - dataparams: {"alerts" :   [{"hostname":<string>, "fileName":<string>, "alertMessage":<string>, "timeStamp":<"hh:mm, dd/mm/yy" date> }]}
             - response:
                 - success:
                     - 1:
                         - code: 200
-                        - content: { "message": "logs successfully recorded" }
+                        - content: { "message": "alerts successfully recorded" }
                 - error:
                     - 1:
                         - code: 422
                         - content: { "error": "Some error message" }
                     - 2:
-                        - code: 422
-                        - content: {"rule_file": [ "Name for rule is already been taken : Bioazih_RAT" ]}
-                    - 3:
                         - code: 403
                         - content: { "error": "You have to login First" }
+        - api6:
+            - title: Get list of Signature Detection alerts
+            - url: /api/v1/alerts
+            - description: This lists alerts of signature detected on host machine and stored on server
+            - method: GET
+            - header: { Content-Type: application/json, Cookie: '<cookie_name>=CookieFromLoginResponse' }
+            - dataparams: { "page_number":<number>, "page_size":<number>, "search":<string on hostname, fileName, alertMessage> }
+            - response:
+                - success:
+                    - 1:
+                        - code: 200
+                        - content: { "alerts": [ { "alert_id": 15, "hostName": "COMPUTER1", "fileName": "FILE1", "alertMessage": "Trojan Found", "timeStamp": "01:00, 01/01/01", "created_at": "18 Jun, 2016 07:06 am", "created_by": { "email": "user@hipara.org", "last_name": "Admin", "first_name": "Admin" } } ] }
+                    - 1:
+                        - code: 200
+                        - content: There is no content
+                - error:
+                    - 1:
+                        - code: 422
+                        - content: { "error": "Some error message" }
+                    - 2:
+                        - code: 403
+                        - content: { "error": "You have to login First" }                

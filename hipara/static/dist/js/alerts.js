@@ -28,13 +28,13 @@ $(function() {
         page_number +=1;
 
         $.ajax({
-            url: "/api/v1/logs?page_size="+page_size+"&page_number=" + page_number + "&" + searchData,
+            url: "/api/v1/alerts?page_size="+page_size+"&page_number=" + page_number + "&" + searchData,
             type: "GET"
         }).done(function(response, textStatus, jqXHR) {
 
             if(jqXHR.status == 200){
                 var createdAt = '';
-                var alerts = response.logs;
+                var alerts = response.alerts;
                 for (var i = 0, len = alerts.length; i < len; i++) {
                     createdAt = alerts[i].created_at.substring(0, 12);
                     if( createdAt !== dateCheck ){

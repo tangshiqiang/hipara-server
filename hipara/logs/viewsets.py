@@ -13,40 +13,40 @@ class CsrfExemptSessionAuthentication(SessionAuthentication):
 class LogsViewSet(viewsets.ViewSet):
     authentication_classes = (CsrfExemptSessionAuthentication, BasicAuthentication)
 
-    def store_logs(self, request, *args, **kwargs):
+    def store_alerts(self, request, *args, **kwargs):
         result = {'data': {'error':"You have to login First"}, 'status': 403}
         if request.user.is_authenticated():
-            result = {'data': {'error':'No logs given'}, 'status': 422}
+            result = {'data': {'error':'No alerts given'}, 'status': 422}
             try:
-                logs = json.loads(request.body.decode("utf-8"));
-                if 'logs' in logs and isinstance(logs['logs'], list) and logs['logs']:
-                    logs = logs['logs']
-                    for log in logs:
-                        if('hostname' in log and log['hostname'] and 'fileName' in log and log['fileName'] and 'alertMessage' in log and log['alertMessage'] and 'timeStamp' in log and log['timeStamp'] and validate_date(log['timeStamp'])):
+                alerts = json.loads(request.body.decode("utf-8"));
+                if 'alerts' in alerts and isinstance(alerts['alerts'], list) and alerts['alerts']:
+                    alerts = alerts['alerts']
+                    for alert in alerts:
+                        if('hostname' in alert and alert['hostname'] and 'fileName' in alert and alert['fileName'] and 'alertMessage' in alert and alert['alertMessage'] and 'timeStamp' in alert and alert['timeStamp'] and validate_date(alert['timeStamp'])):
                             pass
                         else:
                             raise ValueError('Invalid Json Format')
                 else:
-                    raise ValueError('No logs given')
+                    raise ValueError('No alerts given')
                 from .models import Alert
                 user = request.user
-                for log in logs:
+                for alert in alerts:
                     Alert.objects.create(
-                        hostName=log['hostname'],
-                        fileName=log['fileName'],
-                        alertMessage=log['alertMessage'],
-                        timeStamp=validate_date(log['timeStamp']),
+                        hostName=alert['hostname'],
+                        fileName=alert['fileName'],
+                        alertMessage=alert['alertMessage'],
+                        timeStamp=validate_date(alert['timeStamp']),
                         created_by=user
                     )
-                result = {'data': {'message':"logs successfully recorded"}, 'status': 200}
+                result = {'data': {'message':"alerts successfully recorded"}, 'status': 200}
             except ValueError as e:
                 result = {'data': {'error':str(e)}, 'status': 422}
         return Response(data=result['data'], status=result['status'])
 
-    def view_logs(self, request, *args, **kwargs):
+    def view_alerts(self, request, *args, **kwargs):
         result = {'data': {'error':"You have to login First"}, 'status': 403}
         if request.user.is_authenticated():
-            result = {'data': {'error':'No logs Found'}, 'status': 204}
+            result = {'data': {'error':'No alerts Found'}, 'status': 204}
             try:
                 page_number = request.GET.get('page_number')
                 page_size = request.GET.get('page_size')
@@ -60,25 +60,25 @@ class LogsViewSet(viewsets.ViewSet):
                 from .models import Alert
                 from django.db.models import Q
                 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-                logs = Alert.objects.filter(Q(hostName__icontains=search) | Q(fileName__icontains=search) | Q(alertMessage__icontains=search))
-                length = len(logs)
+                alerts = Alert.objects.filter(Q(hostName__icontains=search) | Q(fileName__icontains=search) | Q(alertMessage__icontains=search)).order_by('-created_at')
+                length = len(alerts)
                 if length :
                     value = []
-                    for log in logs:
-                        user = log.created_by
+                    for alert in alerts:
+                        user = alert.created_by
                         user = {
                             'first_name':user.first_name,
                             'last_name':user.last_name,
                             'email':user.email
                         }
                         tempValue = {
-                            'alert_id':log.alert_id,
-                            'hostName':log.hostName,
-                            'fileName':log.fileName,
-                            'alertMessage':log.alertMessage,
-                            'timeStamp':log.timeStamp.strftime("%H:%M, %d/%m/%y"),
+                            'alert_id':alert.alert_id,
+                            'hostName':alert.hostName,
+                            'fileName':alert.fileName,
+                            'alertMessage':alert.alertMessage,
+                            'timeStamp':alert.timeStamp.strftime("%H:%M, %d/%m/%y"),
                             'created_by':user,
-                            'created_at':log.created_at.strftime("%d %b, %Y %I:%M %P"),
+                            'created_at':alert.created_at.strftime("%d %b, %Y %I:%M %P"),
 
                         }
                         value.append(tempValue)
@@ -86,13 +86,13 @@ class LogsViewSet(viewsets.ViewSet):
                     try:
                         value = paginator.page(page_number)
                         data ={
-                            'logs':value.object_list,
+                            'alerts':value.object_list,
                         }
                         result = {'data': data, 'status': 200}
                     except PageNotAnInteger:
                         value = paginator.page(1)
                         data ={
-                            'logs':value.object_list,
+                            'alerts':value.object_list,
                         }
                         result = {'data': data, 'status': 200}
                     except EmptyPage:

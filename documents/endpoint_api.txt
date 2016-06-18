@@ -153,20 +153,20 @@ Example :
 
 
 ---------------------------------------------------------------------
-Title : Send Signature found logs to server
-URL : /api/v1/logs
+Title : Send Signature found alerts to server
+URL : /api/v1/alerts
 Method : POST
 Header :
     Content-Type: application/json
 
 Data Params :
     {
-        "logs" :   [
+        "alerts" :   [
             {
-                "hostname":"COMPUTER1",
-                "fileName":"FILE1",
-                "alertMessage":"Trojan Found",
-                "timeStamp":"hh:mm, dd/mm/yy" 
+                "hostname":<string>, 
+                "fileName":<string>, 
+                "alertMessage":<string>, 
+                "timeStamp":<"hh:mm, dd/mm/yy" date> 
             },
             ...
         ]
@@ -175,7 +175,7 @@ Data Params :
 Success Response :
     Code: 200
     Content :{
-      "message": "logs successfully recorded"
+      "message": "alerts successfully recorded"
     }
 
 Error Response :
@@ -194,13 +194,13 @@ Error Response :
 
 
 Example :
-    EXAMPLE REQUEST : http://hipara.org/api/v1/logs
+    EXAMPLE REQUEST : http://hipara.org/api/v1/alerts
     Method : POST
     Header :
         Content-Type: application/json
     Data Params :
         {
-            "logs":[
+            "alerts":[
                     {
                         "hostname":"COMPUTER1",
                         "fileName":"FILE1",
@@ -224,7 +224,89 @@ Example :
     Response :
         Code: 200
         Content :{
-          "message": "logs successfully recorded"
+          "message": "alerts successfully recorded"
+        }
+
+---------------------------------------------------------------------
+Title : Get list of Signature detect alerts which are stored on server
+URL : /api/v1/alerts
+Method : GET
+
+Data Params :
+    {
+        "page_number":<number>, 
+        "page_size":<number>, 
+        "search":<string on hostname, fileName, alertMessage>
+    }
+
+Success Response :
+    Code: 200
+    Content :{
+      "alerts": [
+        {
+          "alert_id": 15,
+          "hostName": "COMPUTER1",
+          "fileName": "FILE1",
+          "alertMessage": "Trojan Found",
+          "timeStamp": "01:00, 01/01/01",
+          "created_at": "18 Jun, 2016 07:06 am",
+          "created_by": {
+            "email": "user@hipara.org",
+            "last_name": "Admin",
+            "first_name": "Admin"
+          }  
+        },
+        ...
+      ]
+    }
+
+    OR
+
+    Code: 204
+    Content : There is no content
+
+Error Response :
+
+    Code: 422
+    Content: {
+      "error": "Some error message"
+    }
+
+    OR
+
+    Code: 403
+    Content: {
+      "error": "You have to login First"
+    }
+
+
+Example :
+    EXAMPLE REQUEST : http://hipara.org/api/v1/alerts
+    Method : GET
+    Data Params :
+        {
+            "page_number":1, 
+            "page_size":10, 
+            "search":""
+        }
+    Response :
+        Code: 200
+        Content :{
+          "alerts": [
+            {
+              "alert_id": 15,
+              "hostName": "COMPUTER1",
+              "fileName": "FILE1",
+              "alertMessage": "Trojan Found",
+              "timeStamp": "01:00, 01/01/01",
+              "created_at": "18 Jun, 2016 07:06 am",
+              "created_by": {
+                "email": "user@hipara.org",
+                "last_name": "Admin",
+                "first_name": "Admin"
+              }  
+            }
+          ]
         }
 
 ---------------------------------------------------------------------
