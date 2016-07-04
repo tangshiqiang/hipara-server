@@ -25,7 +25,7 @@ INSTALLED_APPS = (
     'rest_framework',
     'registration',
     'rule_manager',
-    'logs',
+    'alert',
 )
 
 MIDDLEWARE_CLASSES = (

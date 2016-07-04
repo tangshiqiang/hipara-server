@@ -34,11 +34,12 @@ cd /var/www/html/hipara-server/
 
 pip install -r requirements.txt
 
-#update settings in settings.py like ALLOWED_HOSTS, Email, Database etc.
+#update settings in settings.py like ALLOWED_HOSTS, Email, Database, cookie name etc.
 sudo nano /var/www/html/hipara-server/hipara/hipara/settings.py
 	#UPDATE Required settings, Default email is File based. update it.
 
 # update superadmin user credentials in /var/www/html/hipara-server/hipara/registration/migrations/0002_auto_20151202_1245.py
+# Also update service user credentials in /var/www/html/hipara-server/hipara/registration/migrations/0002_auto20151202_1245.py
 
 sudo chmod -R 777 /var/www/html/hipara-server/hipara
 cd hipara

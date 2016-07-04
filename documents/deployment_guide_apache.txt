@@ -53,12 +53,12 @@ sudo nano /etc/apache2/mods-available/wsgi_express.conf
 sudo a2enmod wsgi_express
 sudo service apache2 restart
 
-#update settings in settings.py like ALLOWED_HOSTS, Email, Database etc.
+#update settings in settings.py like ALLOWED_HOSTS, Email, Database, cookie name etc.
 sudo nano /var/www/html/hipara-server/hipara/hipara/settings.py
 	#UPDATE Required settings
 
 # update superadmin user credentials in /var/www/html/hipara-server/hipara/registration/migrations/0002_auto_20151202_1245.py
-
+# Also update service user credentials in /var/www/html/hipara-server/hipara/registration/migrations/0002_auto20151202_1245.py
 
 
 sudo chmod -R 777 /var/www/html/hipara-server/hipara

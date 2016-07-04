@@ -26,6 +26,14 @@
 	if you want to change it then update it in 
 	  /hipara-server/hipara/registration/migrations/0002_auto20151202_1245.py
 
+	Service User Credentials :
+		Username : serviceuser
+		Email : serviceuser@hipara.org
+		Password : randomstring
+
+	if you want to change it then update it in 
+	  /hipara-server/hipara/registration/migrations/0003_auto_20160704_0938.py
+
 
 	Then go to path in virtual environment terminal /hipara-server/hipara/
 		python manage.py migrate

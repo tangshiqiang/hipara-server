@@ -309,8 +309,11 @@ def login_view(request):
             user = authenticate(username=form.cleaned_data.get('email'), password=form.cleaned_data.get('password'))
             if user is not None:
                 if user.is_active and not user.metadata.deleted_at:
-                    login(request, user)
-                    return redirect('index')
+                    if user.metadata.role_id != 4 :
+                        login(request, user)
+                        return redirect('index')
+                    else:
+                        form.add_error(None, "UI login for Service user not allowed")
                 else:
                     form.add_error(None, "This account has been disabled contact to admin")
             else:
@@ -364,7 +367,7 @@ def users_view(request):
 
         user_result = User.objects.filter(Q(first_name__icontains=search) | Q(last_name__icontains=search) | Q(email__icontains=search)).order_by('first_name')
         for user in user_result:
-            if user.metadata.role_id > request.user.metadata.role_id:
+            if user.metadata.role_id > request.user.metadata.role_id and user.metadata.role_id != 4:
                 users.append(user)
 
         user_count = len(users)
@@ -543,7 +546,7 @@ def users_detail_view(request, id):
             from .models import Role
             user = User.objects.get(pk=id)
             if user.metadata.role_id > request.user.metadata.role_id:
-                roles = Role.objects.filter(role_id__gt=1)
+                roles = Role.objects.filter(role_id__gt=1, role_id__lt=4)
                 if request.method == 'GET':
                     return render(request, 'user-detail.html', {'user_detail': user, 'roles': roles, 'page': get_page('user-detail')})
                 elif request.method == 'POST':
