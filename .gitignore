@@ -6,3 +6,10 @@
 /hipara/hipara/settings_development.py
 /hipara/hipara/settings_production.py
 /hipara/hipara/settings.py
+/hipara/activate/
+/hipara/hipara/bin/
+/hipara/hipara/include/
+/hipara/hipara/lib/
+/hipara/hipara/pip-selfcheck.json
+/hipara/hipara_access.log
+/hipara/hipara_error.log
