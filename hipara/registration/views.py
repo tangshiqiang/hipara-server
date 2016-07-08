@@ -3,17 +3,32 @@ from django.shortcuts import redirect
 from .utils import get_page
 
 
-def index_view(request):
-    return render(request, 'index.html', {'page': get_page('index')})
+# def index_view(request):
+#     return render(request, 'index.html', {'page': get_page('index')})
 
+def index_view(request):
+    if request.user.is_authenticated():
+        if request.user.metadata.role_id == 1 or request.user.metadata.role_id == 2 :
+            return render(request, 'alert.html', {'page': get_page('alert')})
+        return apis_view(request)
+    return login_view(request)
+
+
+    if request.user.is_authenticated() :
+        return apis_view(request)
+    return login_view(request)
+
+
+# def about_view(request):
+#     return render(request, 'about.html', {'page': get_page('about')})
 
 def about_view(request):
-    return render(request, 'about.html', {'page': get_page('about')})
+    return redirect('/')
+
 def alert_view(request):
-    if request.user.is_authenticated() is None:
-        return redirect('/')
-    if request.user.is_authenticated() and (request.user.metadata.role_id == 1 or request.user.metadata.role_id == 2) and request.method == 'GET':
-        return render(request, 'alert.html', {'page': get_page('alert')})
+    if request.user.is_authenticated():
+        if (request.user.metadata.role_id == 1 or request.user.metadata.role_id == 2) and request.method == 'GET':
+            return render(request, 'alert.html', {'page': get_page('alert')})
     return redirect('/')
 
 def apis_view(request):
