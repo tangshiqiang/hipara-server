@@ -22,22 +22,32 @@ class LogsViewSet(viewsets.ViewSet):
                 if 'alerts' in alerts and isinstance(alerts['alerts'], list) and alerts['alerts']:
                     alerts = alerts['alerts']
                     for alert in alerts:
-                        if('hostname' in alert and alert['hostname'] and 'fileName' in alert and alert['fileName'] and 'alertMessage' in alert and alert['alertMessage'] and 'timeStamp' in alert and alert['timeStamp'] and validate_date(alert['timeStamp'])):
+                        if('hostName' in alert and alert['hostName'] and 'fileName' in alert and alert['fileName'] and 'alertType' in alert and alert['alertType'] in ('ALERT_FILE', 'ALERT_CMD') and 'alertMessage' in alert and alert['alertMessage'] and 'timeStamp' in alert and alert['timeStamp'] and validate_date(alert['timeStamp'])):
                             pass
                         else:
                             raise ValueError('Invalid Json Format')
                 else:
                     raise ValueError('No alerts given')
                 from .models import Alert
+                import os
+                script_dir = os.path.dirname(__file__)
+                rel_path = "logs/alert_cmd.json"
+                file_path = os.path.join(script_dir, rel_path)
                 user = request.user
                 for alert in alerts:
-                    Alert.objects.create(
-                        hostName=alert['hostname'],
-                        fileName=alert['fileName'],
-                        alertMessage=alert['alertMessage'],
-                        timeStamp=validate_date(alert['timeStamp']),
-                        created_by=user
-                    )
+                    if alert['alertType'] == 'ALERT_FILE' :
+                        Alert.objects.create(
+                            hostName=alert['hostName'],
+                            fileName=alert['fileName'],
+                            alertMessage=alert['alertMessage'],
+                            alertType=alert['alertType'],
+                            timeStamp=validate_date(alert['timeStamp']),
+                            created_by=user
+                        )
+                    else :
+                        json_data = json.dumps(alert) +",\n"
+                        with open(file_path, "ab") as f:
+                            f.write(bytes(json_data, 'utf-8'))
                 result = {'data': {'message':"alerts successfully recorded"}, 'status': 200}
             except ValueError as e:
                 result = {'data': {'error':str(e)}, 'status': 422}
@@ -61,7 +71,7 @@ class LogsViewSet(viewsets.ViewSet):
                     from .models import Alert
                     from django.db.models import Q
                     from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-                    alerts = Alert.objects.filter(Q(hostName__icontains=search) | Q(fileName__icontains=search) | Q(alertMessage__icontains=search)).order_by('-created_at')
+                    alerts = Alert.objects.filter(Q(hostName__icontains=search) | Q(fileName__icontains=search) | Q(alertMessage__icontains=search)).order_by('-timeStamp')
                     length = len(alerts)
                     if length :
                         value = []
@@ -77,7 +87,7 @@ class LogsViewSet(viewsets.ViewSet):
                                 'hostName':alert.hostName,
                                 'fileName':alert.fileName,
                                 'alertMessage':alert.alertMessage,
-                                'timeStamp':alert.timeStamp.strftime("%H:%M, %d/%m/%y"),
+                                'timeStamp':alert.timeStamp.strftime("%d %b, %Y %I:%M %P"),
                                 'created_by':user,
                                 'created_at':alert.created_at.strftime("%d %b, %Y %I:%M %P"),
 
@@ -107,7 +117,7 @@ class LogsViewSet(viewsets.ViewSet):
 
 def validate_date(date_text):
     try:
-        return datetime.datetime.strptime(date_text, '%H:%M, %d/%m/%y').strftime("%Y-%m-%d %H:%M")
+        return datetime.datetime.strptime(date_text, '%H:%M, %d/%m/%Y').strftime("%Y-%m-%d %H:%M")
     except ValueError as e:
-        raise ValueError("Incorrect data format, should be hh:mm, dd/mm/yy")
+        raise ValueError("Incorrect data format, should be hh:mm, dd/mm/yyyy")
     return False

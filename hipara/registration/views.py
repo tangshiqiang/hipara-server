@@ -209,22 +209,25 @@ def apis_view(request):
             data =  {
                 "alerts":[
                         {
-                            "hostname":"COMPUTER1",
-                            "fileName":"FILE1",
+                            "hostName":"COMPUTER1",
+                            "fileName":"c:\\\\ABC\\\\pqr.txt",
                             "alertMessage":"Trojan Found",
-                            "timeStamp":"15:59, 31/12/48"
+                            "alertType":"ALERT_FILE",
+                            "timeStamp":"15:59, 31/12/1948"
+                        },
+                        {
+                            "hostname":"COMPUTER1",
+                            "fileName":"/ABC/pqr.txt",
+                            "alertMessage":"Trojan Found",
+                            "alertType":"ALERT_CMD",
+                            "timeStamp":"11:00, 01/01/2001"
                         },
                         {
                             "hostname":"COMPUTER1",
                             "fileName":"FILE1",
                             "alertMessage":"Trojan Found",
-                            "timeStamp":"11:00, 01/01/01"
-                        },
-                        {
-                            "hostname":"COMPUTER1",
-                            "fileName":"FILE1",
-                            "alertMessage":"Trojan Found",
-                            "timeStamp":"01:00, 01/01/01"
+                            "alertType" :   "ALERT_CMD",
+                            "timeStamp":"01:00, 01/01/2016"
                         }
                     ]
             }

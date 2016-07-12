@@ -99,7 +99,7 @@
             - description: This is stores alerts of signature detection on host machine
             - method: POST
             - header: { Cookie: '<cookie_name>=CookieFromLoginResponse' }
-            - dataparams: {"alerts" :   [{"hostname":<string>, "fileName":<string>, "alertMessage":<string>, "timeStamp":<"hh:mm, dd/mm/yy" date> }]}
+            - dataparams: {"alerts" :   [{"hostName":<string>, "fileName":<string>, "alertMessage":<string>, "alertType" : <ALERT_FILE/ALERT_CMD>, "timeStamp":<"hh:mm, dd/mm/yyyy" date> }]}
             - response:
                 - success:
                     - 1:
@@ -123,7 +123,7 @@
                 - success:
                     - 1:
                         - code: 200
-                        - content: { "alerts": [ { "alert_id": 15, "hostName": "COMPUTER1", "fileName": "FILE1", "alertMessage": "Trojan Found", "timeStamp": "01:00, 01/01/01", "created_at": "18 Jun, 2016 07:06 am", "created_by": { "email": "user@hipara.org", "last_name": "Admin", "first_name": "Admin" } } ] }
+                        - content: { "alerts": [ { "alert_id": 15, "hostName": "COMPUTER1", "fileName": "FILE1", "alertMessage": "Trojan Found", "timeStamp": "01:00, 01/01/2001", "created_at": "18 Jun, 2016 07:06 am", "created_by": { "email": "user@hipara.org", "last_name": "Admin", "first_name": "Admin" } } ] }
                     - 1:
                         - code: 200
                         - content: There is no content

@@ -36,7 +36,7 @@ $(function() {
                 var createdAt = '';
                 var alerts = response.alerts;
                 for (var i = 0, len = alerts.length; i < len; i++) {
-                    createdAt = alerts[i].created_at.substring(0, 12);
+                    createdAt = alerts[i].timeStamp.substring(0, 12);
                     if( createdAt !== dateCheck ){
                         $(".timeline").append("\
                         <li class='time-label'>\
@@ -51,7 +51,7 @@ $(function() {
                         <li><i class='fa fa-bell'></i>\
                         <div class='timeline-item' >\
                         <span class='time'><i class='fa fa-clock-o'></i>&nbsp;&nbsp;"
-                         +alerts[i].created_at.substring(12)+
+                         +alerts[i].timeStamp.substring(12)+
                         "</span>\
                             <h3 class='timeline-header'><b>"
                             +alerts[i].hostName+
