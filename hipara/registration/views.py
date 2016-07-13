@@ -269,7 +269,7 @@ def apis_view(request):
 
         session = requests.Session()
 
-        data = {"email":"user@hipara.org", "password":"changedefaultpassword"}
+        data = {"email":"username/email", "password":"password"}
 
         response = session.post(host + login_url, data=data)
 
