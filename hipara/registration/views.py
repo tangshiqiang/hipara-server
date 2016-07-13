@@ -217,14 +217,14 @@ def apis_view(request):
                         },
                         {
                             "hostname":"COMPUTER1",
-                            "fileName":"/ABC/pqr.txt",
+                            "command":"dpkg -i nginx.deb",
                             "alertMessage":"Trojan Found",
                             "alertType":"ALERT_CMD",
                             "timeStamp":"11:00, 01/01/2001"
                         },
                         {
                             "hostname":"COMPUTER1",
-                            "fileName":"FILE1",
+                            "command":"curl http://45.33.88.157/",
                             "alertMessage":"Trojan Found",
                             "alertType" :   "ALERT_CMD",
                             "timeStamp":"01:00, 01/01/2016"

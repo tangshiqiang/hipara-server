@@ -22,8 +22,13 @@ class LogsViewSet(viewsets.ViewSet):
                 if 'alerts' in alerts and isinstance(alerts['alerts'], list) and alerts['alerts']:
                     alerts = alerts['alerts']
                     for alert in alerts:
-                        if('hostName' in alert and alert['hostName'] and 'fileName' in alert and alert['fileName'] and 'alertType' in alert and alert['alertType'] in ('ALERT_FILE', 'ALERT_CMD') and 'alertMessage' in alert and alert['alertMessage'] and 'timeStamp' in alert and alert['timeStamp'] and validate_date(alert['timeStamp'])):
-                            pass
+                        if('hostName' in alert and alert['hostName'] and 'alertType' in alert and alert['alertType'] in ('ALERT_FILE', 'ALERT_CMD') and 'alertMessage' in alert and alert['alertMessage'] and 'timeStamp' in alert and alert['timeStamp'] and validate_date(alert['timeStamp'])):
+                            if alert['alertType'] == 'ALERT_FILE' and 'fileName' in alert and alert['fileName'] :
+                                pass 
+                            elif alert['alertType'] == 'ALERT_CMD' and 'command' in alert and alert['command'] :
+                                pass
+                            else :
+                                raise ValueError('Invalid Json Format for fileName/command')
                         else:
                             raise ValueError('Invalid Json Format')
                 else:

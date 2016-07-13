@@ -96,10 +96,10 @@
         - api5:
             - title: Store Signature Detection alerts
             - url: /api/v1/alerts
-            - description: This is stores alerts of signature detection on host machine
+            - description: This is stores alerts of signature detection on host machine. Alert json should have "fileName" key for alertType "ALERT_FILE" and "command" key for alertType "ALERT_CMD".
             - method: POST
             - header: { Cookie: '<cookie_name>=CookieFromLoginResponse' }
-            - dataparams: {"alerts" :   [{"hostName":<string>, "fileName":<string>, "alertMessage":<string>, "alertType" : <ALERT_FILE/ALERT_CMD>, "timeStamp":<"hh:mm, dd/mm/yyyy" date> }]}
+            - dataparams: {"alerts" :   [{"hostName":<string>, "fileName/command":<string>, "alertMessage":<string>, "alertType" : <ALERT_FILE/ALERT_CMD>, "timeStamp":<"hh:mm, dd/mm/yyyy" date> }]}
             - response:
                 - success:
                     - 1:
@@ -123,8 +123,8 @@
                 - success:
                     - 1:
                         - code: 200
-                        - content: { "alerts": [ { "alert_id": 15, "hostName": "COMPUTER1", "fileName": "FILE1", "alertMessage": "Trojan Found", "timeStamp": "01:00, 01/01/2001", "created_at": "18 Jun, 2016 07:06 am", "created_by": { "email": "user@hipara.org", "last_name": "Admin", "first_name": "Admin" } } ] }
-                    - 1:
+                        - content: { "alerts": [ { "alert_id": 15, "hostName": "COMPUTER1", "fileName": "FILE1", "alertMessage": "Trojan Found", "timeStamp": "18 Jun, 2016 07:06 am", "created_at": "18 Jun, 2016 07:06 am", "created_by": { "email": "user@hipara.org", "last_name": "Admin", "first_name": "Admin" } } ] }
+                    - 2:
                         - code: 200
                         - content: There is no content
                 - error:
