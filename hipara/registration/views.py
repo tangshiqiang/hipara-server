@@ -216,16 +216,18 @@ def apis_view(request):
                             "timeStamp":"15:59, 31/12/1948"
                         },
                         {
-                            "hostname":"COMPUTER1",
+                            "hostName":"COMPUTER1",
                             "command":"dpkg -i nginx.deb",
                             "alertMessage":"Trojan Found",
+                            "parentProcessId":3306,
                             "alertType":"ALERT_CMD",
                             "timeStamp":"11:00, 01/01/2001"
                         },
                         {
-                            "hostname":"COMPUTER1",
+                            "hostName":"COMPUTER1",
                             "command":"curl http://45.33.88.157/",
                             "alertMessage":"Trojan Found",
+                            "parentProcessId":45455,
                             "alertType" :   "ALERT_CMD",
                             "timeStamp":"01:00, 01/01/2016"
                         }

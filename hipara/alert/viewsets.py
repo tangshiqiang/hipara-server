@@ -25,10 +25,19 @@ class LogsViewSet(viewsets.ViewSet):
                         if('hostName' in alert and alert['hostName'] and 'alertType' in alert and alert['alertType'] in ('ALERT_FILE', 'ALERT_CMD') and 'alertMessage' in alert and alert['alertMessage'] and 'timeStamp' in alert and alert['timeStamp'] and validate_date(alert['timeStamp'])):
                             if alert['alertType'] == 'ALERT_FILE' and 'fileName' in alert and alert['fileName'] :
                                 pass 
-                            elif alert['alertType'] == 'ALERT_CMD' and 'command' in alert and alert['command'] :
-                                pass
+                            elif alert['alertType'] == 'ALERT_CMD' and 'command' in alert and alert['command'] and 'parentProcessId' in alert and alert['parentProcessId']:
+                                try:
+                                    number = int(alert['parentProcessId'])
+                                except ValueError:
+                                    raise ValueError('Invalid Json Format (parentProcessId should be integer)')
+                                else:
+                                    if number > 0:
+                                        pass
+                                    else:
+                                        raise ValueError('Invalid Json Format (parentProcessId should be integer)')
                             else :
-                                raise ValueError('Invalid Json Format for fileName/command')
+                                print (alert)
+                                raise ValueError('Invalid Json Format')
                         else:
                             raise ValueError('Invalid Json Format')
                 else:

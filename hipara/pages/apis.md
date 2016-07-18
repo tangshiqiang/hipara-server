@@ -99,7 +99,7 @@
             - description: This is stores alerts of signature detection on host machine. Alert json should have "fileName" key for alertType "ALERT_FILE" and "command" key for alertType "ALERT_CMD".
             - method: POST
             - header: { Cookie: '<cookie_name>=CookieFromLoginResponse' }
-            - dataparams: {"alerts" :   [{"hostName":<string>, "fileName/command":<string>, "alertMessage":<string>, "alertType" : <ALERT_FILE/ALERT_CMD>, "timeStamp":<"hh:mm, dd/mm/yyyy" date> }]}
+            - dataparams: {"alerts" :   [{"hostName":<string>, "fileName/command":<string>, "alertMessage":<string>, "alertType" : <ALERT_FILE/ALERT_CMD>, "parentProcessId":<integer required if ALERT_CMD>timeStamp":<"hh:mm, dd/mm/yyyy" date> }]}
             - response:
                 - success:
                     - 1:
