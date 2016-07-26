@@ -125,7 +125,7 @@
                         - code: 200
                         - content: { "alerts": [ { "alert_id": 15, "hostName": "COMPUTER1", "fileName": "FILE1", "alertMessage": "Trojan Found", "timeStamp": "18 Jun, 2016 07:06 am", "created_at": "18 Jun, 2016 07:06 am", "created_by": { "email": "user@hipara.org", "last_name": "Admin", "first_name": "Admin" } } ] }
                     - 2:
-                        - code: 200
+                        - code: 204
                         - content: There is no content
                 - error:
                     - 1:
@@ -133,4 +133,26 @@
                         - content: { "error": "Some error message" }
                     - 2:
                         - code: 403
-                        - content: { "error": "You have to login First" }                
+                        - content: { "error": "You have to login First" }
+        - api7:
+            - title: Download yar signatures depending on category and status
+            - url: /api/v1/export
+            - description: This api downloads all yara signatures depending on category and status. Default category is "Hipara" and status is "Deployed". Values for category= 0 : All, * : any category id (like 1 for Hipara). Values for status=  -2 : All, -1 : Pending approval, 0 : Not Deployed, 1 : Deployed.
+            - method: GET
+            - header: { Cookie: '<cookie_name>=CookieFromLoginResponse' }
+            - dataparams: { "status":<number>, "category":<number> }
+            - response:
+                - success:
+                    - 1:
+                        - code: 200
+                        - content: File will be downloaded with desired category and status
+                    - 2:
+                        - code: 204
+                        - content: "Nothing To Download"
+                - error:
+                    - 1:
+                        - code: 422
+                        - content: "Invalid Input Given"
+                    - 2:
+                        - code: 403
+                        - content: "You have to login First"

@@ -88,12 +88,18 @@ def import_view(request):
 
                 with transaction.atomic():
                     check = False
+                    status = None
+                    if request.user.metadata.role_id < 3 and request.POST.get('status') == "1":
+                        status = True
+                    elif request.user.metadata.role_id < 3:
+                        status = False
                     for rule_data in parsed_rules:
                         rule = Rule.objects.create(
                             name=rule_data.get('name'),
                             description="",
                             category=category[0],
                             source=source[0],
+                            status=status,
                             created_by=user,
                             updated_by=user
                         )

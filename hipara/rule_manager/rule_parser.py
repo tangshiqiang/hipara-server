@@ -212,6 +212,54 @@ def export_single_rule(rule):
     # Return The rule
     return final_rule
 
+# Status 
+# -2 All
+# 0 Not Deployed
+# 1 Deployed      #default
+# -1 Pending approval
+
+# Category 
+# 0 All
+# * category
+
+def export_category_status(category, status):
+    value = ''
+    count = 0
+    rules_result = []
+    if category is None:
+        category=1;
+    from .models import Rule
+    if status == '-2':
+        if category == '0' or category is None or category is '':
+            rules_result = Rule.objects.all()
+        else:
+            rules_result = Rule.objects.filter(category_id=category)
+    elif status == '-1':
+        if category == '0' or category is None or category is '':
+            rules_result = Rule.objects.filter(status=None)
+        else:
+            rules_result = Rule.objects.filter(status=None, category_id=category)
+    elif status == '0':
+        if category == '0' or category is None or category is '':
+            rules_result = Rule.objects.filter(status=False)
+        else:
+            rules_result = Rule.objects.filter(status=False, category_id=category)
+    else:
+        if category == '0' or category is None or category is '':
+            rules_result = Rule.objects.filter(status=True)
+        else:
+            rules_result = Rule.objects.filter(status=True, category_id=category)
+    try:
+        for rule in rules_result:
+            if value:
+                value += '\n'
+            raw = export_single_rule(rule)
+            value += '{0}'.format(raw)
+            count += 1
+    except:
+        count=-1
+    return {'count':count, 'value':value}
+
 
 def export_category_rule(category):
     final_rule = ''

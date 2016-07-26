@@ -36,7 +36,7 @@ def apis_view(request):
         'api1' : """
         import requests
         import json
-        host = 'https://www.hipara.org'
+        host = 'http://localhost:8000'
         login_url = '/api/v1/auth/login'
 
         session = requests.Session()   # to manage cookies
@@ -59,7 +59,7 @@ def apis_view(request):
     'api2' : """
         import requests
         import json
-        host = 'https://www.hipara.org'
+        host = 'http://localhost:8000'
         login_url = '/api/v1/auth/login'
         logout_url = '/api/v1/auth/logout'
 
@@ -94,7 +94,7 @@ def apis_view(request):
     'api3' : """
         import requests
         import json
-        host = 'https://www.hipara.org'
+        host = 'http://localhost:8000'
         login_url = '/api/v1/auth/login'
         logout_url = '/api/v1/auth/logout'
         download_url = '/api/v1/export/all'
@@ -143,7 +143,7 @@ def apis_view(request):
     'api4' : """
         import requests
         import json
-        host = 'https://www.hipara.org'
+        host = 'http://localhost:8000'
         login_url = '/api/v1/auth/login'
         logout_url = '/api/v1/auth/logout'
         upload_url = '/api/v1/import'
@@ -189,7 +189,7 @@ def apis_view(request):
     'api5' : """
         import requests
         import json
-        host = 'https://www.hipara.org'
+        host = 'http://localhost:8000'
         login_url = '/api/v1/auth/login'
         logout_url = '/api/v1/auth/logout'
         store_alerts_url = '/api/v1/alerts'
@@ -311,7 +311,55 @@ def apis_view(request):
             print("Login Failure")
             print("Content : "+ response.content.decode())
             print("Status Code : " + str(response.status_code))
-    """
+    """,
+    'api7' : """
+        import requests
+        import json
+        host = 'http://localhost:8000'
+        login_url = '/api/v1/auth/login'
+        logout_url = '/api/v1/auth/logout'
+        download_url = '/api/v1/export'
+
+
+        session = requests.Session()
+
+        data = {"email":"username/email", "password":"password"}
+
+        response = session.post(host + login_url, data=data)
+
+        if(response.ok) :
+            print("Success")
+            print("Content : "+response.content.decode())
+            print("Status Code : " + str(response.status_code))
+
+            response = session.get(host + download_url)
+            if(response.ok) :
+                print("Download Success")
+                path = "rules.yar"
+                with open(path, 'wb') as f :
+                    content = response.content
+                    f.write(content)
+                print("file : "+path)
+                print("Status Code : " + str(response.status_code))
+            else :
+                print("Download Failure")
+                print("Content : "+ response.content.decode())
+                print("Status Code : " + str(response.status_code))
+
+            response = session.get(host + logout_url)
+            if(response.ok) :
+                print("Logout Success")
+                print("Content : "+response.content.decode())
+                print("Status Code : " + str(response.status_code))
+            else :
+                print("Logout Failure")
+                print("Content : "+ response.content.decode())
+                print("Status Code : " + str(response.status_code))
+        else :
+            print("Login Failure")
+            print("Content : "+ response.content.decode())
+            print("Status Code : " + str(response.status_code))
+    """,
 
     }
     return render(request, 'apis.html', {'page': get_page('apis'), 'examples':data})

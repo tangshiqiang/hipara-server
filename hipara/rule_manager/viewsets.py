@@ -32,12 +32,18 @@ class RuleManagerViewSet(viewsets.ViewSet):
 
                         with transaction.atomic():
                             check = False
+                            status = None
+                            if request.user.metadata.role_id < 3 and request.POST.get('status') == "1":
+                                status = True
+                            elif request.user.metadata.role_id < 3:
+                                status = False
                             for rule_data in parsed_rules:
                                 rule = Rule.objects.create(
                                     name=rule_data.get('name'),
                                     description="",
                                     category=category[0],
                                     source=source[0],
+                                    status=status,
                                     created_by=user,
                                     updated_by=user
                                 )
@@ -90,4 +96,25 @@ class RuleManagerViewSet(viewsets.ViewSet):
                 response['Content-Disposition'] = 'attachment; filename="all_rules.yar"'
                 return response
             result = {'data': "Nothing To Download", 'status': 404}
+        return Response(data=result['data'], status=result['status'])
+
+    def export_rules(self, request, *args, **kwargs):
+        result = {'data': "You have to login First", 'status': 403}
+        if request.user.is_authenticated():
+            try:
+                status = request.GET.get('status')
+                category = request.GET.get('category')
+                from . import rule_parser
+                from django.http import HttpResponse
+                result = rule_parser.export_category_status(category, status)
+                if result['count'] > 0:
+                    response = HttpResponse(result['value'], content_type='text/plain')
+                    response['Content-Disposition'] = 'attachment; filename="rules.yar"'
+                    return response
+                elif result['count'] < 0:
+                    result = {'data':'Internal Server Error', 'status':400}
+                else:
+                    result = {'data':'Nothing To Download', 'status':204}
+            except:
+                result = {'data':'Invalid Input Given', 'status':422}
         return Response(data=result['data'], status=result['status'])

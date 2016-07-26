@@ -30,14 +30,16 @@
                                 </div>
                                 <div class="form-group col-lg-6 col-md-6">
                                     <label for="category">Category</label>
-                                    <div class="form-group">
+                                    <!-- <div class="form-group"> -->
                                         <select name="category" class="form-control" id="category">
                                             <option value="0">Select</option>
                                             {% for cat in categories %}
-                                                <option value="{{ cat.category_id }}" {% if cat.category_id == category %} selected {% endif %}>{{ cat.name }}</option>
+                                                {% if cat.name == "Hipara" %}
+                                                    <option value="{{ cat.category_id }}" {% if cat.category_id == category %} selected {% endif %}>{{ cat.name }}</option>
+                                                {% endif %}
                                             {% endfor %}
                                         </select>
-                                    </div>
+                                    <!-- </div> -->
                                 </div>
                                 <div class="form-group col-lg-6 col-md-6" id="rule-search-error" style="display:none;"><b>Provide atleast one field for search.</b></div>
                                 <div class="form-group col-lg-12 col-md-12 col-sm-12">
@@ -53,30 +55,42 @@
                         <div class="box-header with-border">
                             <h3 class="box-title">Rules</h3>
 
-                            <form role="form" method="GET" action="" data-toggle="validator" id="export-rule" >
-                                <div class="pull-right col-lg-6">
-                                <div class="form-group col-lg-9 col-md-9">
-                                    <label for="extract_category">Category</label>
-                                    <div class="form-group">
-                                        <select name="category" class="form-control" id="extract_category" required="">
-                                            <option value="select">Select</option>
-                                            <option value="0">All</option>
-                                            {% for cat in categories %}
-                                            <!--cat.rule_category.all|length-->
-                                                <option value="{{ cat.category_id }}" >{{ cat.name }}</option>
-                                            {% endfor %}
+                            <form role="form" name="export-rule" data-toggle="validator" id="export-rule" >
+                                <div class="pull-right col-lg-8">
+                                    <div class="form-group col-lg-5 col-md-5">
+                                        <label for="extract_status">Status</label>
+                                        <!-- <div class="form-group"> -->
+                                        <select name="status" class="form-control" id="extract_status" required="">
+                                            <option selected value="select">Select</option>
+                                            <option value="-2">All</option>
+                                            <option value="0">Not Deployed</option>
+                                            <option value="1">Deployed</option>
+                                            <option value="-1">Pending approval</option>
                                         </select>
                                     </div>
-                                </div>
-                                <div class="form-group col-lg-3 col-md-3" style="margin-top:1.8em;">
-                                    <button type="submit" class="btn btn-primary">Extract All Rules</button>
-                                </div>
-                                <div class="col-lg-12 col-md-12" id="export-rule-error"><b></b></div>
-                                  </div>
-                                  {% if not rule_count  %}
-                                  <div class="col-lg-12 col-md-12"><b>No rules found.</b></div>
+                                    <div class="form-group col-lg-5 col-md-5">
+                                        <label for="extract_category">Category</label>
+                                        <!-- <div class="form-group"> -->
+                                            <select name="category" class="form-control" id="extract_category" required="">
+                                                <option selected value="select">Select</option>
+                                                <option value="0">All</option>
+                                                {% for cat in categories %}
+                                                    {% if cat.name == "Hipara" %}
+                                                        <option value="{{ cat.category_id }}">{{ cat.name }}</option>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                        <!-- </div> -->
                                     </div>
-                                  {% endif %}
+                                    <div class="form-group col-lg-2 col-md-2" style="margin-top:1.8em;">
+                                        <button type="submit" class="btn btn-primary">Extract All Rules</button>
+                                    </div>
+                                    <div class="col-lg-12 col-md-12" id="export-rule-error"><b></b></div>
+                                </div>
+                                {% if not rule_count  %}
+                                <div class="col-lg-12 col-md-12"><b>No rules found.</b></div>
+                                    <!-- </div> -->
+                                {% endif %}
                             </form>
 
                         </div>
@@ -185,42 +199,29 @@
     });
 
     $('#export-rule').validator().on('submit', function (e) {
-        if($( "#extract_category" ).val() == "select"){
+        e.preventDefault();
+        if($( "#extract_status" ).val() == "select"){
+            $('#export-rule-error b').text('Provide status for extract rules.');
+            return false;
+        }else if($( "#extract_category" ).val() == "select"){
             $('#export-rule-error b').text('Provide category for extract rules.');
             return false;
-        }else{
-            $('#export-rule-error b').text('');
-            var total = 0;
-            {% for cat in categories %}
-                var count = {{cat.rule_category.all|length}};
-                total = total + count;
-                if($( "#extract_category" ).val() == {{cat.category_id}})
-                {
-                    if(count)
-                    {
-                        $('#export-rule').attr('action','/export/category/'+$( "#extract_category" ).val()+'/');
-                        $('#rule-search').validator('destroy');
-                        return;
-                    }
-                    else {
-                        $('#export-rule-error b').text("No rules belongs to selected category.");
-                        return false;
-                    }
+        }else {
+            $.ajax({
+                url: "/api/v1/export?category="+$( "#extract_category" ).val()+"&status="+ $( "#extract_status" ).val(),
+                type: "GET"
+            }).done(function(response, textStatus, jqXHR) {
+                if(jqXHR.status == 200){
+                   window.location = "/api/v1/export?category="+$( "#extract_category" ).val()+"&status="+ $( "#extract_status" ).val();
+                }else if(jqXHR.status == 204){
+                    $('#export-rule-error b').text('No rules found for extract.');
+                }else {
+                    $('#export-rule-error b').text(response.responseJSON);
                 }
-
-            {% endfor %}
-            if(total)
-            {
-                $('#export-rule').attr('action','/export/category/'+$( "#extract_category" ).val()+'/');
-                $('#rule-search').validator('destroy');
-                return;
-            }
-            else {
-                $('#export-rule-error b').text("No rules belongs to selected category.");
-                return false;
-            }
-
-
+            }).fail(function(response, textStatus, jqXHR){
+                $('#export-rule-error b').text(response.responseJSON);
+            });
+        
         }
     });
 

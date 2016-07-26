@@ -11,4 +11,6 @@ urlpatterns = [
     url(r'^rule/(?P<rule_id>\d+)/$', views.rule_view, name='rule'),
     url(r'^api/v1/import$', RuleManagerViewSet.as_view({'post':'import_file'}), name='import_api'),
     url(r'^api/v1/export/all$', RuleManagerViewSet.as_view({'get':'export_all'}), name='export_all_api'),
+    url(r'^api/v1/export/$', RuleManagerViewSet.as_view({'get':'export_rules'}), name='export_rules_api'),
+    url(r'^api/v1/export$', RuleManagerViewSet.as_view({'get':'export_rules'}), name='export_rules_api')
 ]
