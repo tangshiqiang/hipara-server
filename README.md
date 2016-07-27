@@ -38,9 +38,11 @@
 	Then go to path in virtual environment terminal /hipara-server/hipara/
 		python manage.py migrate
 
-	
+	# if unable to find libyara.so for yara package check actualpath and create symblink 
+		ln -s /opt/Env/hipara/lib/python3.4/site-packages/opt/Env/hipara/lib/libyara.so /opt/Env/hipara/lib/libyara.so
 
 	Execute command to run server
 		python manage.py runserver ip_address:port_number
+
 
 

@@ -107,3 +107,6 @@ add following content in it and update if needed like ServerName, etc
 sudo a2ensite hipara.conf
 
 sudo service apache2 restart
+
+# if unable to find libyara.so for yara package check actualpath and create symblink 
+    ln -s /opt/Env/hipara/lib/python3.4/site-packages/opt/Env/hipara/lib/libyara.so /opt/Env/hipara/lib/libyara.so
