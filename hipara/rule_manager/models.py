@@ -18,7 +18,7 @@ class Category(models.Model):
 class Rule(models.Model):
     rule_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=128)
-    description = models.CharField(max_length=200, null=True, blank=True)
+    description = models.CharField(max_length=1000, null=True, blank=True)
     category = models.ForeignKey(Category, related_name='rule_category', blank=True, null=True)
     source = models.CharField(max_length=200, null=True, blank=True)
     version = models.IntegerField(default=1)
@@ -39,7 +39,7 @@ class Rule(models.Model):
 class MetaData(models.Model):
     rule = models.ForeignKey(Rule, related_name='meta_rule', blank=True, null=True)
     key = models.CharField(max_length=200, null=True, blank=True)
-    value = models.CharField(max_length=200, null=True, blank=True)
+    value = models.CharField(max_length=1000, null=True, blank=True)
     
     def __str__(self):
         return self.rule.name
