@@ -86,7 +86,7 @@
                         <div class="box-header with-border">
                             <h3 class="box-title">Update role</h3>
                         </div>
-                        <form role="form" data-toggle="validator" id="role-update" action="/users/{{user_detail.id}}/" method="POST" >
+                        <form role="form" data-toggle="validator" id="role-update" action="/users/{{user_detail.id}}/?method=POST" method="POST" >
                             <div class="box-body">
                             {% csrf_token %}
                                 <div class="form-group col-lg-6 col-md-6">
@@ -116,6 +116,46 @@
                         </form>
                     </div>
                 </div>
+                <div class="col-xs-12">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Change Password</h3>
+                            {% if form.non_field_errors or error %}
+                                <br/>
+                                {% for error in form.non_field_errors %}
+                                    {{error}}
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                        <form role="form" data-toggle="validator" id="change-password" action="/users/{{user_detail.id}}/?method=PUT" method="POST" >
+                            <div class="box-body">
+                            {% csrf_token %}
+                                <div class="form-group col-lg-6 col-md-6">
+                                    <label for="password">Enter New Password</label>
+                                    <input type="password" class="form-control" name="password" min="8" max="32">
+                                    {% if form.password.errors %}
+                                        {% for error in form.password.errors %}
+                                            {{error}}
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                                <div class="form-group col-lg-6 col-md-6">
+                                    <label for="re_password">Re-type Password</label>
+                                    <input type="password" class="form-control" name="re_password">
+                                    {% if form.re_password.errors %}
+                                        {% for error in form.re_password.errors %}
+                                            {{error}}
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                                <div class="form-group col-lg-12 col-md-12 col-sm-12">
+                                    <button type="submit" class="btn btn-primary">Change Password</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
             </div>
         </section>
         <!-- /.content -->

@@ -416,7 +416,7 @@ def change_password_view(request):
 
 
 def users_view(request):
-    if request.user.is_authenticated() and request.user.metadata.role_id < 3:
+    if request.user.is_authenticated() and request.user.metadata.role_id == 1:
 
         from django.contrib.auth.models import User
         from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -435,7 +435,7 @@ def users_view(request):
 
         user_result = User.objects.filter(Q(first_name__icontains=search) | Q(last_name__icontains=search) | Q(email__icontains=search)).order_by('first_name')
         for user in user_result:
-            if user.metadata.role_id > request.user.metadata.role_id and user.metadata.role_id != 4:
+            if user.metadata.role_id > request.user.metadata.role_id:
                 users.append(user)
 
         user_count = len(users)
@@ -611,13 +611,15 @@ def users_detail_view(request, id):
     if request.user.is_authenticated() and request.user.metadata.role_id == 1:
         try:
             from django.contrib.auth.models import User
+            from .forms import UpdatePasswordForm
             from .models import Role
             user = User.objects.get(pk=id)
             if user.metadata.role_id > request.user.metadata.role_id:
-                roles = Role.objects.filter(role_id__gt=1, role_id__lt=4)
+                roles = Role.objects.filter(role_id__gt=1, role_id__lt=5)
                 if request.method == 'GET':
-                    return render(request, 'user-detail.html', {'user_detail': user, 'roles': roles, 'page': get_page('user-detail')})
-                elif request.method == 'POST':
+                    form = UpdatePasswordForm(initial={'password': ""})
+                    return render(request, 'user-detail.html', {'user_detail': user, 'roles': roles, 'page': get_page('user-detail'), 'form': form})
+                elif request.method == 'POST' and request.GET.get('method') == 'POST':
                     status = int(request.POST.get('status'))
                     role = int(request.POST.get('role'))
                     if role > 1:
@@ -627,7 +629,15 @@ def users_detail_view(request, id):
                         metatadata.updated_by = request.user
                         user.save()
                         metatadata.save()
-                        return render(request, 'user-detail.html', {'user_detail': user, 'roles': roles, 'page': get_page('user-detail')})
+                        form = UpdatePasswordForm(initial={'password': ""})
+                        return render(request, 'user-detail.html', {'user_detail': user, 'roles': roles, 'page': get_page('user-detail'), 'form': form})
+                elif request.method == 'POST' and request.GET.get('method') == 'PUT':
+                    form = UpdatePasswordForm(request.POST)
+                    if form.is_valid():
+                        user.set_password(form.cleaned_data.get('password'))
+                        user.save()
+                        form.add_error(None, "Password Changed Successfully")
+                    return render(request, 'user-detail.html', {'user_detail': user, 'roles': roles, 'page': get_page('user-detail'), 'form': form})
         except:
             return redirect('index')
     return redirect('index')

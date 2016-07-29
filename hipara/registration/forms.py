@@ -45,3 +45,14 @@ class ChangePasswordForm(forms.Form):
         if self.user.check_password(old_password) :
             return old_password;
         raise forms.ValidationError("Old password isn't valid")
+
+class UpdatePasswordForm(forms.Form):
+    password = forms.CharField(widget=forms.PasswordInput(), required=True, min_length=6, max_length=75)
+    re_password = forms.CharField(widget=forms.PasswordInput(), required=True, min_length=6, max_length=75)
+
+    def clean_re_password(self):
+        password = self.cleaned_data['password']
+        re_password = self.cleaned_data['re_password']
+        if password == re_password:
+            return re_password;
+        raise forms.ValidationError("password and retyped password does not match")
