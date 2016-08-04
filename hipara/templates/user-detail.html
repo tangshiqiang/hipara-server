@@ -36,6 +36,12 @@
                                     <dd>{{user_detail.email}}</dd>
                                 </dl>
                            </div>
+                           <div class="col-lg-4">
+                                <dl class="dl-horizontal">
+                                    <dt>Username :</dt>
+                                    <dd>{{user_detail.username}}</dd>
+                                </dl>
+                           </div>
                             <div class="col-lg-4">
                                 <dl class="dl-horizontal">
                                     <dt>Role :</dt>
@@ -50,6 +56,18 @@
                                     {% else %}
                                         <dd>Inactive</dd>
                                     {% endif %}
+                                </dl>
+                           </div>
+                           <div class="col-lg-4">
+                                <dl class="dl-horizontal">
+                                    <dt>Job Title :</dt>
+                                    <dd>{% if user_detail.metadata.job_title %}{{user_detail.metadata.job_title}}{% endif %}</dd>
+                                </dl>
+                           </div>
+                            <div class="col-lg-4">
+                                <dl class="dl-horizontal">
+                                    <dt>Company :</dt>
+                                    <dd>{% if user_detail.metadata.company %}{{user_detail.metadata.company}} {% endif %}</dd>
                                 </dl>
                            </div>
                             <div class="col-lg-4">

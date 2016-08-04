@@ -383,7 +383,7 @@ def login_view(request):
                     else:
                         form.add_error(None, "UI login for Service user not allowed")
                 else:
-                    form.add_error(None, "This account has been disabled contact to admin")
+                    form.add_error(None, "Email is not verified. Please verify your email.")
             else:
                 form.add_error(None, "Invalid Username and/or Password")
                 form.fields.password = ""
@@ -538,8 +538,8 @@ def register_view(request, token):
     if not request.user.is_authenticated():
         from django.utils import timezone
         from .models import User_invite_token
-        from .forms import SignUpForm
-        form = SignUpForm(
+        from .forms import RegisterForm
+        form = RegisterForm(
             initial={'email': "",
                      'first_name': "",
                      'last_name': "",
@@ -553,14 +553,14 @@ def register_view(request, token):
                     email = ""
                     if invite.email:
                         email = invite.email
-                    form = SignUpForm(
+                    form = RegisterForm(
                         initial={'email': email,
                                  'first_name': "",
                                  'last_name': "",
                                  'username': ""}
                     )
                 elif request.method == 'POST':
-                    form = SignUpForm(request.POST)
+                    form = RegisterForm(request.POST)
                     if form.is_valid():
                         if not invite.email or invite.email == form.cleaned_data.get('email'):
                             from django.db import transaction
@@ -601,6 +601,86 @@ def register_view(request, token):
             error = "Sorry You are not Invited"
         return render(request, 'register.html', {'form': form, 'token': token, 'error': error, 'page': get_page('register')})
     return redirect('index')
+
+def signup_view(request):
+    if not request.user.is_authenticated():
+        from .forms import SignUpForm
+        if request.method == 'POST':
+            form = SignUpForm(request.POST)
+            if form.is_valid():
+                from django.db import transaction
+                try:
+                    from django.contrib.auth.models import User
+                    from django.contrib.auth.hashers import make_password
+                    from django.contrib.auth import authenticate, login
+                    from django.core.mail import EmailMultiAlternatives
+                    from django.core.urlresolvers import reverse
+                    import string, random
+                    from .models import UserMetaData
+                    with transaction.atomic():
+                        token=''.join(random.sample(string.ascii_lowercase, 25))
+                        user = User.objects.create(
+                            username=form.cleaned_data.get('username'),
+                            first_name=form.cleaned_data.get('first_name'),
+                            last_name=form.cleaned_data.get('last_name'),
+                            password=make_password(form.cleaned_data.get('password')),
+                            email=form.cleaned_data.get('email'),
+                            is_active=False 
+                        )
+                        UserMetaData.objects.create(
+                            user=user,
+                            job_title=form.cleaned_data.get('job_title'),
+                            company=form.cleaned_data.get('company'),
+                            token=token,
+                            role_id=3,
+                            created_by=user,
+                            updated_by=user
+                        )
+                        subject = "Hipara Account Verification"
+                        url = request.build_absolute_uri(reverse('verify', kwargs={'token': token}))
+                        html_body = 'Invite url : <a href="' + url + '">link</a>'
+                        body = "Invite url : "+url
+                        from_email = "Hipara Support <support@hipara.org>"
+                        headers = {'Reply-To': 'Hipara Support <no-reply@hipara.org>'}
+                        msg = EmailMultiAlternatives(subject=subject, body=body, from_email=from_email, to=[form.cleaned_data.get('email')], headers = headers)
+                        msg.attach_alternative(html_body, "text/html")
+                        msg.send()
+                        form.fields['email']=""
+                        form.fields['first_name']=""
+                        form.fields['last_name']=""
+                        form.fields['username']=""
+                        form.fields['job_title']=""
+                        form.fields['company']=""
+                        form.add_error(None, 'Sign up Successful. Please verify your email by activating link on email')
+                except:
+                    transaction.rollback()
+                    form.add_error(None, 'Some Error Occurred while Sign Up')
+        else:
+            form = SignUpForm(
+                initial={'email': "",
+                    'first_name': "",
+                    'last_name': "",
+                    'username': "",
+                    'job_title': "",
+                    'company': ""}
+            )
+        return render(request, 'sign-up.html', {'form': form, 'page': get_page('sign-up')})
+    return redirect('index')
+
+def verify_view(request, token):
+    message = ""
+    from .models import UserMetaData
+    try:
+        userMetaData=UserMetaData.objects.get(token=token)
+        user = userMetaData.user
+        user.is_active=True
+        userMetaData.token=None
+        userMetaData.save()
+        user.save()
+        message="Your Email is verified"
+    except:
+        message = "Sorry Invalid User to verify"
+    return render(request, 'verify.html', {'message': message, 'page': get_page('verify')})
 
 
 def not_found(request):

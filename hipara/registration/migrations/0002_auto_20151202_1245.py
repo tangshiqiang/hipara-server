@@ -9,7 +9,7 @@ from django.contrib.auth.hashers import make_password
 
 def data_seeder(apps, schema_editor):
     role1 = Role.objects.create(name='Super Admin')
-    Role.objects.create(name='Admin')
+    role2 = Role.objects.create(name='Admin')
     Role.objects.create(name='User')
     password = make_password('changedefaultpassword')
     superadmin = User.objects.create(
@@ -24,6 +24,19 @@ def data_seeder(apps, schema_editor):
         role=role1,
         created_by=superadmin,
         updated_by=superadmin
+    )
+    admin = User.objects.create(
+        password=make_password('hiparademo'),
+        username='demo',
+        first_name='Hipara',
+        last_name='Demo',
+        email='demo@hipara.org'
+    )
+    UserMetaData.objects.create(
+        user=admin,
+        role=role2,
+        created_by=admin,
+        updated_by=admin
     )
 
 

@@ -1,0 +1,13 @@
+- title: Sign Up
+- robots: True
+- metadata:
+    - description:
+        - name: description
+        - content: Sign Up
+    - keywords: 
+        - name: keywords
+        - content: Bitroots software, angularjs, php, nodejs, html, css
+- content:
+	- header: Hipara
+	- sub_header: Lorem ipsum dolor sit amet.
+	- title: Sign up

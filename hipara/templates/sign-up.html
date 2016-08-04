@@ -1,0 +1,154 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Hipara | {{ page.title }}</title>
+    
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+    {% if page.robots = "True" %}
+    <meta name="robots" content="no-follow,no-index">
+    {% endif %}
+
+    {% for key, meta in page.metadata.items %}
+    <meta {% if meta.name %}name="{{ meta.name }}" {% endif %}{% if meta.http_equiv %}http-equiv="{{ meta.http_equiv }}" {% endif %}{% if meta.charset %}charset="{{ meta.charset }}" {% endif %}{% if meta.property %}property="{{ meta.property }}" {% endif %}{% if meta.content %}content="{{ meta.content }}" {% endif %}/>
+    {% endfor %}
+    
+    <!-- Bootstrap 3.3.5 -->
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'bootstrap/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'dist/css/AdminLTE.min.css' %}">
+    <link rel="stylesheet" href="{% static 'dist/css/skins/_all-skins.min.css' %}">
+    <link rel="stylesheet" href="{% static 'dist/css/style.css' %}">
+</head>
+
+<body class="hold-transition register-page">
+    <div class="register-box">
+        <div class="register-logo">
+            <a href="/"><b>{{ page.content.header }}</b></a>
+            <!-- <p>{{ page.content.sub_header }}</p> -->
+        </div>
+
+        <div class="register-box-body">
+            <p class="login-box-msg">{{ page.content.title }}</p>
+            <form role="form" id="registration_form" data-toggle="validator" action="/signup/" method="post">
+                {% csrf_token %}
+                <div class="form-group has-feedback">
+                    <input type="text" class="form-control" placeholder="First name" autofocus="" name="first_name" value="{{form.first_name.value}}" required >
+                    <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                </div>
+                {% if form.first_name.errors %}
+                <div>
+                    {% for error in form.first_name.errors %}
+                    {{error}}
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <div class="form-group has-feedback">
+                    <input type="text" class="form-control" placeholder="Last name" name="last_name" value="{{form.last_name.value}}" required>
+                    <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                </div>
+                {% if form.last_name.errors %}
+                <div>
+                    {% for error in form.last_name.errors %}
+                    {{error}}
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <div class="form-group has-feedback">
+                    <input type="email" class="form-control" placeholder="Email" name="email" value="{{form.email.value}}" required>
+                    <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                </div>
+                {% if form.email.errors %}
+                <div>
+                    {% for error in form.email.errors %}
+                    {{error}}
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <div class="form-group has-feedback">
+                    <input type="text" class="form-control" placeholder="Username" name="username" value="{{form.username.value}}" required>
+                    <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                </div>
+                {% if form.username.errors %}
+                <div>
+                    {% for error in form.username.errors %}
+                    {{error}}
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <div class="form-group has-feedback">
+                    <input type="text" class="form-control" placeholder="Job Title" name="job_title" value="{{form.job_title.value}}">
+                    <span class="fa fa-circle-o form-control-feedback"></span>
+                    <!-- <i class="fa fa-circle-o"></i> -->
+                </div>
+                {% if form.job_title.errors %}
+                <div>
+                    {% for error in form.job_title.errors %}
+                    {{error}}
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <div class="form-group has-feedback">
+                    <input type="text" class="form-control" placeholder="Company" name="company" value="{{form.company.value}}">
+                    <span class="fa fa-circle-o form-control-feedback"></span>
+                </div>
+                {% if form.company.errors %}
+                <div>
+                    {% for error in form.company.errors %}
+                    {{error}}
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <div class="form-group has-feedback">
+                    <input type="password" class="form-control" placeholder="Password"
+                    id="password" name="password" required  data-minlength="6" data-maxlength="75">
+                    <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                    <!-- <span class="help-block">Minimum of 5 characters</span> -->
+                </div>
+                {% if form.password.errors %}
+                <div>
+                    {% for error in form.password.errors %}
+                    {{error}}
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <div class="form-group has-feedback">
+                    <input type="password" class="form-control" id="passwordConfirm"
+                    data-match="#password" data-match-error="Whoops, these don't match"
+                    placeholder="Confirm password" required data-minlength="6" data-maxlength="75">
+                    <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                </div>
+                <div class="help-block with-errors"></div>
+                {% if form.non_field_errors or error %}
+                <div>
+                    {{error}}
+                    {% for error in form.non_field_errors %}
+                    {{error}}
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <div class="row login-action">
+                    <div class="col-xs-4">
+                        <button type="submit" class="btn btn-primary btn-block btn-flat">Sign up</button>
+                    </div>
+                    <div class="col-xs-7 pull-right">
+                        <a href="/login/" class="text-center">I already have a account</a>
+                    </div>
+                    <!-- /.col -->
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="{% static 'plugins/jQuery/jQuery-2.1.4.min.js' %}"></script>
+    <!-- Bootstrap 3.3.5 -->
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'dist/js/validator.min.js' %}"></script>
+</body>
+
+</html>
