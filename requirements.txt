@@ -12,3 +12,4 @@ simplejson==3.8.1
 six==1.10.0
 yara==1.7.7
 yara-python==3.4.0.0
+sendgrid==2.2.1
