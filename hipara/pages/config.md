@@ -1,0 +1,9 @@
+- title: Config
+- robots: True
+- metadata:
+    - description:
+        - name: description
+        - content: Config
+    - keywords:
+        - name: keywords
+        - content: config

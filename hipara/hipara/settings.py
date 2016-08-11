@@ -26,6 +26,7 @@ INSTALLED_APPS = (
     'registration',
     'rule_manager',
     'alert',
+    'settings',
 )
 
 MIDDLEWARE_CLASSES = (

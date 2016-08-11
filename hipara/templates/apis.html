@@ -19,7 +19,7 @@
             <div class="row">
                 <div class="col-xs-12 sample-codes">
                     <!-- Example -->
-                    {% for key, api in page.content.apis.items %}
+                    {% for key, api in apis.items %}
 
                     <h3><b>{{ api.title }}</b></h3>
                     <p>Description: {{api.description}}</p>
@@ -37,7 +37,7 @@
                             <h3>Response</h3>
 
                             <b>Success</b>:
-                            {% for success_key, success in api.response.success.items %}
+                            {% for success in api.response.success %}
                                 <ul>
                                     <li><strong>Status Code : </strong>{{success.code}}</li>
                                     <li><strong>Content : </strong>{{success.content}}</li>
@@ -45,7 +45,7 @@
                             {% endfor %}
 
                             <b>Error</b>:
-                            {% for error_key, error in api.response.error.items %}
+                            {% for error in api.response.error %}
                                 <ul>
                                     <li><strong>Status Code : </strong>{{error.code}}</li>
                                     <li><strong>Content : </strong>{{error.content}}</li>
@@ -56,10 +56,11 @@
                     <h3 class="snippets-title">Code Snippets</h3>
 <pre>
 <code data-language="javascript">
-{{examples|getattribute:key}}
+{{api.example}}
 </code>
 </pre>
                     {% endfor %}
+                    
                     <!-- example end -->
                 </div>
                 <!-- /.box -->

@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+<div class="content-wrapper">
+    <div class="container padding-lr-zero">
+        <section class="content-header">
+            <h1>
+                Routine Options
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="/"><i class="glyphicon glyphicon-home"></i> Home</a></li>
+                <li>Settings</li>
+                <li>Routine Options</li>
+            </ol>
+        </section>
+
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Update Routine Options</h3>
+                        </div>
+                        <form role="form" action="/settings/routine/" method="POST" id="update-routine">
+                            {% csrf_token %}
+                            <div class="box-body">
+
+                                <div class="form-group col-lg-12 col-md-12 col-sm-12">
+                                    <input type="checkbox" name="fullDiskScan" {% if form.fullDiskScan.value %} checked {% endif %}>
+                                    <label for="fullDiskScan">Run Full Disk Scan</label>
+                                    {% if form.fullDiskScan.errors %}
+                                    <div class="col-lg-12 col-md-12">
+                                        {% for error in form.fullDiskScan.errors %}
+                                            <b>{{error}}</b>
+                                        {% endfor %}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <div class="form-group col-lg-12 col-md-12 col-sm-12">
+                                    <input type="checkbox" name="memoryScan" {% if form.memoryScan.value %} checked {% endif %}>
+                                    <label for="memoryScan">Run Memory Scan</label>
+                                    {% if form.memoryScan.errors %}
+                                    <div class="col-lg-12 col-md-12">
+                                        {% for error in form.memoryScan.errors %}
+                                            <b>{{error}}</b>
+                                        {% endfor %}
+                                    </div>
+                                    {% endif %}
+                                </div>
+
+                                {% if form.non_field_errors %}
+                                <div class="col-lg-12 col-md-12" id="import-error">
+                                      {% for error in form.non_field_errors %}
+                                          <b>{{error}}</b>
+                                      {% endfor %}
+                                </div>
+                                {% endif %}
+
+                                <div class="form-group col-lg-12 col-md-12 col-sm-12">
+                                    <button type="submit" class="btn btn-primary">Update</button>
+                                </div>
+                            </div>
+
+                            <!-- /.box-body -->
+                        </form>
+                    </div>
+                    
+                </div>
+                <!-- /.box -->
+            </div>
+            <!-- /.col -->
+        </section>
+    </div>
+</div>
+
+{% endblock %}s

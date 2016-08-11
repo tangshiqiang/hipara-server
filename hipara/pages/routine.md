@@ -1,0 +1,9 @@
+- title: Routine
+- robots: True
+- metadata:
+    - description:
+        - name: description
+        - content: Routine
+    - keywords:
+        - name: keywords
+        - content: Routine

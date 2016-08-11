@@ -104,6 +104,21 @@
                                 </a>
                             </li>
                             {% endif %}
+
+                            {% if user.metadata.role_id = 1 %}
+
+                            {% endif %}
+                            <li class="dropdown {% if '/settings/' in request.path %}active{% endif %}">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <i class="glyphicon glyphicon-cog"></i>
+                                    <span>Settings</span>
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li {% if request.path = '/settings/config/' %} class="active" {% endif %}><a href="/settings/config/">Config</a></li>
+                                    <li {% if request.path = '/settings/routine/' %} class="active" {% endif %}><a href="/settings/routine/">Routine Options</a></li>
+                                </ul>
+                            </li>
                             {% endif %}
                         </ul>
 

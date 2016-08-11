@@ -5,6 +5,7 @@
 /hipara/staticfiles/
 /hipara/hipara/settings_development.py
 /hipara/hipara/settings_production.py
+/hipara/hipara/settings_demo.py
 /hipara/hipara/settings.py
 /hipara/activate/
 /hipara/hipara/bin/
