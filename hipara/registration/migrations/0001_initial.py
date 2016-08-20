@@ -46,6 +46,9 @@ class Migration(migrations.Migration):
                 ('role', models.ForeignKey(default=3, on_delete=django.db.models.deletion.CASCADE, related_name='user_role', to='registration.Role')),
                 ('updated_by', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='updated_users', to=settings.AUTH_USER_MODEL)),
                 ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='metadata', to=settings.AUTH_USER_MODEL)),
+				('job_title', models.CharField(max_length=250, blank=True, default=None, null=True)),
+				('company', models.CharField(max_length=250, blank=True, default=None, null=True)),
+				('token', models.CharField(max_length=250, blank=True, default=None, null=True)),
             ],
         ),
     ]

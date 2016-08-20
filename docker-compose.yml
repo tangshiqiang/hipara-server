@@ -1,0 +1,19 @@
+# docker-compose.yml -- deploys files for HIPARA demo server
+#	by Tin Tam <tin@hipara.org>
+#
+
+# MySQL Database Image
+db:
+ image: 'mysql:latest'
+ volumes:
+  - ./db/storage:/var/lib/mysql
+ env_file: .env
+
+web:
+ restart: always
+ build: .
+ env_file: .env
+ links:
+  - db:db
+ ports:
+  - "8000:8000"
