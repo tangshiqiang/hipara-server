@@ -111,7 +111,7 @@ if [ -f "/etc/debian_version" ]; then
 	sudo git clone https://github.com/jbc22/hipara-server.git ./
 	sudo git checkout demo-server
 	
-	sudo mv hipara/demo_settings.py hipara/settings.py
+	sudo mv hipara/hipara/demo_settings.py hipara/hipara/settings.py
 	
 	docker-compose up --build -d
 	
