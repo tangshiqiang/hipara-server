@@ -109,10 +109,11 @@ if [ -f "/etc/debian_version" ]; then
 	
 	echo "#  Cloning HIPARA git repo"
 	sudo git clone https://github.com/jbc22/hipara-server.git ./
+	sudo git checkout demo-server
 	
 	sudo mv hipara/demo_settings.py hipara/settings.py
 	
-	sudo docker-compose up --build -d
+	docker-compose up --build -d
 	
 	echo -e "
 	# Installation complete!
@@ -133,6 +134,8 @@ if [ -f "/etc/debian_version" ]; then
 	# User: demo@hipara.org
 	# password: hiparademo
 	#
+	# To view docker container logs use this command:
+	# docker-compose logs 
 	#
 	# To stop the demo server run the following in the /opt/hipara directory:
 	# docker-compose down
