@@ -6,6 +6,8 @@ SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 	
 DEBUG = True
 
+DEMO = True
+
 ALLOWED_HOSTS = []
 
 INSTALLED_APPS = (
