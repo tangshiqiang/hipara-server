@@ -19,7 +19,9 @@ echo -e "
 # This script will build and move files to a self contained enviornment
 # All files related to HIPARA Server can be found in /opt/hipara
 #
-# This scirpt is intended to peform a demo installation on an Ubuntu OS
+# This scirpt is intended to peform a demo installation on Debian based
+#  operating systems (Debian, Ubuntu, Mint, etc..)
+#
 # For other platforms and deployments, please visit:
 # https://github.com/jbc22/hipara-server
 #
