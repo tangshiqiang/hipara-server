@@ -82,17 +82,6 @@
                 </div>
                 {% endif %}
                 <div class="form-group has-feedback">
-                    <input type="text" class="form-control" placeholder="Username" name="username" value="{{form.username.value}}" required>
-                    <span class="glyphicon glyphicon-user form-control-feedback"></span>
-                </div>
-                {% if form.username.errors %}
-                <div>
-                    {% for error in form.username.errors %}
-                    {{error}}
-                    {% endfor %}
-                </div>
-                {% endif %}
-                <div class="form-group has-feedback">
                     <input type="password" class="form-control" placeholder="Password"
                     id="password" name="password" required  data-minlength="6" data-maxlength="75">
                     <span class="glyphicon glyphicon-lock form-control-feedback"></span>

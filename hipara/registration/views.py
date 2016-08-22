@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
 from .utils import get_page
-
+from django.conf import settings
 
 # def index_view(request):
 #     return render(request, 'index.html', {'page': get_page('index')})
@@ -243,7 +243,7 @@ def register_view(request, token):
                         initial={'email': email,
                                  'first_name': "",
                                  'last_name': "",
-                                 'username': ""}
+                                }
                     )
                 elif request.method == 'POST':
                     form = RegisterForm(request.POST)
@@ -257,15 +257,16 @@ def register_view(request, token):
                                 from .models import UserMetaData
                                 with transaction.atomic():
                                     user = User.objects.create(
-                                        username=form.cleaned_data.get('username'),
+                                        username=form.cleaned_data.get('email'),
                                         first_name=form.cleaned_data.get('first_name'),
                                         last_name=form.cleaned_data.get('last_name'),
                                         password=make_password(form.cleaned_data.get('password')),
                                         email=form.cleaned_data.get('email')
                                     )
+                                    _role_id = 2 if settings.DEMO else 3
                                     UserMetaData.objects.create(
                                         user=user,
-                                        role_id=3,
+                                        role_id=_role_id,
                                         created_by=invite.created_by,
                                         updated_by=user
                                     )
@@ -306,19 +307,20 @@ def signup_view(request):
                     with transaction.atomic():
                         token=''.join(random.sample(string.ascii_lowercase, 25))
                         user = User.objects.create(
-                            username=form.cleaned_data.get('username'),
+                            username=form.cleaned_data.get('email'),
                             first_name=form.cleaned_data.get('first_name'),
                             last_name=form.cleaned_data.get('last_name'),
                             password=make_password(form.cleaned_data.get('password')),
                             email=form.cleaned_data.get('email'),
                             is_active=False 
                         )
+                        _role_id = 2 if settings.DEMO else 3
                         UserMetaData.objects.create(
                             user=user,
                             job_title=form.cleaned_data.get('job_title'),
                             company=form.cleaned_data.get('company'),
                             token=token,
-                            role_id=3,
+                            role_id=_role_id,
                             created_by=user,
                             updated_by=user
                         )
@@ -346,7 +348,6 @@ def signup_view(request):
                 initial={'email': "",
                     'first_name': "",
                     'last_name': "",
-                    'username': "",
                     'job_title': "",
                     'company': ""}
             )
@@ -355,6 +356,7 @@ def signup_view(request):
 
 def verify_view(request, token):
     message = ""
+    status = 400
     from .models import UserMetaData
     try:
         userMetaData=UserMetaData.objects.get(token=token)
@@ -364,9 +366,10 @@ def verify_view(request, token):
         userMetaData.save()
         user.save()
         message="Your Email is verified"
+        status = 200
     except:
         message = "Sorry Invalid User to verify"
-    return render(request, 'verify.html', {'message': message, 'page': get_page('verify')})
+    return render(request, 'verify.html', {'status': status, 'message': message, 'page': get_page('verify')})
 
 
 def not_found(request):
