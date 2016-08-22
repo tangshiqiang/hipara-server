@@ -76,11 +76,12 @@ if [ -f "/etc/debian_version" ]; then
 	#echo -n ""
 	
 	# Getting OS distro info
-	. /etc/lsb-release
-	OS=$DISTRIB_ID
+	OS=$(lsb_release -si)
+	OSNAME=$(lsb_release --codename|cut -f2)
 	ARCH=$(uname -m | sed 's/x86_//;s/i[3-6]86/32/')
-	VER=$DISTRIB_RELEASE
-	OSNAME=$DISTRIB_CODENAME
+	VER=$(lsb_release -sr)
+		
+	
 	
 	echo "#  Updating packages"
 	sudo apt-get -qq update
