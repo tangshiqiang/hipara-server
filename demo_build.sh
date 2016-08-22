@@ -31,7 +31,7 @@ echo -e "
 
 # Check if executed as root user
 if [ "$(id -u)" != "0" ]; then
-   echo "EROR: This script must be run as root or with sudo" 1>&2
+   echo "ERROR: This script must be run as root or with sudo" 1>&2
    exit 1
 fi
 
