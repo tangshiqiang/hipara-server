@@ -55,7 +55,7 @@ def getLoginApiDocument():
 
         session = requests.Session()   # to manage cookies
 
-        data = {"email":"username/email", "password":"password"}
+        data = {"email":"email", "password":"password"}
 
         response = session.post(host + login_url, data=data)
 
@@ -104,7 +104,7 @@ def getLogoutApiDocument():
 
         session = requests.Session()
 
-        data = {"email":"username/email", "password":"password"}
+        data = {"email":"email", "password":"password"}
 
         response = session.post(host + login_url, data=data)
 
@@ -183,7 +183,7 @@ def getUploadRuleApi():
 
         session = requests.Session()
 
-        data = {"email":"username/email", "password":"password"}
+        data = {"email":"email", "password":"password"}
 
         response = session.post(host + login_url, data=data)
 
@@ -265,7 +265,7 @@ def getDownloadRuleCategoryApi():
 
         session = requests.Session()
 
-        data = {"email":"username/email", "password":"password"}
+        data = {"email":"email", "password":"password"}
 
         response = session.post(host + login_url, data=data)
 
@@ -358,7 +358,7 @@ def getStoreAplertsApi():
 
         session = requests.Session()
 
-        data = {"email":"username/email", "password":"password"}
+        data = {"email":"email", "password":"password"}
 
         response = session.post(host + login_url, data=data)
 
@@ -491,7 +491,7 @@ def getListAlertsApi():
 
         session = requests.Session()
 
-        data = {"email":"username/email", "password":"password"}
+        data = {"email":"email", "password":"password"}
 
         response = session.post(host + login_url, data=data)
 
@@ -586,7 +586,7 @@ def getDownloadConfigFileApi():
 
         session = requests.Session()
 
-        data = {"email":"username/email", "password":"password"}
+        data = {"email":"email", "password":"password"}
 
         response = session.post(host + login_url, data=data)
 
@@ -670,7 +670,7 @@ def getRoutineOptionsApi():
 
         session = requests.Session()
 
-        data = {"email":"username/email", "password":"password"}
+        data = {"email":"email", "password":"password"}
 
         response = session.post(host + login_url, data=data)
 
@@ -743,7 +743,7 @@ def getDownloadRuleApi():
 
         session = requests.Session()
 
-        data = {"email":"username/email", "password":"password"}
+        data = {"email":"email", "password":"password"}
 
         response = session.post(host + login_url, data=data)
 
