@@ -45,12 +45,7 @@ def apis_view(request):
     apisData['api7'] = apis.getDownloadConfigFileApi()
     apisData['api8'] = apis.getRoutineOptionsApi()
     apisData['api9'] = apis.getDownloadRuleApi()
-
-    
-
     return render(request, 'apis.html', {'page': get_page('apis'), 'apis': apisData})
-
-
 
 def login_view(request):
     from .forms import LoginForm
@@ -77,7 +72,6 @@ def login_view(request):
         form = LoginForm(initial={'email': ""})
     return render(request, 'login.html', {'form': form, 'page': get_page('login')})
 
-
 def logout_view(request):
     if request.user.is_authenticated():
         from django.contrib.auth import logout
@@ -99,7 +93,6 @@ def change_password_view(request):
     else:
         form = ChangePasswordForm(initial={'old_password': ""})
     return render(request, 'change-password.html', {'form': form, 'page': get_page('change-password')})
-
 
 def users_view(request):
     if request.user.is_authenticated() and request.user.metadata.role_id == 1:
@@ -135,7 +128,6 @@ def users_view(request):
         return render(request, 'users.html',
                       {'users': users, 'user_count': user_count, 'search': search, 'page': get_page('users')})
     return redirect('index')
-
 
 def invite_view(request):
     if request.user.is_authenticated():
@@ -218,7 +210,6 @@ def invite_view(request):
         else:
             return render(request, 'invite.html', {'error': error, 'page': get_page('invite')})
     return redirect('index')
-
 
 def register_view(request, token):
     if not request.user.is_authenticated():
@@ -371,10 +362,8 @@ def verify_view(request, token):
         message = "Sorry Invalid User to verify"
     return render(request, 'verify.html', {'status': status, 'message': message, 'page': get_page('verify')})
 
-
 def not_found(request):
     return redirect('index')
-
 
 def users_detail_view(request, id):
     if request.user.is_authenticated() and request.user.metadata.role_id == 1:
