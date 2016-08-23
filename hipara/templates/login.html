@@ -13,7 +13,7 @@
             <form action="/login/" method="post">
                 {% csrf_token %}
                 <div class="form-group has-feedback">
-                    <input type="text" name="email" value="{{form.email.value}}" class="form-control" placeholder="Email/Username" autofocus="" required>
+                    <input type="text" name="email" value="{{form.email.value}}" class="form-control" placeholder="Email" autofocus="" required>
                     <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
                 </div>
                 {% if form.email.errors %}
