@@ -18,7 +18,6 @@ def index_view(request):
         return apis_view(request)
     return login_view(request)
 
-
 # def about_view(request):
 #     return render(request, 'about.html', {'page': get_page('about')})
 
