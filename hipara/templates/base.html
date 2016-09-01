@@ -116,6 +116,7 @@
                                 </a>
                                 <ul class="dropdown-menu" role="menu">
                                     <li {% if request.path = '/settings/config/' %} class="active" {% endif %}><a href="/settings/config/">Config</a></li>
+                                    <li {% if request.path = '/settings/msi_package/' %} class="active" {% endif %}><a href="/settings/msi_package/">MSI</a></li>
                                     <li {% if request.path = '/settings/routine/' %} class="active" {% endif %}><a href="/settings/routine/">Routine Options</a></li>
                                 </ul>
                             </li>

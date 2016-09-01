@@ -781,3 +781,165 @@ def getDownloadRuleApi():
             print("Status Code : " + str(response.status_code))
     """
 	}
+
+
+def getLatestMsiPackageBuildNumberApi():
+    return {
+        'title': "Get latest MSI package build number",
+        'url': "/api/v1/msi_package_build/",
+        'description': "Get latest MSI package build number. It will be used to download latest MSI package",
+        'method': "GET",
+        'header': """{  
+    Cookie: '<cookie_name>=CookieFromLoginResponse' 
+}""",
+        
+        'response':{
+            'success':[
+                {
+                    'code': 200,
+                    'content': """{
+    "buildNumber": 78956
+}"""
+                }
+            ],
+            'error':[
+                {
+                    'code': 404,
+                    'content': """{ 
+    "error": "There is no MSI package. Request admin to upload MSI package" 
+}"""
+                },
+                {
+                    'code': 403,
+                    'content': """{ 
+    "error": "You have to login First" 
+}"""
+                }
+            ],
+        },
+        'example': """
+        import requests
+        import json
+
+        host = 'http://localhost:8000'
+        login_url = '/api/v1/auth/login'
+        logout_url = '/api/v1/auth/logout'
+        fetch_msi_package_build_number_url = '/api/v1/msi_package_build'
+
+
+        session = requests.Session()
+
+        data = {"email":"email", "password":"password"}
+
+        response = session.post(host + login_url, data=data)
+
+        if(response.ok) :
+            print("Success")
+            print("Content : "+response.content.decode())
+            print("Status Code : " + str(response.status_code))
+            response = session.get(host + fetch_msi_package_build_number_url)
+            if(response.status_code == 200) :
+                print("MSI package build number Success")
+                print("Content : "+ response.content.decode())
+                print("Status Code : " + str(response.status_code))
+            else :
+                print("Get MSI package build number")
+                print("Content : "+ response.content.decode())
+                print("Status Code : " + str(response.status_code))
+
+            response = session.get(host + logout_url)
+            if(response.ok) :
+                print("Logout Success")
+                print("Content : "+response.content.decode())
+                print("Status Code : " + str(response.status_code))
+            else :
+                print("Logout Failure")
+                print("Content : "+ response.content.decode())
+                print("Status Code : " + str(response.status_code))
+        else :
+            print("Login Failure")
+            print("Content : "+ response.content.decode())
+            print("Status Code : " + str(response.status_code))
+    """
+    }
+
+def getDownloadMsiPackageApi():
+    return {
+        'title': "Download MSI package",
+        'url': "/api/v1/download_msi_package/ :build_number/",
+        'description': "Download the MSI package of given build number which is stored on the server. If the given build number is latest then the latest MSI package will be downloaded otherwise error",
+        'method': "GET",
+        'header': """{  
+    Cookie: '<cookie_name>=CookieFromLoginResponse' 
+}""",
+        'response':{
+            'success':[
+                {
+                    'code': 200,
+                    'content': """MSI package will be downloaded"""
+                }
+            ],
+            'error':[
+                {
+                    'code': 404,
+                    'content': """{ 
+    "error": "There is no MSI package with this build" 
+}"""
+                },
+                {
+                    'code': 403,
+                    'content': """{ 
+    "error": "You have to login First" 
+}"""
+                }
+            ],
+        },
+        'example': """
+        import requests
+        import json
+
+        host = 'http://localhost:8000'
+        login_url = '/api/v1/auth/login'
+        logout_url = '/api/v1/auth/logout'
+        fetch_msi_package_url = '/api/v1/download_msi_package/4568'
+
+
+        session = requests.Session()
+
+        data = {"email":"email", "password":"password"}
+
+        response = session.post(host + login_url, data=data)
+
+        if(response.ok) :
+            print("Success")
+            print("Content : "+response.content.decode())
+            print("Status Code : " + str(response.status_code))
+            response = session.get(host + fetch_msi_package_url)
+            if(response.status_code == 200) :
+                print("MSI package Download Success")
+                path = "file.msi"
+                with open(path, 'wb') as f :
+                    content = response.content
+                    f.write(content)
+                print("file : "+path)
+                print("Status Code : " + str(response.status_code))
+            else :
+                print("MSI package Download Failure")
+                print("Content : "+ response.content.decode())
+                print("Status Code : " + str(response.status_code))
+
+            response = session.get(host + logout_url)
+            if(response.ok) :
+                print("Logout Success")
+                print("Content : "+response.content.decode())
+                print("Status Code : " + str(response.status_code))
+            else :
+                print("Logout Failure")
+                print("Content : "+ response.content.decode())
+                print("Status Code : " + str(response.status_code))
+        else :
+            print("Login Failure")
+            print("Content : "+ response.content.decode())
+            print("Status Code : " + str(response.status_code))
+    """
+    }

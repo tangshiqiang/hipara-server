@@ -43,3 +43,29 @@ class SettingsViewSet(viewsets.ViewSet):
                 data = json.load(routineFile)
             result = {'data':data, 'status':200}
         return Response(data=result['data'], status=result['status'])
+
+    def msi_package_build(self, request, *args, **kwargs):
+        result = {'data': {'error': "You have to login First"}, 'status': 403}
+        if request.user.is_authenticated():
+            msiPackageJsonFile = views.getMsiPackageFile();
+            if msiPackageJsonFile:
+                result = {'data': {'buildNumber': msiPackageJsonFile['buildNumber'] }, 'status': 200}
+            else:
+                result = {'data': {'error': "There is no MSI package. Request admin to upload MSI package"}, 'status': 404}
+        return Response(data=result['data'], status=result['status'])
+
+    def download_msi_package(self, request, build_number, *args, **kwargs):
+        result = {'data': {'error': "You have to login First"}, 'status': 403}
+        if request.user.is_authenticated():
+            msiPackageJsonFile = views.getMsiPackageFile();
+            if msiPackageJsonFile:
+                if msiPackageJsonFile['buildNumber'] == int(build_number) :
+                    currentDir = os.path.dirname(__file__)
+                    msiPackageFileRelativePath = "storage/msi_package/"+msiPackageJsonFile['fileName']
+                    msiPackageFilePath = os.path.join(currentDir, msiPackageFileRelativePath)
+                    msiPackageFileData = open(msiPackageFilePath, "rb").read()
+                    response = HttpResponse(msiPackageFileData)
+                    response['Content-Disposition'] = 'attachment; filename="'+msiPackageJsonFile['fileName']+'"'
+                    return response
+            result = {'data': {'error': "There is no MSI package with this build"}, 'status': 404}
+        return Response(data=result['data'], status=result['status'])
