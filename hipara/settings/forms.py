@@ -17,7 +17,7 @@ class UploadMsiPackageForm(forms.Form):
 		max_size = 1024*1024*2
 		fileContent = file.read()
 		filetype = magic.from_buffer(fileContent)
-		if not "MSI" in filetype:
+		if not "MSI" in filetype and not file.name.endswith('.msi'):
 			raise forms.ValidationError("File is not MSI.")
 		if file.size > max_size:
 			raise forms.ValidationError("Ensure this file size is not greater than 2MB.")
