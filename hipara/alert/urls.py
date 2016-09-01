@@ -4,4 +4,5 @@ from .viewsets import LogsViewSet
 
 urlpatterns = [
     url(r'^api/v1/alerts$', LogsViewSet.as_view({'post':'store_alerts', 'get':'view_alerts'}), name='store_logs'),
+    url(r'^api/v1/alert/(?P<alert_id>\d+)/update_eval/(?P<EVAL>\d+)/$', LogsViewSet.as_view({'post': 'update_alert_eval'}), name='update_alert_eval'),
 ]

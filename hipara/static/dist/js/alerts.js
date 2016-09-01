@@ -61,6 +61,16 @@ $(function() {
                             <div class='timeline-body'>"
                                 +alerts[i].alertMessage+
                             "</div>\
+                            <div class='timeline-footer'>\
+                                <div class='form-group'>\
+                                    <label>Evaluation:</label> \
+                                    <select class='form-control alert-eval' alert_id='" +alerts[i].alert_id+"'>\
+                                        <option value='0' " +((alerts[i].alertEval == 0) ? "selected" : "")+">None</option>\
+                                        <option value='1' " +((alerts[i].alertEval == 1) ? "selected" : "")+">True Positive</option>\
+                                        <option value='2' " +((alerts[i].alertEval == 2) ? "selected" : "")+">False Positive</option>\
+                                    </select>\
+                                </div>\
+                            </div>\
                         </div>\
                         </li>\
                     ");
@@ -92,6 +102,45 @@ $(function() {
         getAlerts();
     });
 
+    
+    // AJAX CSRF
+    $.ajaxSetup({ 
+         beforeSend: function(xhr, settings) {
+             function getCookie(name) {
+                 var cookieValue = null;
+                 if (document.cookie && document.cookie != '') {
+                     var cookies = document.cookie.split(';');
+                     for (var i = 0; i < cookies.length; i++) {
+                         var cookie = jQuery.trim(cookies[i]);
+                         // Does this cookie string begin with the name we want?
+                         if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                             cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                             break;
+                         }
+                     }
+                 }
+                 return cookieValue;
+             }
+             if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+                 // Only send the token to relative URLs i.e. locally.
+                 xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+             }
+         } 
+    });
+        
+    // Post on alert eval change
+    $(document).on('change', '.alert-eval', function(event){
+        var alert_id = $(this).attr('alert_id');
+        var alert_eval = this.value;
+        $.post("/api/v1/alert/"+alert_id+"/update_eval/"+alert_eval+"/")
+            .success(function(response){
+                console.log(response);
+            })
+            .fail(function(response){
+                console.log(response);
+            });
+    });
+    
     function init() {
         page_number = 0;
         dateCheck = '';

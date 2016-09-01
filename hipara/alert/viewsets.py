@@ -104,6 +104,7 @@ class LogsViewSet(viewsets.ViewSet):
                                 'timeStamp':alert.timeStamp.strftime("%d %b, %Y %I:%M %P"),
                                 'created_by':user,
                                 'created_at':alert.created_at.strftime("%d %b, %Y %I:%M %P"),
+                                'alertEval': alert.alertEval,
 
                             }
                             value.append(tempValue)
@@ -128,6 +129,21 @@ class LogsViewSet(viewsets.ViewSet):
                 result = {'data': "Not Allowed to Service User", 'status': 401}
         return Response(data=result['data'], status=result['status'])
 
+    def update_alert_eval(self, request, alert_id=None, EVAL=None):
+        result = {'data': {'error':"You have to login First"}, 'status': 403}
+        if request.user.is_authenticated():
+            if request.user.metadata.role_id < 3:
+                from .models import Alert
+                alert = Alert.objects.filter(alert_id=alert_id).first()
+                if alert and EVAL:
+                    alert.alertEval = int(EVAL)
+                    alert.save()
+                    result = {'data': "success", 'status': 200}
+                else:
+                    result = {'data': "Alert not found", 'status': 404}
+            else:
+                result = {'data': "Not Allowed to Service User", 'status': 401}
+        return Response(data=result['data'], status=result['status'])
 
 def validate_date(date_text):
     try:
