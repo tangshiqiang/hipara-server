@@ -63,7 +63,7 @@ $(function() {
                             "</div>\
                             <div class='timeline-footer'>\
                                 <div class='form-group'>\
-                                    <label>Evaluation:</label> \
+                                    <label>Evaluate:</label> \
                                     <select class='form-control alert-eval' alert_id='" +alerts[i].alert_id+"'>\
                                         <option value='0' " +((alerts[i].alertEval == 0) ? "selected" : "")+">None</option>\
                                         <option value='1' " +((alerts[i].alertEval == 1) ? "selected" : "")+">True Positive</option>\
