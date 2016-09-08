@@ -23,6 +23,9 @@ class Alert(models.Model):
 	created_by = models.ForeignKey(User, related_name='created_alert', blank=True, null=True)
 	created_at = models.DateTimeField(auto_now_add=True)
 	alertEval = models.IntegerField(choices=ALERT_EVAL, default=0)
+	process_name = models.CharField(max_length=250, blank=True, null=True, default=None)
+	host_uuid = models.CharField(max_length=250, blank=True, null=True, default=None)
+	host_ipaddr = models.CharField(max_length=250, blank=True, null=True, default=None)
 
 	def __str__(self):
 		return self.hostName

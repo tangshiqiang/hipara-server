@@ -320,7 +320,9 @@ def getStoreAplertsApi():
     		"fileName/command":<string>, 
 		    "alertMessage":<string>, 
 		    "alertType" : <ALERT_FILE/ALERT_CMD>, 
-		    "parentProcessId":<integer required if ALERT_CMD>timeStamp":<"hh:mm, dd/mm/yyyy" date> 
+		    "process_name":<String, Optional>,
+            "host_uuid":<String, UUUID, Optional>,
+            "host_ipaddr":<String, IP address, Optional> 
 		}
 	]
 }""",
@@ -374,7 +376,10 @@ def getStoreAplertsApi():
                             "fileName":"c:\\\\ABC\\\\pqr.txt",
                             "alertMessage":"Trojan Found",
                             "alertType":"ALERT_FILE",
-                            "timeStamp":"15:59, 31/12/1948"
+                            "timeStamp":"15:59, 31/12/1948",
+                            "process_name":"sfgdsa",
+                            "host_uuid":"FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF",
+                            "host_ipaddr":"192.168.1.152"
                         },
                         {
                             "hostName":"COMPUTER1",
@@ -454,7 +459,10 @@ def getListAlertsApi():
     			"email": "user@hipara.org", 
     			"last_name": "Admin", 
     			"first_name": "Admin" 
-    		} 
+    		},
+            "host_ipaddr": "192.168.1.152",
+            "host_uuid": "FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF",
+            "process_name": "sfgdsa" 
     	} 
     ] 
 }"""

@@ -59,7 +59,21 @@ $(function() {
                             +alerts[i].fileName+
                             "</b></h3>\
                             <div class='timeline-body'>"
+                                +"<b>Message: </b>"
                                 +alerts[i].alertMessage+
+
+                                ((alerts[i].process_name) ?
+                                ("<br><b>Process Name: </b>"
+                                +alerts[i].process_name ) : "")+
+
+                                ((alerts[i].host_uuid) ?
+                                ("<br><b>Host Uuid: </b>"
+                                +alerts[i].host_uuid ) : "")+
+
+                                ((alerts[i].host_ipaddr) ?
+                                ("<br><b>Host IP address: </b>"
+                                +alerts[i].host_ipaddr  ) : "")+
+
                             "</div>\
                             <div class='timeline-footer'>\
                                 <div class='form-group'>\

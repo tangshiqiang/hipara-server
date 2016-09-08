@@ -36,7 +36,6 @@ class LogsViewSet(viewsets.ViewSet):
                                     else:
                                         raise ValueError('Invalid Json Format (parentProcessId should be integer)')
                             else :
-                                print (alert)
                                 raise ValueError('Invalid Json Format')
                         else:
                             raise ValueError('Invalid Json Format')
@@ -56,7 +55,10 @@ class LogsViewSet(viewsets.ViewSet):
                             alertMessage=alert['alertMessage'],
                             alertType=alert['alertType'],
                             timeStamp=validate_date(alert['timeStamp']),
-                            created_by=user
+                            created_by=user,
+                            process_name= alert['process_name'] if 'process_name' in alert else None,
+                            host_uuid= alert['host_uuid'] if 'host_uuid' in alert else None,
+                            host_ipaddr= alert['host_ipaddr'] if 'host_ipaddr' in alert else None,
                         )
                     else :
                         json_data = json.dumps(alert) +",\n"
@@ -85,7 +87,7 @@ class LogsViewSet(viewsets.ViewSet):
                     from .models import Alert
                     from django.db.models import Q
                     from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-                    alerts = Alert.objects.filter(Q(hostName__icontains=search) | Q(fileName__icontains=search) | Q(alertMessage__icontains=search)).order_by('-timeStamp')
+                    alerts = Alert.objects.filter(Q(hostName__icontains=search) | Q(fileName__icontains=search) | Q(alertMessage__icontains=search) | Q(process_name__icontains=search) | Q(host_uuid__icontains=search) | Q(host_ipaddr__icontains=search)).order_by('-timeStamp')
                     length = len(alerts)
                     if length :
                         value = []
@@ -105,6 +107,9 @@ class LogsViewSet(viewsets.ViewSet):
                                 'created_by':user,
                                 'created_at':alert.created_at.strftime("%d %b, %Y %I:%M %P"),
                                 'alertEval': alert.alertEval,
+                                'process_name':alert.process_name,
+                                'host_uuid':alert.host_uuid,
+                                'host_ipaddr':alert.host_ipaddr
 
                             }
                             value.append(tempValue)
