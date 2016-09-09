@@ -28,7 +28,6 @@ class Alert(models.Model):
 	
 	alert_id = models.AutoField(primary_key=True)
 	host = models.ForeignKey(Host, blank=True, null=True, related_name="alerts")
-	hostName = models.CharField(max_length=128)
 	fileName = models.CharField(max_length=200)
 	alertMessage = models.CharField(max_length=250)
 	alertType = models.CharField(max_length=250, choices=ALERT_TYPE, default=ALERT_FILE)
@@ -37,7 +36,6 @@ class Alert(models.Model):
 	created_at = models.DateTimeField(auto_now_add=True)
 	alertEval = models.IntegerField(choices=ALERT_EVAL, default=0)
 	process_name = models.CharField(max_length=250, blank=True, null=True, default=None)
-	host_uuid = models.CharField(max_length=250, blank=True, null=True, default=None)
 	host_ipaddr = models.CharField(max_length=250, blank=True, null=True, default=None)
 
 	def __str__(self):
