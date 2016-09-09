@@ -1,6 +1,7 @@
 /env/
 **/__pycache__/
 **/.idea/
+*.pyc
 /hipara/secret_key.py
 /hipara/staticfiles/
 /hipara/hipara/settings_development.py
