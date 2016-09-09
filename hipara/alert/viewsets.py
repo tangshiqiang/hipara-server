@@ -23,54 +23,57 @@ class LogsViewSet(viewsets.ViewSet):
 					alerts = alerts['alerts']
 					for alert in alerts:
 						if (alert.get('hostName') and alert.get('alertType') and
-							alert['alertType'] in ('ALERT_FILE', 'ALERT_CMD') and alert.get('alertMessage') and
-								alert.get('timeStamp') and validate_date(alert['timeStamp'])):
-							if alert['alertType'] == 'ALERT_FILE' and alert.get('fileName'):
-								pass
-							elif alert['alertType'] == 'ALERT_CMD' and alert.get('command') and alert.get('parentProcessId'):
-								try:
-									number = int(alert['parentProcessId'])
-								except ValueError:
-									raise ValueError('Invalid Json Format (parentProcessId should be integer)')
-								else:
-									if number > 0:
-										pass
-									else:
-										raise ValueError('Invalid Json Format (parentProcessId should be integer)')
-							else:
-								raise ValueError('Invalid Json Format')
+							alert['alertType'] in ('ALERT_FILE') and alert.get('alertMessage') and
+							alert.get('timeStamp') and validate_date(alert['timeStamp']) and alert.get('fileName')):
+							pass
 						else:
 							raise ValueError('Invalid Json Format')
 				else:
 					raise ValueError('No alerts given')
 				from .models import Alert, Host
-				import os
-				script_dir = os.path.dirname(__file__)
-				rel_path = "logs/alert_cmd.json"
-				file_path = os.path.join(script_dir, rel_path)
 				user = request.user
 				for alert in alerts:
-					if alert['alertType'] == 'ALERT_FILE':
-						host = Host.objects.update_or_create(
-							name=alert['hostName'],
-							uuid=alert['host_uuid'] if alert.get('host_uuid') else None,
-							last_seen=datetime.datetime.now()
-						)
-						Alert.objects.create(
-							host=host[0],
-							fileName=alert['fileName'],
-							alertMessage=alert['alertMessage'],
-							alertType=alert['alertType'],
-							timeStamp=validate_date(alert['timeStamp']),
-							created_by=user,
-							process_name=alert['process_name'] if 'process_name' in alert else None,
-							host_ipaddr=alert['host_ipaddr'] if 'host_ipaddr' in alert else None,
-						)
-					else:
-						json_data = json.dumps(alert) + ",\n"
+					host = Host.objects.update_or_create(
+						name=alert['hostName'],
+						uuid=alert['host_uuid'] if alert.get('host_uuid') else None,
+						last_seen=datetime.datetime.now()
+					)
+					Alert.objects.create(
+						host=host[0],
+						fileName=alert['fileName'],
+						alertMessage=alert['alertMessage'],
+						alertType=alert['alertType'],
+						timeStamp=validate_date(alert['timeStamp']),
+						created_by=user,
+						process_name=alert['process_name'] if 'process_name' in alert else None,
+						host_ipaddr=alert['host_ipaddr'] if 'host_ipaddr' in alert else None,
+					)
+
+				result = {'data': {'message': "alerts successfully recorded"}, 'status': 200}
+			except ValueError as e:
+				result = {'data': {'error': str(e)}, 'status': 422}
+		return Response(data=result['data'], status=result['status'])
+
+	def store_logs(self, request, *args, **kwargs):
+		result = {'data': {'error': "You have to login First"}, 'status': 403}
+		if request.user.is_authenticated():
+			result = {'data': {'error': 'No logs given'}, 'status': 422}
+			try:
+				logs = json.loads(request.body.decode("utf-8"));
+				if logs.get('logs') and isinstance(logs['logs'], list):
+					logs = logs['logs']
+
+					import os
+					script_dir = os.path.dirname(__file__)
+					rel_path = "logs/alert_cmd.json"
+					file_path = os.path.join(script_dir, rel_path)
+					for log in logs:
+						json_data = json.dumps(log) + ",\n"
 						with open(file_path, "ab") as f:
 							f.write(bytes(json_data, 'utf-8'))
-				result = {'data': {'message': "alerts successfully recorded"}, 'status': 200}
+				else:
+					raise ValueError('No logs given')
+				result = {'data': {'message': "logs successfully recorded"}, 'status': 200}
 			except ValueError as e:
 				result = {'data': {'error': str(e)}, 'status': 422}
 		return Response(data=result['data'], status=result['status'])

@@ -304,11 +304,11 @@ def getDownloadRuleCategoryApi():
     """
 	}
 
-def getStoreAplertsApi():
+def getStoreAlertsApi():
 	return {
 		'title': "Store Signature Detection alerts",
         'url': "/api/v1/alerts",
-        'description': "This is stores alerts of signature detection on host machine. Alert json should have \"fileName\" key for alertType \"ALERT_FILE\" and \"command\" key for alertType \"ALERT_CMD\".",
+        'description': "This is stores alerts of signature detection on host machine.",
         'method': "POST",
         'header': """{ 
     Cookie: '<cookie_name>=CookieFromLoginResponse' 
@@ -317,9 +317,9 @@ def getStoreAplertsApi():
     "alerts" :   [
     	{
     		"hostName":<string>, 
-    		"fileName/command":<string>, 
+    		"fileName":<string>, 
 		    "alertMessage":<string>, 
-		    "alertType" : <ALERT_FILE/ALERT_CMD>, 
+		    "alertType" : "ALERT_FILE", 
 		    "process_name":<String, Optional>,
             "host_uuid":<String, UUUID, Optional>,
             "host_ipaddr":<String, IP address, Optional> 
@@ -380,22 +380,6 @@ def getStoreAplertsApi():
                             "process_name":"sfgdsa",
                             "host_uuid":"FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF",
                             "host_ipaddr":"192.168.1.152"
-                        },
-                        {
-                            "hostName":"COMPUTER1",
-                            "command":"dpkg -i nginx.deb",
-                            "alertMessage":"Trojan Found",
-                            "parentProcessId":3306,
-                            "alertType":"ALERT_CMD",
-                            "timeStamp":"11:00, 01/01/2001"
-                        },
-                        {
-                            "hostName":"COMPUTER1",
-                            "command":"curl http://45.33.88.157/",
-                            "alertMessage":"Trojan Found",
-                            "parentProcessId":45455,
-                            "alertType" :   "ALERT_CMD",
-                            "timeStamp":"01:00, 01/01/2016"
                         }
                     ]
             }
@@ -426,6 +410,114 @@ def getStoreAplertsApi():
     """
 
 	}
+
+def getStoreLogsApi():
+    return {
+        'title': "Store Signature Detection command logs",
+        'url': "/api/v1/logs",
+        'description': "This is stores logs of signature detection on host machine.",
+        'method': "POST",
+        'header': """{ 
+    Cookie: '<cookie_name>=CookieFromLoginResponse' 
+}""",
+        'dataparams': """{
+    "logs" :   [
+        {
+            "key1":<value>, 
+            "key2":<value>
+        }
+    ]
+}""",
+        'response':{
+            'success':[
+                {
+                    'code': 200,
+                    'content': """{ 
+    "message": "logs successfully recorded" 
+}"""
+                }],
+            'error':[
+                {
+                    'code': 422,
+                    'content': """{ 
+    "error": "Some error message" 
+}"""
+                },
+                {
+                    'code': 403,
+                    'content': """{ 
+    "error": "You have to login First" 
+}"""
+                }
+            ]
+        },
+        'example': """
+        import requests
+        import json
+        host = 'http://localhost:8000'
+        login_url = '/api/v1/auth/login'
+        logout_url = '/api/v1/auth/logout'
+        store_logs_url = '/api/v1/logs'
+
+
+        session = requests.Session()
+
+        data = {"email":"email", "password":"password"}
+
+        response = session.post(host + login_url, data=data)
+
+        if(response.ok) :
+            print("Success")
+            print("Content : "+response.content.decode())
+            print("Status Code : " + str(response.status_code))
+
+            data =  {
+                "logs":[
+                        {
+                            "hostName":"COMPUTER1",
+                            "command":"dpkg -i nginx.deb",
+                            "alertMessage":"Trojan Found",
+                            "parentProcessId":3306,
+                            "alertType":"ALERT_CMD",
+                            "timeStamp":"11:00, 01/01/2001"
+                        },
+                        {
+                            "hostName":"COMPUTER1",
+                            "command":"curl http://45.33.88.157/",
+                            "alertMessage":"Trojan Found",
+                            "parentProcessId":45455,
+                            "alertType" :   "ALERT_CMD",
+                            "timeStamp":"01:00, 01/01/2016"
+                        }
+                    ]
+            }
+            headers = {'Content-Type': 'application/json'}
+            response = session.post(host + store_logs_url, data=json.dumps(data),  headers=headers)
+            if(response.ok) :
+                print("Store logs Success")
+                print("Content : "+response.content.decode())
+                print("Status Code : " + str(response.status_code))
+            else :
+                print("Store logs Failure")
+                print("Content : "+ response.content.decode())
+                print("Status Code : " + str(response.status_code))
+
+            response = session.get(host + logout_url)
+            if(response.ok) :
+                print("Logout Success")
+                print("Content : "+response.content.decode())
+                print("Status Code : " + str(response.status_code))
+            else :
+                print("Logout Failure")
+                print("Content : "+ response.content.decode())
+                print("Status Code : " + str(response.status_code))
+        else :
+            print("Login Failure")
+            print("Content : "+ response.content.decode())
+            print("Status Code : " + str(response.status_code))
+    """
+
+    }
 
 def getListAlertsApi():
 	return {
