@@ -10,11 +10,11 @@ def forwards(apps, schema_editor):
 	alert = apps.get_model("alert", "Alert")
 	hosts = apps.get_model("alert", "Host")
 	hosts.objects.bulk_create(
-		hosts(name=alerts.get('hostName'))
-		for alerts in alert.objects.all().values('hostName').distinct()
+		hosts(name=alerts.get('hostName'), uuid=alerts.get('host_uuid'))
+		for alerts in alert.objects.all().values('hostName', 'host_uuid').distinct()
 	)
 	for a in alert.objects.all().order_by('created_at'):
-		a.host =  hosts.objects.filter(name=a.hostName).first()
+		a.host =  hosts.objects.filter(name=a.hostName, uuid=a.host_uuid).first()
 		a.save()
 
 		host = a.host
@@ -27,6 +27,7 @@ def reverse(apps, schema_editors):
 
 	for a in alert.objects.all():
 		a.hostName =  a.host.name
+		a.host_uuid = a.host.uuid
 		a.save()
 
 class Migration(migrations.Migration):
