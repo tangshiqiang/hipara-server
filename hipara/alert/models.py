@@ -1,5 +1,17 @@
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import datetime
+
+class Host(models.Model):
+	uuid = models.CharField(max_length=50, db_index=True, blank=True, null=True)
+	name = models.CharField(max_length=128, db_index=True)
+	last_seen = models.DateTimeField(default=datetime.now)
+
+	class Meta:
+		unique_together = ['uuid', 'name']
+
+	def __str__(self):
+		return self.name
 
 class Alert(models.Model):
 	ALERT_FILE	=	'ALERT_FILE' 
@@ -15,6 +27,7 @@ class Alert(models.Model):
 	)
 	
 	alert_id = models.AutoField(primary_key=True)
+	host = models.ForeignKey(Host, blank=True, null=True, related_name="alerts")
 	hostName = models.CharField(max_length=128)
 	fileName = models.CharField(max_length=200)
 	alertMessage = models.CharField(max_length=250)
@@ -28,4 +41,4 @@ class Alert(models.Model):
 	host_ipaddr = models.CharField(max_length=250, blank=True, null=True, default=None)
 
 	def __str__(self):
-		return self.hostName
+		return self.host.name
