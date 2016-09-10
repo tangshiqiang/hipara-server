@@ -1043,3 +1043,79 @@ def getDownloadMsiPackageApi():
             print("Status Code : " + str(response.status_code))
     """
     }
+
+def getUpdateEvalApi():
+	return {
+		'title': "Update Alert Eval",
+		'url': "/api/v1/alert/:alert_id/:eval_id/",
+		'description':
+			"""This api call allows you to evaluate an alert and mark it as a true or false postiive.
+			Accepted values for eval_id are: 0 - None, 1 - True Positive, 2 - False Postiive""",
+		'method': "POST",
+		'header': """{ Cookie: '<cookie_name>=CookieFromLoginResponse'}""",
+		'response': {
+			'success': [
+				{
+					'code': 200,
+					'content': """success"""
+				}
+			],
+			'error': [
+				{
+					'code': 404,
+					'content': """{
+						"error": "Alert not found"
+					}"""
+				},
+				{
+					'code': 403,
+					'content': """{
+	    				"error": "You have to login First"
+					}"""
+				}
+			],
+		},
+		'example': """
+	        import requests
+	        import json
+
+	        host = 'http://localhost:8000'
+	        login_url = '/api/v1/auth/login'
+	        logout_url = '/api/v1/auth/logout'
+	        alert_eval_update_url = '/api/v1/alert/10/1/'
+
+
+	        session = requests.Session()
+
+	        data = {"email":"email", "password":"password"}
+
+	        response = session.post(host + login_url, data=data)
+
+	        if(response.ok) :
+	            print("Success")
+	            print("Content : "+response.content.decode())
+	            print("Status Code : " + str(response.status_code))
+	            response = session.get(host + alert_eval_update_url)
+	            if(response.status_code == 200) :
+	                print("success")
+	                print("Status Code : " + str(response.status_code))
+	            else :
+	                print("Alert Eval Update Failure")
+	                print("Content : "+ response.content.decode())
+	                print("Status Code : " + str(response.status_code))
+
+	            response = session.get(host + logout_url)
+	            if(response.ok) :
+	                print("Logout Success")
+	                print("Content : "+response.content.decode())
+	                print("Status Code : " + str(response.status_code))
+	            else :
+	                print("Logout Failure")
+	                print("Content : "+ response.content.decode())
+	                print("Status Code : " + str(response.status_code))
+	        else :
+	            print("Login Failure")
+	            print("Content : "+ response.content.decode())
+	            print("Status Code : " + str(response.status_code))
+	    """
+	}

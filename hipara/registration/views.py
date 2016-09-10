@@ -47,6 +47,8 @@ def apis_view(request):
     apisData['api10'] = apis.getDownloadRuleApi()
     apisData['api11'] = apis.getLatestMsiPackageBuildNumberApi()
     apisData['api12'] = apis.getDownloadMsiPackageApi()
+    apisData['api13'] = apis.getUpdateEvalApi()
+
     return render(request, 'apis.html', {'page': get_page('apis'), 'apis': apisData})
 
 def login_view(request):
