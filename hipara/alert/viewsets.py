@@ -180,11 +180,11 @@ class LogsViewSet(viewsets.ViewSet):
 
 						host.save()
 
-						result = {'data': lr_state, 'status': 200}
+						result = {'data': "success", 'status': 200}
 					else:
 						result = {'data': {'error': "Live response state not found"}, 'status': 403}
 				else:
-					result = {'data': "Alert not found", 'status': 404}
+					result = {'data': "Host not found", 'status': 404}
 			else:
 				result = {'data': "Not Allowed to Service User", 'status': 401}
 		return Response(data=result['data'], status=result['status'])
