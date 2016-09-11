@@ -2,6 +2,7 @@
 **/__pycache__/
 **/.idea/
 *.pyc
+.DS_Store
 /hipara/secret_key.py
 /hipara/staticfiles/
 /hipara/hipara/settings_development.py
