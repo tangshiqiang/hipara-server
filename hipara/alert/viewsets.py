@@ -59,7 +59,7 @@ class LogsViewSet(viewsets.ViewSet):
 		if request.user.is_authenticated():
 			result = {'data': {'error': 'No logs given'}, 'status': 422}
 			try:
-				logs = json.loads(request.body.decode("utf-8"));
+				logs = json.loads(request.body.decode("utf-8"))
 				if logs.get('logs') and isinstance(logs['logs'], list):
 					logs = logs['logs']
 
@@ -119,8 +119,10 @@ class LogsViewSet(viewsets.ViewSet):
 								'created_at': alert.created_at.strftime("%d %b, %Y %I:%M %P"),
 								'alertEval': alert.alertEval,
 								'process_name': alert.process_name,
+								'host_id': alert.host.id,
 								'host_uuid': alert.host.uuid,
-								'host_ipaddr': alert.host_ipaddr
+								'host_ipaddr': alert.host_ipaddr,
+								'host_perform_lr': alert.host.perform_lr
 
 							}
 							value.append(tempValue)
@@ -161,6 +163,31 @@ class LogsViewSet(viewsets.ViewSet):
 				result = {'data': "Not Allowed to Service User", 'status': 401}
 		return Response(data=result['data'], status=result['status'])
 
+	def update_host_lr(self, request, host_id=None):
+		result = {'data': {'error': "You have to login First"}, 'status': 403}
+		if request.user.is_authenticated():
+			if request.user.metadata.role_id < 3:
+				from .models import Host
+				host = Host.objects.filter(id=host_id).first()
+				if host:
+					lr_state = request.POST.get('lr_state')
+					if lr_state == 'true' or lr_state == 'false':
+						if lr_state == 'true':
+							host.perform_lr = True
+
+						if lr_state == 'false':
+							host.perform_lr = False
+
+						host.save()
+
+						result = {'data': lr_state, 'status': 200}
+					else:
+						result = {'data': {'error': "Live response state not found"}, 'status': 403}
+				else:
+					result = {'data': "Alert not found", 'status': 404}
+			else:
+				result = {'data': "Not Allowed to Service User", 'status': 401}
+		return Response(data=result['data'], status=result['status'])
 
 def validate_date(date_text):
 	try:

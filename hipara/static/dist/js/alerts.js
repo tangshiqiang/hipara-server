@@ -37,6 +37,7 @@ $(function() {
                 var alerts = response.alerts;
                 for (var i = 0, len = alerts.length; i < len; i++) {
                     createdAt = alerts[i].timeStamp.substring(0, 12);
+                    perform_lr = (alerts[i].host_perform_lr) ? "checked" : ""
                     if( createdAt !== dateCheck ){
                         $(".timeline").append("\
                         <li class='time-label'>\
@@ -84,11 +85,26 @@ $(function() {
                                         <option value='2' " +((alerts[i].alertEval == 2) ? "selected" : "")+">False Positive</option>\
                                     </select>\
                                 </div>\
+                                <div class='form-group'>\
+									<input type='checkbox' host_id="+alerts[i].host_id+" \
+									class='checkbox_perform_lr' "+ perform_lr +" >\
+                                </div>\
                             </div>\
                         </div>\
                         </li>\
                     ");
                 }
+
+				// Stylize the perform LR checkboxes
+                $('.checkbox_perform_lr').each(function(){
+                	var sytel_class = (this.checked) ? "icheckbox_line-green": "icheckbox_line-aero"
+                	var label_text =  (this.checked) ? "Live response pending on host": "Perform live response on host"
+                	$(this).iCheck({
+                		checkboxClass: sytel_class,
+                		insert: '<div class="icheck_line-icon"></div><span class="perform_lr_label">' + label_text + "</span>"
+					})
+				});
+
                 $('#searchError').text();
                 if(alerts.length == page_size ){
                     $('#showMore').show();
@@ -154,7 +170,44 @@ $(function() {
                 console.log(response);
             });
     });
-    
+
+    // Perform LR listeners
+    $(document).on('ifChecked', '.checkbox_perform_lr', function(event){
+    	var host_id = event.target.attributes.host_id.value
+    	$.post("/api/v1/host/"+host_id+"/update_lr/", {'lr_state': true} )
+    		.success(function(response){
+    			$('.checkbox_perform_lr[host_id='+host_id+']').each(function(){
+					$(this).prop('checked', true)
+					$(this).parent().addClass('checked')
+					$(this).parent().removeClass('icheckbox_line-aero')
+					$(this).parent().addClass('icheckbox_line-green')
+					$(this).parent().children('.perform_lr_label').text("Live response pending on host")
+				});
+    		})
+    		.fail(function(response){
+    			console.log('fail')
+    			console.log(response)
+    		})
+
+    });
+    $(document).on('ifUnchecked', '.checkbox_perform_lr', function(event){
+    	var host_id = event.target.attributes.host_id.value
+    	$.post("/api/v1/host/"+host_id+"/update_lr/", {'lr_state': false} )
+    		.success(function(response){
+				$('.checkbox_perform_lr[host_id='+host_id+']').each(function(){
+					$(this).prop('checked', false)
+					$(this).parent().removeClass('checked')
+					$(this).parent().removeClass('icheckbox_line-green')
+					$(this).parent().addClass('icheckbox_line-aero')
+					$(this).parent().children('.perform_lr_label').text("Perform live response on host")
+				});
+			})
+			.fail(function(response){
+				console.log('fail')
+				console.log(response)
+			})
+    });
+
     function init() {
         page_number = 0;
         dateCheck = '';

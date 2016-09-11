@@ -6,6 +6,7 @@ class Host(models.Model):
 	uuid = models.CharField(max_length=50, db_index=True, blank=True, null=True)
 	name = models.CharField(max_length=128, db_index=True)
 	last_seen = models.DateTimeField(default=datetime.now)
+	perform_lr = models.BooleanField(default=False)
 
 	class Meta:
 		unique_together = ['uuid', 'name']
