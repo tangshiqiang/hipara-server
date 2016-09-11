@@ -1119,3 +1119,86 @@ def getUpdateEvalApi():
 	            print("Status Code : " + str(response.status_code))
 	    """
 	}
+
+def getUpdateHostLr():
+	return{
+		'title': "Update Host Perform Live Response",
+		'url': "/api/v1/host/:host_id/update_lr/",
+		'description': "This api call allows you to change the state of performing a live response on a host",
+		'method': "POST",
+		'dataparams': """{ 'lr_state': <boolean> }""",
+		'response': {
+			'success': [
+				{
+					'code': 200,
+					'content': """success"""
+				}
+			],
+			'error': [
+				{
+					'code': 404,
+					'content': """{
+							"error": "Host not found"
+						}"""
+				},
+				{
+					'code': 403,
+					'content': """{
+		    				"error": "Live response state not found"
+						}"""
+				},
+				{
+					'code': 403,
+					'content': """{
+		    				"error": "You have to login First"
+						}"""
+				}
+			],
+		},
+		'example': """
+	        import requests
+	        import json
+	        host = 'http://localhost:8000'
+	        login_url = '/api/v1/auth/login'
+	        logout_url = '/api/v1/auth/logout'
+	        update_host_lr_url = '/api/v1/host/14/update_lr/'
+
+
+	        session = requests.Session()
+
+	        data = {"email":"email", "password":"password"}
+
+	        response = session.post(host + login_url, data=data)
+
+	        if(response.ok) :
+	            print("Success")
+	            print("Content : "+response.content.decode())
+	            print("Status Code : " + str(response.status_code))
+
+	            data =  {'lr_state': True}
+	            headers = {'Content-Type': 'application/json'}
+	            response = session.post(host + update_host_lr_url, data=json.dumps(data),  headers=headers)
+	            if(response.ok) :
+	                print("Update host lr Success")
+	                print("Content : "+response.content.decode())
+	                print("Status Code : " + str(response.status_code))
+	            else :
+	                print("Update host lr Failure")
+	                print("Content : "+ response.content.decode())
+	                print("Status Code : " + str(response.status_code))
+
+	            response = session.get(host + logout_url)
+	            if(response.ok) :
+	                print("Logout Success")
+	                print("Content : "+response.content.decode())
+	                print("Status Code : " + str(response.status_code))
+	            else :
+	                print("Logout Failure")
+	                print("Content : "+ response.content.decode())
+	                print("Status Code : " + str(response.status_code))
+	        else :
+	            print("Login Failure")
+	            print("Content : "+ response.content.decode())
+	            print("Status Code : " + str(response.status_code))
+	    """
+	}
