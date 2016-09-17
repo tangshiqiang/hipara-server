@@ -54,11 +54,10 @@ $(function() {
                         <span class='time'><i class='fa fa-clock-o'></i>&nbsp;&nbsp;"
                          +alerts[i].timeStamp.substring(12)+
                         "</span>\
-                            <h3 class='timeline-header'><b>"
-                            +alerts[i].hostName+
-                            "&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;"
-                            +alerts[i].fileName+
-                            "</b></h3>\
+                            <h3 class='timeline-header'><b>\
+                            <span class='host_name'>"+alerts[i].hostName+ "</span>\
+                            <span class='file_name' style='word-break: break-word;'>"+alerts[i].fileName+ "</span>\
+                            </b></h3>\
                             <div class='timeline-body'>"
                                 +"<b>Message: </b>"
                                 +alerts[i].alertMessage+
