@@ -33,13 +33,21 @@ class LogsViewSet(viewsets.ViewSet):
 				from .models import Alert, Host
 				user = request.user
 				for alert in alerts:
-					host = Host.objects.update_or_create(
-						name=alert['hostName'],
-						uuid=alert['host_uuid'] if alert.get('host_uuid') else None,
-						last_seen=datetime.datetime.now()
-					)
+					try:
+						host = Host.objects.get(
+							name=alert['hostName'],
+							uuid=alert['host_uuid'] if alert.get('host_uuid') else None
+						)
+						host.last_seen = datetime.datetime.now()
+						host.save()
+					except Host.DoesNotExist:
+						host = Host.objects.update_or_create(
+							name=alert['hostName'],
+							uuid=alert['host_uuid'] if alert.get('host_uuid') else None,
+							last_seen=datetime.datetime.now()
+						)
 					Alert.objects.create(
-						host=host[0],
+						host=host,
 						fileName=alert['fileName'],
 						alertMessage=alert['alertMessage'],
 						alertType=alert['alertType'],
