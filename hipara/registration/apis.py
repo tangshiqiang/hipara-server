@@ -322,7 +322,8 @@ def getStoreAlertsApi():
 		    "alertType" : "ALERT_FILE", 
 		    "process_name":<String, Optional>,
             "host_uuid":<String, UUUID, Optional>,
-            "host_ipaddr":<String, IP address, Optional> 
+            "host_ipaddr":<String, IP address, Optional>,
+            "host_interfaces":<List of JSON key value pairs, Interface name - IP Address - Mac Address, Optional>
 		}
 	]
 }""",
@@ -378,8 +379,13 @@ def getStoreAlertsApi():
                             "alertType":"ALERT_FILE",
                             "timeStamp":"15:59, 31/12/1948",
                             "process_name":"sfgdsa",
+                            "hardware_sn": "VMware-00 4d 5a 6e bc 72 e4 22-11 55 d0 00 00 00 00",
                             "host_uuid":"FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF",
-                            "host_ipaddr":"192.168.1.152"
+                            "host_ipaddr":"192.168.1.152",
+                            "host_interfaces": [
+                            	{"name": "eth0", "mac": "AA:BB:CC:DD:EE:FF", "address": {"ipv4": "192.168.1.152", "ipv6": ""},
+                            	{"name": "eth1", "mac": "00:11:22:33:44:55", "address": {"ipv4": "", "ipv6": "2001:0db8:85a3:0000:0000:8a2e:0370:7334"}
+			],
                         }
                     ]
             }

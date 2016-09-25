@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.authentication import BasicAuthentication, SessionAuthentication
 import json
 import datetime
+from .models import Alert, Host, Interface
 
 
 class CsrfExemptSessionAuthentication(SessionAuthentication):
@@ -30,22 +31,51 @@ class LogsViewSet(viewsets.ViewSet):
 							raise ValueError('Invalid Json Format')
 				else:
 					raise ValueError('No alerts given')
-				from .models import Alert, Host
+
 				user = request.user
 				for alert in alerts:
 					try:
 						host = Host.objects.get(
 							name=alert['hostName'],
-							uuid=alert['host_uuid'] if alert.get('host_uuid') else None
+							uuid=alert['host_uuid'] if alert.get('host_uuid') else None,
+							hardware_sn=alert['hardware_sn'] if alert.get('hardware_sn') else None,
 						)
 						host.last_seen = datetime.datetime.now()
 						host.save()
 					except Host.DoesNotExist:
-						host = Host.objects.update_or_create(
+						host = Host.objects.create(
 							name=alert['hostName'],
 							uuid=alert['host_uuid'] if alert.get('host_uuid') else None,
+							hardware_sn=alert['hardware_sn'] if alert.get('hardware_sn') else None,
 							last_seen=datetime.datetime.now()
 						)
+
+					for interface in alert.get('host_interfaces', []):
+						_mac = interface.get('mac', None)
+						if _mac:
+							_name = interface.get('name')
+							_address = interface.get('address', {})
+							_ipv4 = _address.get('ipv4')
+							_ipv6 = _address.get('ipv6')
+							try:
+								_interface = Interface.objects.get(host=host, mac=_mac)
+								_interface.name = _name if _name else _interface.name
+								_interface.address = _address if _address else _interface.address
+								_interface.ipv4 = _ipv4 if _ipv4 else _interface.ipv4
+								_interface.ipv6 = _ipv6 if _ipv6 else _interface.ipv6
+
+								_interface.save()
+
+							except Interface.DoesNotExist:
+								Interface.objects.create(
+									host=host,
+									mac=_mac,
+									name=_name,
+									address=_address,
+									ipv4=_ipv4,
+									ipv6=_ipv6
+								)
+
 					Alert.objects.create(
 						host=host,
 						fileName=alert['fileName'],

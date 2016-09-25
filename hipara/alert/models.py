@@ -6,13 +6,25 @@ class Host(models.Model):
 	uuid = models.CharField(max_length=50, db_index=True, blank=True, null=True)
 	name = models.CharField(max_length=128, db_index=True)
 	last_seen = models.DateTimeField(default=datetime.now)
+	hardware_sn = models.CharField(max_length=256, db_index=True, blank=True, null=True)
+	grr_um = models.CharField(max_length=256, db_index=True, blank=True, null=True)
 	perform_lr = models.BooleanField(default=False)
 
 	class Meta:
-		unique_together = ['uuid', 'name']
+		unique_together = ['uuid', 'name', 'hardware_sn']
 
 	def __str__(self):
 		return self.name
+
+class Interface(models.Model):
+	host = models.ForeignKey(Host, related_name="interfaces")
+	name = models.CharField(max_length=256)
+	mac = models.CharField(max_length=17)
+	ipv4 = models.CharField(max_length=15, blank=True, null=True)
+	ipv6 = models.CharField(max_length=45, blank=True, null=True)
+
+	class Meta:
+		unique_together = ['host', 'mac']
 
 class Alert(models.Model):
 	ALERT_FILE	=	'ALERT_FILE' 
