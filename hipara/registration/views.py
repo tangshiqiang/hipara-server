@@ -49,6 +49,7 @@ def apis_view(request):
     apisData['api12'] = apis.getDownloadMsiPackageApi()
     apisData['api13'] = apis.getUpdateEvalApi()
     apisData['api14'] = apis.getUpdateHostLr()
+    apisData['api15'] = apis.getHost()
     return render(request, 'apis.html', {'page': get_page('apis'), 'apis': apisData})
 
 def login_view(request):

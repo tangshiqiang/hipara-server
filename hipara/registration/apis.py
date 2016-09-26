@@ -810,7 +810,6 @@ def getRoutineOptionsApi():
     """
 	}
 
-
 def getDownloadRuleApi():
 	return {
 		'title': "Export All signature rule",
@@ -887,7 +886,6 @@ def getDownloadRuleApi():
             print("Status Code : " + str(response.status_code))
     """
 	}
-
 
 def getLatestMsiPackageBuildNumberApi():
     return {
@@ -1190,6 +1188,95 @@ def getUpdateHostLr():
 	                print("Status Code : " + str(response.status_code))
 	            else :
 	                print("Update host lr Failure")
+	                print("Content : "+ response.content.decode())
+	                print("Status Code : " + str(response.status_code))
+
+	            response = session.get(host + logout_url)
+	            if(response.ok) :
+	                print("Logout Success")
+	                print("Content : "+response.content.decode())
+	                print("Status Code : " + str(response.status_code))
+	            else :
+	                print("Logout Failure")
+	                print("Content : "+ response.content.decode())
+	                print("Status Code : " + str(response.status_code))
+	        else :
+	            print("Login Failure")
+	            print("Content : "+ response.content.decode())
+	            print("Status Code : " + str(response.status_code))
+	    """
+	}
+
+def getHost():
+	return {
+		'title': "Get Host",
+		'url': "/api/v1/host/:host_id/",
+		'description': "This api call allows you to gather information about a host",
+		'method': "GET",
+		'dataparams': "",
+		'response': {
+			'success': [
+				{
+					'code': 200,
+					'content': """ {
+						"interfaces": [],
+						"hardware_sn": null,
+						"name": "computer name",
+						"last_seen": "2000-01-00T00:00:00Z",
+						"perform_lr": false,
+						"uuid": "FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF",
+						"id": 14,
+						"grr_um": null
+					} """
+				}
+			],
+			'error': [
+				{
+					'code': 404,
+					'content': """{
+								"error": "Host not found"
+							}"""
+				},
+				{
+					'code': 403,
+					'content': """{
+			    				"error": "You have to login First"
+							}"""
+				}
+			],
+		},
+		'example': """
+	        import requests
+	        import json
+
+	        host = 'http://localhost:8000'
+	        login_url = '/api/v1/auth/login'
+	        logout_url = '/api/v1/auth/logout'
+	        get_host_url = '/api/v1/host/12/'
+
+
+	        session = requests.Session()
+
+	        data = {"email":"email", "password":"password"}
+
+	        response = session.post(host + login_url, data=data)
+
+	        if(response.ok) :
+	            print("Success")
+	            print("Content : "+response.content.decode())
+	            print("Status Code : " + str(response.status_code))
+	            data = {
+	                'page_number':1,
+	                'page_size' :10,
+	                'search'    : ''
+	            }
+	            response = session.get(host + get_host_url, params=data)
+	            if(response.status_code == 200) :
+	                print("Got host successfully")
+	                print("Contents of host: "+response.content.decode())
+	                print("Status Code : " + str(response.status_code))
+	            else :
+	                print("Got Host Failure")
 	                print("Content : "+ response.content.decode())
 	                print("Status Code : " + str(response.status_code))
 

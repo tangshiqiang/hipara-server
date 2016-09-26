@@ -10,7 +10,6 @@ class CsrfExemptSessionAuthentication(SessionAuthentication):
 	def enforce_csrf(self, request):
 		return
 
-
 class LogsViewSet(viewsets.ViewSet):
 	authentication_classes = (CsrfExemptSessionAuthentication, BasicAuthentication)
 
@@ -201,11 +200,43 @@ class LogsViewSet(viewsets.ViewSet):
 				result = {'data': "Not Allowed to Service User", 'status': 401}
 		return Response(data=result['data'], status=result['status'])
 
+	def view_host(self, request, host_id=None):
+		result = {'data': {'error': "You have to login First"}, 'status': 403}
+		if request.user.is_authenticated():
+			if request.user.metadata.role_id < 3:
+
+				host = Host.objects.filter(id=host_id).first()
+				if host:
+					interfaces = []
+					for i in host.interfaces.all():
+						interfaces.append({
+							'id': i.id,
+							'name': i.name,
+							'mac': i.mac,
+							'ipv4': i.ipv4,
+							'ipv6': i.ipv6
+						})
+
+					result = {'data': {
+						'id': host.id,
+						'uuid': host.uuid,
+						'name': host.name,
+						'hardware_sn': host.hardware_sn,
+						'grr_um': host.grr_um,
+						'last_seen': host.last_seen,
+						'perform_lr': host.perform_lr,
+						'interfaces': interfaces
+					}, 'status': 200}
+				else:
+					result = {'data': "Host not found", 'status': 404}
+			else:
+				result = {'data': "Not Allowed to Service User", 'status': 401}
+		return Response(data=result['data'], status=result['status'])
+
 	def update_host_lr(self, request, host_id=None):
 		result = {'data': {'error': "You have to login First"}, 'status': 403}
 		if request.user.is_authenticated():
 			if request.user.metadata.role_id < 3:
-				from .models import Host
 				host = Host.objects.filter(id=host_id).first()
 				if host:
 					lr_state = request.POST.get('lr_state')
