@@ -219,7 +219,7 @@ $(function() {
 				((response.hardware_sn) ? ("<br><b>Hardware Serial Number : </b>"	+response.hardware_sn ) : "")+
 				((response.last_seen) ? ("<br><b>Last Seen: </b>"	+response.last_seen ) : "") +
 				((response.grr_um) ? ("<br><b>GRR ID: </b>"	+response.grr_um ) : "") +
-				((response.interfaces) ? ("<br><b>Interfaces: </b>"	+ interfaces ) : "") +
+				((interfaces != "") ? ("<br><b>Interfaces: </b>"	+ interfaces ) : "") +
 
 				"<div class='form-group'>\
 					<input type='checkbox' host_id="+response.id+" \
