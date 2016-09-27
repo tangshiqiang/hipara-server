@@ -137,7 +137,7 @@ if [ -f "/etc/debian_version" ]; then
 	# User: demo@hipara.org
 	# password: hiparademo
 	#
-	# To view docker container logs use this command:
+	# To view docker container logs use this command in the /opt/hipara directory::
 	# docker-compose logs 
 	#
 	# To stop the demo server run the following in the /opt/hipara directory:
