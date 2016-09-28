@@ -17,6 +17,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+	'djcelery',
     'rest_framework',
     'registration',
     'rule_manager',
@@ -107,3 +108,21 @@ SESSION_COOKIE_AGE = 86400
 AUTHENTICATION_BACKENDS = ['django-dual-authentication.backends.DualAuthentication']
 AUTHENTICATION_METHOD = 'both'
 AUTHENTICATION_CASE_SENSITIVE = 'both'
+
+# Celery config
+
+# redis server address
+REDIS_HOST = "redis://%s:%s/0" % (os.environ.get('REDIS_HOST', 'localhost'), os.environ.get('REDIS_PORT', '6379'))
+BROKER_URL = REDIS_HOST
+# store task results in redis
+CELERY_RESULT_BACKEND = REDIS_HOST
+# task result life time until they will be deleted
+CELERY_TASK_RESULT_EXPIRES = 7*86400  # 7 days
+# needed for worker monitoring
+CELERY_SEND_EVENTS = True
+# where to store periodic tasks (needed for scheduler)
+CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
+
+# add following lines to the end of settings.py
+import djcelery
+djcelery.setup_loader()
