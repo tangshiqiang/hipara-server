@@ -126,3 +126,8 @@ CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
 # add following lines to the end of settings.py
 import djcelery
 djcelery.setup_loader()
+
+# GRR server settings
+GRR_HOST_URL = os.environ.get('GRR_HOST_URL')
+GRR_USER_NAME = os.environ.get('GRR_USER_NAME')
+GRR_USER_PASSWORD = os.environ.get('GRR_USER_PASSWORD')
