@@ -27,11 +27,13 @@ class Interface(models.Model):
 		unique_together = ['host', 'mac']
 
 class Alert(models.Model):
-	ALERT_FILE	=	'ALERT_FILE' 
-	ALERT_CMD	=	'ALERT_CMD'
-	ALERT_TYPE	=	(
+	ALERT_FILE = 'ALERT_FILE'
+	ALERT_CMD = 'ALERT_CMD'
+	ALERT_RANSOMWARE = 'ALERT_RANSOMWARE'
+	ALERT_TYPE = (
 		(ALERT_FILE, 'ALERT_FILE'),
-		(ALERT_CMD, 'ALERT_CMD')
+		(ALERT_CMD, 'ALERT_CMD'),
+		(ALERT_RANSOMWARE, 'ALERT_RANSOMWARE')
 	)
 	ALERT_EVAL = (
 		(0, None),

@@ -2,7 +2,7 @@ import time
 from datetime import timedelta, datetime
 from celery.decorators import task, periodic_task
 from celery.utils.log import get_task_logger
-import grr_utils as gu
+import alert.grr_utils as gu
 from .models import Alert, Host, LiveResponse, LiveResponseFlow
 
 logger = get_task_logger(__name__)
@@ -15,7 +15,7 @@ def process_alert(alert_id):
 	:return: Dictionary - Values of client, flow, and operation ID or None
 	"""
 	# Get alert object
-	alert = Alert.objects.filter(id=alert_id).first()
+	alert = Alert.objects.filter(alert_id=alert_id).first()
 
 	# exit if alert isn't found
 	if alert:
@@ -206,3 +206,6 @@ def check_lrs():
 		if completed == len(flows):
 			lr.complete = True
 			lr.save()
+			host = lr.host
+			host.perform_lr = False
+			host.save()

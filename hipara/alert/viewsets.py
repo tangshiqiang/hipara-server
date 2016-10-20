@@ -3,7 +3,8 @@ from rest_framework.response import Response
 from rest_framework.authentication import BasicAuthentication, SessionAuthentication
 import json
 import datetime
-from .models import Alert, Host, Interface
+from .models import Alert, Host, Interface, LiveResponse
+from .tasks import process_alert, cancel_lr
 
 
 class CsrfExemptSessionAuthentication(SessionAuthentication):
@@ -23,7 +24,7 @@ class LogsViewSet(viewsets.ViewSet):
 					alerts = alerts['alerts']
 					for alert in alerts:
 						if (alert.get('hostName') and alert.get('alertType') and
-							alert['alertType'] in ('ALERT_FILE') and alert.get('alertMessage') and
+							alert['alertType'] in ('ALERT_FILE', 'ALERT_RANSOMWARE') and alert.get('alertMessage') and
 							alert.get('timeStamp') and validate_date(alert['timeStamp']) and alert.get('fileName')):
 							pass
 						else:
@@ -85,6 +86,9 @@ class LogsViewSet(viewsets.ViewSet):
 						process_name=alert['process_name'] if 'process_name' in alert else None,
 						host_ipaddr=alert['host_ipaddr'] if 'host_ipaddr' in alert else None,
 					)
+
+					# Start GRR async task
+					process_alert.delay(Alert.alert_id)
 
 				result = {'data': {'message': "alerts successfully recorded"}, 'status': 200}
 			except ValueError as e:
@@ -241,15 +245,19 @@ class LogsViewSet(viewsets.ViewSet):
 				if host:
 					lr_state = request.POST.get('lr_state')
 					if lr_state == 'true' or lr_state == 'false':
+						host_lrs = LiveResponse.objects.filter(host=host, complete=False)
+
 						if lr_state == 'true':
-							host.perform_lr = True
+							if host.perform_lr or host_lrs:
+								result = {'data': {'error': 'Live response already in progress'}, 'status': 403}
+							else:
+								host.perform_lr = True
+								result = {'data': "success", 'status': 200}
 
-						if lr_state == 'false':
+						if lr_state == 'false' and host.perform_lr:
+							for lr in host_lrs:
+								cancel_lr.delay(lr.id)
 							host.perform_lr = False
-
-						host.save()
-
-						result = {'data': "success", 'status': 200}
 					else:
 						result = {'data': {'error': "Live response state not found"}, 'status': 403}
 				else:
