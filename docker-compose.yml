@@ -9,11 +9,22 @@ db:
   - ./db/storage:/var/lib/mysql
  env_file: .env
 
+redis:
+ image: 'redis:latest'
+ expose:
+  - "6379"
+
 web:
  restart: always
  build: .
  env_file: .env
+ volumes:
+  - ./hipara:/app
+  - ./requirements.txt:/app/requirements.txt
+  - ./run_web.sh:/app/run_web.sh
  links:
   - db:db
+  - redis:redis
  ports:
-  - "8000:8000"
+  - "8008:8000"
+ command: /bin/sh -c "./run_web.sh"

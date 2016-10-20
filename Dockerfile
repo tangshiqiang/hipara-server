@@ -19,5 +19,16 @@ RUN pip3 install -r requirements.txt
 # Install packages
 RUN apt-get update && apt-get install netcat -y
 
-# Run the Django runserver
-CMD /bin/sh -c "./run_web.sh"
+# Adding unprivileged celery user
+RUN adduser --disabled-password --gecos '' celery
+
+# Adding PID dir to /var/run
+RUN mkdir -p /var/run/celery
+
+# Adding Log dir to /var/log
+RUN mkdir -p /var/log/celery
+
+# Set permissions for celery user for PID and log dir
+RUN chown celery:celery /var/run/celery
+RUN chown celery:celery /var/log/celery
+

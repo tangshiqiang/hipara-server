@@ -2,16 +2,11 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-try:
-    from secret_key import *
-except ImportError:
-    with open('secret_key.py', 'w') as out:
-        chars = 'abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)'
-        from django.utils.crypto import get_random_string
-        out.write("SECRET_KEY = '{0}'".format(get_random_string(50, chars)))
-    from secret_key import *
-
+SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
+	
 DEBUG = True
+
+DEMO = True
 
 ALLOWED_HOSTS = []
 
@@ -22,6 +17,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+	'djcelery',
     'rest_framework',
     'registration',
     'rule_manager',
@@ -68,11 +64,11 @@ DATABASES = {
     },
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': '<database_name>',
-        'USER': '<database_user_name>',
-        'PASSWORD': '<database_password>',
-        'HOST': 'localhost',
-        'PORT': '',
+        'NAME': os.environ['MYSQL_DATABASE'],
+        'USER': os.environ['MYSQL_USER'],
+        'PASSWORD': os.environ['MYSQL_PASSWORD'],
+        'HOST': os.environ['DJANGO_MYSQL_HOST'],
+        'PORT': os.environ['DJANGO_MYSQL_PORT'],
     }
 }
 
@@ -105,10 +101,33 @@ STATICFILES_FINDERS = (
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'email')
 
-SESSION_COOKIE_NAME = '<cookie_name>'
+SESSION_COOKIE_NAME = os.environ['DJANGO_SESSION_COOKIE_NAME']
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 SESSION_COOKIE_AGE = 86400
 
 AUTHENTICATION_BACKENDS = ['django-dual-authentication.backends.DualAuthentication']
 AUTHENTICATION_METHOD = 'both'
 AUTHENTICATION_CASE_SENSITIVE = 'both'
+
+# Celery config
+
+# redis server address
+REDIS_HOST = "redis://%s:%s/0" % (os.environ.get('REDIS_HOST', 'localhost'), os.environ.get('REDIS_PORT', '6379'))
+BROKER_URL = REDIS_HOST
+# store task results in redis
+CELERY_RESULT_BACKEND = REDIS_HOST
+# task result life time until they will be deleted
+CELERY_TASK_RESULT_EXPIRES = 7*86400  # 7 days
+# needed for worker monitoring
+CELERY_SEND_EVENTS = True
+# where to store periodic tasks (needed for scheduler)
+CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
+
+# add following lines to the end of settings.py
+import djcelery
+djcelery.setup_loader()
+
+# GRR server settings
+GRR_HOST_URL = os.environ.get('GRR_HOST_URL')
+GRR_USER_NAME = os.environ.get('GRR_USER_NAME')
+GRR_USER_PASSWORD = os.environ.get('GRR_USER_PASSWORD')
