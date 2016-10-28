@@ -524,7 +524,7 @@ def cancel_flow(client_id, flow_id):
 	headers, cookies = gen_auth_headers()
 
 	url = host_url + "/api/clients/%s/flows/%s/actions/cancel" % (client_id, flow_id)
-	r = requests.post(url, cookies=cookies, headers=headers, data=json.dumps(data))
+	r = requests.post(url, cookies=cookies, headers=headers)
 
 	rtn = None
 	if r.status_code == 200:
@@ -575,4 +575,74 @@ def get_flow_status(client_id, flow_id):
 			except ValueError:
 				pass
 
+	return rtn
+
+
+# Get GRR Version string
+def get_grr_version():
+	"""
+	Function to get the version of GRR
+	:return: String - The GRR server version
+	"""
+	# Get CSRF Auth Header
+	headers, cookies = gen_auth_headers()
+
+	r = requests.get(host_url + '/api/config', cookies=cookies, headers=headers)
+	rtn = None
+	if r.status_code == 200:
+		for line in r.text.splitlines(True):
+			try:
+				js = json.loads(line)
+				sec = js.get('sections')
+				if sec:
+					for i in sec:
+						if i.get('value', {}).get('name', {}).get('value') == 'Source':
+							for o in i.get('value').get('options'):
+								if o.get('value').get('name').get('value') == 'Source.version_string':
+									return o.get('value').get('value').get('value')
+			except ValueError:
+				pass
+
+
+# Get client binary
+def get_client_binary(os, platform, linux_type=None):
+	"""
+	Function to download the client binary for GRR
+	:param os: String - must be "windows", "linux" or "darwin"
+	:param platform: String - must be "i386" or "amd64"
+	:param linux_type: String - optional - "deb" or "rpm"
+	:return: Binary or None
+	"""
+	# Get CSRF Auth Header
+	headers, cookies = gen_auth_headers()
+
+	# get grr version
+	gv = get_grr_version()
+
+	# build binary url
+	ext = None
+	pre = 'grr'
+	if os != "windows" and os != "linux" and os != "darwin":
+		return None
+
+	if platform != "amd64" and platform != "i386":
+		return None
+
+	if os == "windows":
+		ext = "exe"
+		pre = 'GRR'
+
+	if os == "linux" and linux_type:
+		if linux_type == "deb" or linux_type == "rpm":
+			ext = linux_type
+
+	if os == "darwin":
+		ext = "pkg"
+
+	binary_url = '/api/config/binaries/EXECUTABLE/%s/installers/%s_%s_%s.%s' % (os, pre, gv, platform, ext)
+
+	r = requests.get(host_url + binary_url, cookies=cookies, headers=headers)
+	rtn = None
+	if r.status_code == 200:
+		rtn = r.text
 	return rtn

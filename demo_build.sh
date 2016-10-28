@@ -1,5 +1,5 @@
 #!/bin/bash
-# build.sh -- builds and deploys files for HIPARA server
+# demo_build.sh -- builds and deploys files for HIPARA server
 #	by Tin Tam <tin@hipara.org>
 #
 #
@@ -100,10 +100,10 @@ if [ -f "/etc/debian_version" ]; then
 	
 	echo "#  Starting Docker install"
 	sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D > /dev/null
-	sudo echo deb https://apt.dockerproject.org/repo ${OS,,}-$OSNAME main > /etc/apt/sources.list.d/docker.list
-	
+	sudo echo deb https://apt.dockerproject.org/repo ubuntu-xenial main| sudo tee --append /etc/apt/sources.list.d/docker.list
+
 	echo "#   Installing docker engine"
-	sudo apt-get -qq update && apt-get install docker-engine -y > /dev/null
+	sudo apt-get -qq update && sudo apt-get install docker-engine -y > /dev/null
 	
 	echo "#   Installing docker-compose"
 	curl -L https://github.com/docker/compose/releases/download/1.8.0/docker-compose-`uname -s`-`uname -m` > docker-compose
@@ -115,7 +115,38 @@ if [ -f "/etc/debian_version" ]; then
 	sudo git checkout demo-server
 	
 	sudo mv hipara/hipara/demo_settings.py hipara/hipara/settings.py
-	
+
+	echo "#  Setting IPV6 Forwarding"
+	sudo sysctl -w net.ipv6.conf.all.forwarding=1
+
+	echo -e "
+################## GRR Rapid Response (GRR) settings ######################
+
+You will be prompted to input the following configuration variable for GRR.
+
+EXTERNAL_HOSTNAME  - This is a value represented in either an IP address or
+					 a fully qualified domain name (FQDN)
+
+					 GRR Clients must be able to reach this IP address/fqdn
+
+					 EX: 10.0.0.54 or demo.hipara.org
+
+#############################################################################
+
+"
+
+	while : ; do
+		read -p "# Please enter the EXTERNAL_HOSTNAME: " EXTERNAL_HOSTNAME
+		if [ "$EXTERNAL_HOSTNAME" ]; then
+			break
+		fi
+		echo "Error: EXTERNAL_HOSTNAME not set"
+	done
+
+	echo EXTERNAL_HOSTNAME=$EXTERNAL_HOSTNAME >> grr/.env
+	echo GRR_HOST_URL=http://$EXTERNAL_HOSTNAME:8001
+
+	echo "# Starting Docker image build"
 	docker-compose up --build -d
 	
 	echo -e "

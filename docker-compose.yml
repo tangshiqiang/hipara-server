@@ -28,3 +28,19 @@ web:
  ports:
   - "8008:8000"
  command: /bin/sh -c "./run_web.sh"
+
+grr:
+ restart: always
+ image: 'grrdocker/grr:latest'
+ ports:
+  - "0.0.0.0:8001:8000"
+  - "0.0.0.0:8080:8080"
+ ulimits:
+  nofile:
+   soft: 1048576
+   hard: 1048576
+ env_file: ./grr/.env
+ volumes:
+  - ./grr/db:/var/grr-datastore
+  - ./grr/logs:/var/log
+  - ./grr/docker-entrypoint.sh:/docker-entrypoint.sh
