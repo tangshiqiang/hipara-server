@@ -26,15 +26,15 @@ web:
   - db:db
   - redis:redis
  ports:
-  - "8008:8000"
+  - "8000:8000"
  command: /bin/sh -c "./run_web.sh"
 
 grr:
  restart: always
  image: 'grrdocker/grr:latest'
  ports:
-  - "0.0.0.0:8001:8000"
-  - "0.0.0.0:8080:8080"
+  - "8001:8000"
+  - "8080:8080"
  ulimits:
   nofile:
    soft: 1048576
