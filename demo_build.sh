@@ -37,7 +37,7 @@ fi
 
 # Prompt user install confirmation
 echo "# "
-read -p "# Continue install (y/n)" CONT
+read -p "# Continue install (y/n): " CONT
 if [ "$CONT" != "y" ]; then
 	exit 1
 fi
@@ -156,7 +156,9 @@ EXTERNAL_HOSTNAME  - This is a value represented in either an IP address or
 	# instructions for production use at: 
 	#   https://github.com/jbc22/hipara-server/
 	# 
-	# To view demo sever, navigate to http://localhost:8000
+	# To view demo sever, navigate to http://$EXTERNAL_HOSTNAME:8000
+	#
+	# To view the GRR admin UI, navigate to http://$EXTERNAL_HOSTNAME:8001
 	#
 	# The default credentials are as follows:
 	#
@@ -168,11 +170,21 @@ EXTERNAL_HOSTNAME  - This is a value represented in either an IP address or
 	# User: demo@hipara.org
 	# password: hiparademo
 	#
+	# GRR
+	# User: admin
+	# password: hiparaserver
+	#
+	# Ports used:
+	#  - 8000 (HIPARA Django instance)
+	#  - 8001 (GRR Admin UI)
+	#  - 8080 (GRR Client port)
+	#
+	#
 	# To view docker container logs use this command in the /opt/hipara directory::
-	# docker-compose logs 
+	# sudo docker-compose logs
 	#
 	# To stop the demo server run the following in the /opt/hipara directory:
-	# docker-compose down
+	# sudo docker-compose down
 	#
 	#
 	# Thanks for trying HIPARA!
