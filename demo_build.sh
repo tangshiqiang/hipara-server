@@ -143,7 +143,7 @@ EXTERNAL_HOSTNAME  - This is a value represented in either an IP address or
 		echo "Error: EXTERNAL_HOSTNAME not set"
 	done
 	echo \n >> grr/.env
-	echo \n >> >> .env
+	echo \n >> .env
 
 	echo EXTERNAL_HOSTNAME=$EXTERNAL_HOSTNAME >> grr/.env
 	echo GRR_HOST_URL=http://$EXTERNAL_HOSTNAME:8001 >> .env
