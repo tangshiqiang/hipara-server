@@ -144,7 +144,7 @@ EXTERNAL_HOSTNAME  - This is a value represented in either an IP address or
 	done
 
 	echo EXTERNAL_HOSTNAME=$EXTERNAL_HOSTNAME >> grr/.env
-	echo GRR_HOST_URL=http://$EXTERNAL_HOSTNAME:8001
+	echo GRR_HOST_URL=http://$EXTERNAL_HOSTNAME:8001 >> .env
 
 	echo "# Starting Docker image build"
 	docker-compose up --build -d
