@@ -14,6 +14,9 @@ done
 # Collect static files
 /bin/sh -c "python manage.py collectstatic --noinput"
 
+# Clear dead celery pid
+rm /var/run/celery/*.pid
+
 # Run detached celery worker
 su -m celery -c "celery worker -A hipara.celery --detach --pidfile=/var/run/celery/%n.pid --logfile=/var/log/celery/%n.log"
 
