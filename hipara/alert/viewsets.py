@@ -71,12 +71,11 @@ class LogsViewSet(viewsets.ViewSet):
 									host=host,
 									mac=_mac,
 									name=_name,
-									address=_address,
 									ipv4=_ipv4,
 									ipv6=_ipv6
 								)
 
-					Alert.objects.create(
+					alert = Alert.objects.create(
 						host=host,
 						fileName=alert['fileName'],
 						alertMessage=alert['alertMessage'],
@@ -88,7 +87,7 @@ class LogsViewSet(viewsets.ViewSet):
 					)
 
 					# Start GRR async task
-					process_alert.delay(Alert.alert_id)
+					process_alert.delay(alert.alert_id)
 
 				result = {'data': {'message': "alerts successfully recorded"}, 'status': 200}
 			except ValueError as e:

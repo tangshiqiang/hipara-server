@@ -23,7 +23,7 @@ initialize() {
 }
 
 checkclientbin() {
- if [ ! -f /usr/share/grr-server/executables/installers/*.exe ]; then
+ if [ ! -f /usr/share/grr-server/executables/installers/GRR_*_amd64.exe ]; then
   echo "Repacking clients..."
   grr_config_updater repack_clients
   echo "Client repack complete"
