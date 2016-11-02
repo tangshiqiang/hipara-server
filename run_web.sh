@@ -19,6 +19,7 @@ rm /var/run/celery/*.pid
 
 # Run detached celery worker
 su -m celery -c "celery worker -A hipara.celery --detach --pidfile=/var/run/celery/%n.pid --logfile=/var/log/celery/%n.log"
+su -m celery -c "celery beat -A hipara.celery --detach --pidfile=/var/run/celery/%n.pid --logfile=/var/log/celery/%n.log"
 
 # Start the django web interface
 /bin/sh -c "python manage.py runserver 0.0.0.0:8000"
