@@ -18,7 +18,7 @@ def process_alert(alert_id):
 	alert = Alert.objects.filter(alert_id=alert_id).first()
 
 	# exit if alert isn't found
-	if alert:
+	if not alert:
 		logger.error('Unable to find alert from id %s' % alert_id)
 		return None
 
