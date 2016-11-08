@@ -550,7 +550,11 @@ def get_flow_status(client_id, flow_id):
 	:param flow_id: String - The GRR flow ID. EX: F:ABCDEF12
 	:return: JSON - Dictionary containing completion and error status as well as error messages or None
 	"""
-	r = requests.get(host_url + '/api/clients/%s/flows/%s/' % (client_id, flow_id))
+
+	# Get CSRF Auth Header
+	headers, cookies = gen_auth_headers()
+	url = host_url + '/api/clients/%s/flows/%s/' % (client_id, flow_id)
+	r = requests.get(url, cookies=cookies, headers=headers)
 	rtn = None
 	if r.status_code == 200:
 		for line in r.text.splitlines(True):

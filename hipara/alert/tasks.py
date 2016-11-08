@@ -158,7 +158,8 @@ def perform_lr(host_id):
 				lr=lr, type=LiveResponseFlow.Registry, flow_id=registry_flow_id
 			)
 			flows.append({'lr_flow_id': registry_lr_flow, 'flow_id':registry_flow_id, 'type': 'Registry', 'complete': False})
-
+		lr.complete = False
+		lr.save()
 		return {'lr_id': lr.id, 'flows': flows}
 
 
