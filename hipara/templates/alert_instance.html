@@ -1,0 +1,267 @@
+{% extends "base.html" %} {% load staticfiles %} {% load url_decode %} {% block content %}
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="container padding-lr-zero">
+        <section class="content-header">
+            <h1>
+                Alert
+                 {% if alert %}<small>{{ alert.alert_id}}</small>{% endif %}
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li><a a href="/"><i class="glyphicon glyphicon-bell"></i>Alerts</a></li>
+				<li><a><i class="fa fa-bell-o"></i>Alert</a></li>
+            </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+			<!-- alert information row -->
+			<div class="row">
+				<div class="col-md-12">
+					<div class="box box-primary">
+						<div class="box-header">
+							<h3 class="box-title">Alert</h3>
+							<div class="box-tools pull-right">
+								<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+								</button>
+							</div>
+							<!-- ./box-tools -->
+						</div>
+						<!-- /.box-header -->
+
+						<div class="box-body">
+							<!-- Nav tabs -->
+							<ul class="nav nav-tabs" role="tablist">
+								<li role="presentation" class="active">
+									<a href="#alert_details" aria-controls="alert_details" role="tab" data-toggle="tab">
+										Details
+									</a>
+								</li>
+
+								{% if alert.grr_file_flow_id %}
+								<li role="presentation">
+									<a href="#alert_file_download" aria-controls="alert_file_download" role="tab" data-toggle="tab">
+										File Download
+									</a>
+								</li>
+								{% endif %}
+							</ul>
+							<!-- ./ nav-tabs -->
+
+							<!-- Tab panes -->
+							<div class="tab-content">
+								<div role="tabpanel" class="tab-pane active" id="alert_details">
+									<table class="table table-striped">
+										<tbody>
+										<tr>
+											<th>File Name</th>
+											<td>{{ alert.fileName|url_decode }}</td>
+										</tr>
+
+										<tr>
+											<th>Message</th>
+											<td>{{ alert.alertMessage|url_decode }}</td>
+										</tr>
+
+										<tr>
+											<th>Type</th>
+											<td>{{ alert.alertType }}</td>
+										</tr>
+
+										{% if alert.process_name %}
+										<tr>
+											<th>Process Name</th>
+											<td>{{ alert.process_name|url_decode }}</td>
+										</tr>
+										{% endif %}
+
+										{% if alert.host_ipaddr %}
+										<tr>
+											<th>IP Address</th>
+											<td>{{ alert.host_ipaddr|url_decode }}</td>
+										</tr>
+										{% endif %}
+
+										<tr>
+											<th>Time Stamp</th>
+											<td>{{ alert.timeStamp }}</td>
+										</tr>
+
+										<tr>
+											<th>Created</th>
+											<td>{{ alert.created_at }}</td>
+										</tr>
+
+										<tr>
+											<th>Evaluate</th>
+											<td>
+												<select class='form-control alert-eval' alert_id='{{ alert.alert_id }}'>
+													<option value='0' {% if alert.alertEval == 0 %}selected {% endif %}>None</option>
+													<option value='1' {% if alert.alertEval == 1 %}selected {% endif %} >True Positive</option>\
+													<option value='2' {% if alert.alertEval == 2 %}selected {% endif %}>False Positive</option>\
+												</select>
+											</td>
+										</tr>
+
+										</tbody>
+									</table>
+								</div>
+								<!-- ./host_details -->
+
+								{% if alert.grr_file_flow_id %}
+								<div role="tabpanel" class="tab-pane" id="alert_file_download">
+
+								</div>
+								<!-- ./host_interfaces -->
+								{% endif %}
+
+							</div>
+							<!-- ./tab-content -->
+
+						</div>
+						<!-- ./box-body -->
+
+					</div>
+					<! -- /. box -->
+
+				</div>
+				 <!-- /.col -->
+			</div>
+			<!-- /.row alert information -->
+
+			<!-- host information row -->
+            <div class="row">
+                <div class="col-md-12">
+
+					<div class="box box-primary">
+						<div class="box-header">
+							<h3 class="box-title">Host</h3>
+							<div class="box-tools pull-right">
+								<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+								</button>
+							</div>
+							<!-- ./box-tools -->
+						</div>
+						<!-- /.box-header -->
+
+						<div class="box-body">
+
+							<!-- Nav tabs -->
+							<ul class="nav nav-tabs" role="tablist">
+								<li role="presentation" class="active">
+									<a href="#host_details" aria-controls="host_details" role="tab" data-toggle="tab">
+										Details
+									</a>
+								</li>
+
+								{% if alert.host.interfaces.all %}
+								<li role="presentation">
+									<a href="#host_interfaces" aria-controls="profile" role="tab" data-toggle="tab">
+										Interfaces
+									</a>
+								</li>
+								{% endif %}
+
+								{% if alert.host.grr_um %}
+								<li role="presentation">
+									<a href="#host_grr_lr" aria-controls="messages" role="tab" data-toggle="tab">
+										GRR LR History
+									</a>
+								</li>
+								{% endif %}
+							</ul>
+							<!-- ./ nav-tabs -->
+
+
+							<!-- Tab panes -->
+							<div class="tab-content">
+								<div role="tabpanel" class="tab-pane active" id="host_details">
+									<table class="table table-striped">
+										<tbody>
+											{% if alert.host.name %}
+											<tr>
+												<th style="">Name</th><td>{{ alert.host.name|url_decode }}</td>
+											</tr>
+											{% endif %}
+
+											{% if alert.host.grr_um %}
+											<tr>
+												<th>GRR ID</th><td>{{ alert.host.grr_um }}</td>
+											</tr>
+											{% endif %}
+
+											{% if alert.host.uuid %}
+											<tr>
+												<th>UUID</th><td>{{ alert.host.uuid }}</td>
+											</tr>
+											{% endif %}
+
+											{% if alert.host.last_seen %}
+											<tr>
+												<th>Last Alert</th><td>{{ alert.host.last_seen }}</td>
+											</tr>
+											{% endif %}
+										</tbody>
+									</table>
+								</div>
+								<!-- ./host_details -->
+
+								{% if alert.host.interfaces.all %}
+								<div role="tabpanel" class="tab-pane" id="host_interfaces">
+									<table class="table table-striped">
+										<thead>
+											<tr>
+												<th>Name</th>
+												<th>MAC</th>
+												<th>IPv4</th>
+												<th>IPv6</th>
+											</tr>
+										</thead>
+										<tbody>
+										{% for iface in alert.host.interfaces.all %}
+										<tr>
+											<td>{{ iface.name }}</td>
+											<td>{{ iface.mac }}</td>
+											<td>{% if iface.ipv4 %}{{ iface.ipv4 }}{% endif %}</td>
+											<td>{% if iface.ipv6 %}{{ iface.ipv6 }}{% endif %}</td>
+										</tr>
+										{% endfor %}
+										</tbody>
+									</table>
+								</div>
+								<!-- ./host_interfaces -->
+								{% endif %}
+
+								{% if alert.host.grr_um %}
+								<div role="tabpanel" class="tab-pane" id="host_grr_lr">
+
+								</div>
+								<!-- ./host_grr_lr -->
+								{% endif %}
+							</div>
+							<!-- ./tab-content -->
+
+						</div>
+						<!-- ./box-body -->
+
+					</div>
+					<! -- /. box -->
+
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row host information -->
+
+
+        </section>
+        <!-- /.content -->
+    </div>
+</div>
+<!-- /.content-wrapper -->
+
+{% endblock %}
+{% block footer %}
+<script src="{% static 'dist/js/alert_instance.js' %}"></script>
+{% endblock %}

@@ -56,8 +56,8 @@ $(function() {
                         "</span>\
                             <h3 class='timeline-header'><b>\
                             <a href='#' class='alert_host_name' host_id="+alerts[i].host_id+">\
-                            "+alerts[i].hostName+ "</a>\
-                            <span class='file_name' style='word-break: break-word;'>"+alerts[i].fileName+ "</span>\
+                            "+alerts[i].hostName+ "</a> - <a href='/alert/"+alerts[i].alert_id+"/'>\
+                            <span class='file_name' style='word-break: break-word;'>"+alerts[i].fileName+ "</span></a>\
                             </b></h3>\
                             <div class='timeline-body'>"
                                 +"<b>Message: </b>"

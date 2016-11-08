@@ -83,7 +83,7 @@ def perform_lr(host_id):
 
 	if host:
 		# Create LR Object
-		lr = LiveResponseFlow.objects.create(host=host)
+		lr = LiveResponse.objects.create(host=host)
 
 		# List of flow IDs
 		flows = []

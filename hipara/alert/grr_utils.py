@@ -160,13 +160,13 @@ def get_memory(client_id):
 
 	# Get CSRF Auth Header
 	headers, cookies = gen_auth_headers()
-
 	data = {
 		"flow": {
 			"runner_args": {"flow_name": "MemoryCollector", "priority": "HIGH_PRIORITY"},
-			"args": {"store_results_in_aff4": True}
+			  "args": {}
 		}
 	}
+
 	url = host_url + "/api/clients/%s/flows" % client_id
 	r = requests.post(url, cookies=cookies, headers=headers, data=json.dumps(data))
 
@@ -178,7 +178,7 @@ def get_memory(client_id):
 					js = json.loads(line)
 					val = js.get("value", {})
 					flow_id = val.get('flow_id')
-					rtn = flow_id
+					rtn = flow_id.get('value')
 			except ValueError:
 				pass
 	return rtn
@@ -208,7 +208,7 @@ def get_processes(client_id):
 					js = json.loads(line)
 					val = js.get("value", {})
 					flow_id = val.get('flow_id')
-					rtn = flow_id
+					rtn = flow_id.get('value')
 			except ValueError:
 				pass
 	return rtn
@@ -237,7 +237,7 @@ def get_netstat(client_id):
 					js = json.loads(line)
 					val = js.get("value", {})
 					flow_id = val.get('flow_id')
-					rtn = flow_id
+					rtn = flow_id.get('value')
 			except ValueError:
 				pass
 	return rtn
@@ -265,7 +265,7 @@ def get_windows_logs(client_id):
 					"WindowsEventLogApplication",
 					"WindowsEventLogSystem"
 				],
-				"store_results_in_aff4": True
+				"store_results_in_aff4": False
 			}
 		}
 	}
@@ -280,7 +280,7 @@ def get_windows_logs(client_id):
 					js = json.loads(line)
 					val = js.get("value", {})
 					flow_id = val.get('flow_id')
-					rtn = flow_id
+					rtn = flow_id.get('value')
 			except ValueError:
 				pass
 	return rtn
@@ -304,7 +304,7 @@ def get_linux_logs(client_id):
 					"LinuxAuthLogs",
 					"LinuxCronLogs"
 				],
-				"store_results_in_aff4": True
+				"store_results_in_aff4": False
 			}
 		}
 	}
@@ -319,7 +319,7 @@ def get_linux_logs(client_id):
 					js = json.loads(line)
 					val = js.get("value", {})
 					flow_id = val.get('flow_id')
-					rtn = flow_id
+					rtn = flow_id.get('value')
 			except ValueError:
 				pass
 	return rtn
@@ -345,7 +345,7 @@ def get_osx_logs(client_id):
 					"OSXSystemLogs",
 					"OSXUserApplicationLogs"
 				],
-				"store_results_in_aff4": True
+				"store_results_in_aff4": False
 			}
 		}
 	}
@@ -360,7 +360,7 @@ def get_osx_logs(client_id):
 					js = json.loads(line)
 					val = js.get("value", {})
 					flow_id = val.get('flow_id')
-					rtn = flow_id
+					rtn = flow_id.get('value')
 			except ValueError:
 				pass
 	return rtn
@@ -411,7 +411,7 @@ def update_fs_listing(client_id):
 					js = json.loads(line)
 					operation_id = js.get("operation_id", {})
 					flow_id = operation_to_flow(operation_id)
-					rtn = flow_id
+					rtn = flow_id.get('value')
 			except ValueError:
 				pass
 	return rtn
@@ -452,7 +452,7 @@ def get_windows_registry(client_id):
 					"WindowsSystemRegistryFiles",
 					"WindowsUserRegistryFiles"
 				],
-				"store_results_in_aff4": True
+				"store_results_in_aff4": False
 			}
 		}
 	}
@@ -467,7 +467,7 @@ def get_windows_registry(client_id):
 					js = json.loads(line)
 					val = js.get("value", {})
 					flow_id = val.get('flow_id')
-					rtn = flow_id
+					rtn = flow_id.get('value')
 			except ValueError:
 				pass
 	return rtn
@@ -491,7 +491,7 @@ def get_windows_scheduled_tasks(client_id):
 					"WindowsScheduledTasks",
 					"WindowsSharedTaskScheduler"
 				],
-				"store_results_in_aff4": True
+				"store_results_in_aff4": False
 			}
 		}
 	}
@@ -506,7 +506,7 @@ def get_windows_scheduled_tasks(client_id):
 					js = json.loads(line)
 					val = js.get("value", {})
 					flow_id = val.get('flow_id')
-					rtn = flow_id
+					rtn = flow_id.get('value')
 			except ValueError:
 				pass
 	return rtn
