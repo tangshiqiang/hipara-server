@@ -16,4 +16,5 @@ sendgrid==2.2.1
 sendgrid-django==2.0.0
 python-magic==0.4.12
 redis==2.10.5
+celery==3.1.24
 django-celery==3.1.17

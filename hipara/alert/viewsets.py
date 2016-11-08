@@ -4,7 +4,8 @@ from rest_framework.authentication import BasicAuthentication, SessionAuthentica
 import json
 import datetime
 from .models import Alert, Host, Interface, LiveResponse
-from .tasks import process_alert, cancel_lr
+from .tasks import process_alert, cancel_lr, perform_lr
+from .utils import url_decode
 
 
 class CsrfExemptSessionAuthentication(SessionAuthentication):
@@ -36,17 +37,17 @@ class LogsViewSet(viewsets.ViewSet):
 				for alert in alerts:
 					try:
 						host = Host.objects.get(
-							name=alert['hostName'],
-							uuid=alert['host_uuid'] if alert.get('host_uuid') else None,
-							hardware_sn=alert['hardware_sn'] if alert.get('hardware_sn') else None,
+							name=url_decode(alert['hostName']),
+							uuid=url_decode(alert['host_uuid']) if alert.get('host_uuid') else None,
+							hardware_sn=url_decode(alert['hardware_sn']) if alert.get('hardware_sn') else None,
 						)
 						host.last_seen = datetime.datetime.now()
 						host.save()
 					except Host.DoesNotExist:
 						host = Host.objects.create(
-							name=alert['hostName'],
-							uuid=alert['host_uuid'] if alert.get('host_uuid') else None,
-							hardware_sn=alert['hardware_sn'] if alert.get('hardware_sn') else None,
+							name=url_decode(alert['hostName']),
+							uuid=url_decode(alert['host_uuid']) if alert.get('host_uuid') else None,
+							hardware_sn=url_decode(alert['hardware_sn']) if alert.get('hardware_sn') else None,
 							last_seen=datetime.datetime.now()
 						)
 
@@ -58,32 +59,32 @@ class LogsViewSet(viewsets.ViewSet):
 							_ipv4 = _address.get('ipv4')
 							_ipv6 = _address.get('ipv6')
 							try:
-								_interface = Interface.objects.get(host=host, mac=_mac)
-								_interface.name = _name if _name else _interface.name
-								_interface.address = _address if _address else _interface.address
-								_interface.ipv4 = _ipv4 if _ipv4 else _interface.ipv4
-								_interface.ipv6 = _ipv6 if _ipv6 else _interface.ipv6
+								_interface = Interface.objects.get(host=host, mac=url_decode(_mac))
+								_interface.name = url_decode(_name)if _name else _interface.name
+								_interface.address = url_decode(_address) if _address else _interface.address
+								_interface.ipv4 = url_decode(_ipv4) if _ipv4 else _interface.ipv4
+								_interface.ipv6 = url_decode(_ipv6) if _ipv6 else _interface.ipv6
 
 								_interface.save()
 
 							except Interface.DoesNotExist:
 								Interface.objects.create(
 									host=host,
-									mac=_mac,
-									name=_name,
-									ipv4=_ipv4,
-									ipv6=_ipv6
+									mac=url_decode(_mac),
+									name=url_decode(_name),
+									ipv4=url_decode(_ipv4),
+									ipv6=url_decode(_ipv6)
 								)
 
 					alert = Alert.objects.create(
 						host=host,
-						fileName=alert['fileName'],
-						alertMessage=alert['alertMessage'],
-						alertType=alert['alertType'],
+						fileName=url_decode(alert['fileName']),
+						alertMessage=url_decode(alert['alertMessage']),
+						alertType=url_decode(alert['alertType']),
 						timeStamp=validate_date(alert['timeStamp']),
 						created_by=user,
-						process_name=alert['process_name'] if 'process_name' in alert else None,
-						host_ipaddr=alert['host_ipaddr'] if 'host_ipaddr' in alert else None,
+						process_name=url_decode(alert['process_name']) if 'process_name' in alert else None,
+						host_ipaddr=url_decode(alert['host_ipaddr']) if 'host_ipaddr' in alert else None,
 					)
 
 					# Start GRR async task
@@ -151,9 +152,9 @@ class LogsViewSet(viewsets.ViewSet):
 							}
 							tempValue = {
 								'alert_id': alert.alert_id,
-								'hostName': alert.host.name,
-								'fileName': alert.fileName,
-								'alertMessage': alert.alertMessage,
+								'hostName': url_decode(alert.host.name),
+								'fileName': url_decode(alert.fileName),
+								'alertMessage': url_decode(alert.alertMessage),
 								'timeStamp': alert.timeStamp.strftime("%d %b, %Y %I:%M %P"),
 								'created_by': user,
 								'created_at': alert.created_at.strftime("%d %b, %Y %I:%M %P"),
@@ -251,6 +252,7 @@ class LogsViewSet(viewsets.ViewSet):
 								result = {'data': {'error': 'Live response already in progress'}, 'status': 403}
 							else:
 								host.perform_lr = True
+								perform_lr.delay(host_id)
 								result = {'data': "success", 'status': 200}
 
 						if lr_state == 'false' and host.perform_lr:
@@ -271,3 +273,5 @@ def validate_date(date_text):
 	except ValueError as e:
 		raise ValueError("Incorrect data format, should be hh:mm, dd/mm/yyyy")
 	return False
+
+
