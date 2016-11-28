@@ -6,7 +6,9 @@
         <section class="content-header">
             <h1>
                 Alert
-                 {% if alert %}<small>{{ alert.alert_id}}</small>{% endif %}
+                {% if alert %}<small>{{ alert.alert_id}}</small>
+				{% else %}<large>Not Found</large>
+				{% endif %}
             </h1>
             <ol class="breadcrumb">
                 <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -15,6 +17,7 @@
             </ol>
         </section>
 
+		{% if alert %}
         <!-- Main content -->
         <section class="content">
 			<!-- alert information row -->
@@ -42,8 +45,8 @@
 
 								{% if alert.grr_file_flow_id %}
 								<li role="presentation">
-									<a href="#alert_file_download" aria-controls="alert_file_download" role="tab" data-toggle="tab">
-										File Download
+									<a href="#alert_file" aria-controls="alert_file" role="tab" data-toggle="tab">
+										GRR File Details
 									</a>
 								</li>
 								{% endif %}
@@ -111,8 +114,10 @@
 								<!-- ./host_details -->
 
 								{% if alert.grr_file_flow_id %}
-								<div role="tabpanel" class="tab-pane" id="alert_file_download">
-
+								<div role="tabpanel" class="tab-pane" id="alert_file">
+									<table class="table table-striped" id="alert_file_table">
+										<tr><td><i class="fa fa-lg fa-refresh fa-spin"></i> Loading...</td></tr>
+									</table>
 								</div>
 								<!-- ./host_interfaces -->
 								{% endif %}
@@ -236,6 +241,37 @@
 
 								{% if alert.host.grr_um %}
 								<div role="tabpanel" class="tab-pane" id="host_grr_lr">
+									<div class='form-group'>
+										<input type='checkbox' host_id="{{ alert.host.id }}"
+										   class='checkbox_perform_lr' {% if alert.host.perform_lr %}checked{% endif %}>
+									</div>
+									<table class="table table-striped">
+										<thead>
+											<tr>
+												<th>Start Date</th>
+												<th>State</th>
+												<th>Actions</th>
+											</tr>
+										</thead>
+										<tbody>
+											{% for lr in alert.host.lrs.all %}
+											<tr>
+												<td>{{ lr.start_date }}</td>
+												<td>{% if lr.complete %}Complete{% else %}Running{% endif %}</td>
+												<td>
+													<a href="#"  class="view_grr_results">
+														<i lr_id="{{lr.id}}" class="fa fa-search-plus" aria-hidden="true"></i>
+													</a>
+													{% if not lr.complete %}
+													<button class="btn btn-xs btn-danger">
+														<i class="fa fa-times" aria-hidden="true"></i> Cancel
+													</button>
+													{% endif %}
+												</td>
+											</tr>
+											{% endfor %}
+										</tbody>
+									</table>
 
 								</div>
 								<!-- ./host_grr_lr -->
@@ -253,15 +289,138 @@
                 <!-- /.col -->
             </div>
             <!-- /.row host information -->
-
-
-        </section>
+		</section>
         <!-- /.content -->
+		{% endif %}
     </div>
 </div>
 <!-- /.content-wrapper -->
 
+<!-- GRR modal -->
+<div class="modal fade" id="grrModal" tabindex="-1" role="dialog" aria-labelledby="grrModalLabel">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="hostModalLabel">Live Response Details</h4>
+			</div>
+			<div class="modal-body">
+			...
+			</div>
+			<div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
 {% endblock %}
-{% block footer %}
+{% block footer %} {% if alert %}
 <script src="{% static 'dist/js/alert_instance.js' %}"></script>
-{% endblock %}
+<script src="{% static 'dist/js/jquery.base64.min.js' %}"></script>
+<script src="{% static 'dist/js/utf8.js' %}"></script>
+<script type="text/javascript">
+
+// Stylize the perform LR checkboxes
+$('.checkbox_perform_lr').each(function(){
+	var sytel_class = (this.checked) ? "icheckbox_line-green": "icheckbox_line-aero"
+	var label_text =  (this.checked) ? "Live response pending on host": "Perform live response on host"
+	$(this).iCheck({
+		checkboxClass: sytel_class,
+		insert: '<div class="icheck_line-icon"></div><span class="perform_lr_label">' + label_text + "</span>"
+	})
+});
+
+var file_flow_complete = false;
+function String2Hex(tmp) {
+    var str = '';
+    for(var i = 0; i < tmp.length; i++) {
+        str += tmp[i].charCodeAt(0).toString(16);
+    }
+    return str;
+}
+
+{% if alert.grr_file_flow_id %}
+function load_file_flow_result(){
+	$.ajax({
+		url: "{% url 'get_flow_result' client_id=alert.host.grr_um flow_id=alert.grr_file_flow_id %}",
+		type: "GET"
+	}).success(function(response, textStatus, jqXHR){
+		// Clear table
+		$('#alert_file_table').html("")
+
+		// File Download
+		var dl_url = "{% url 'download_alert_file' client_id=alert.host.grr_um flow_id=alert.grr_file_flow_id %}"
+		$('#alert_file_table').append(
+			"<tr><th>File Download</th><td>" +
+			"<a href=" + dl_url + " <i class='fa fa-floppy-o' aria-hidden='true'></i></a>" +
+			"</td></tr>"
+		)
+
+		// hashes
+		var md5 = response.items[0].value.payload.value.hash_entry.value.md5.value
+		var sha1 = response.items[0].value.payload.value.hash_entry.value.sha1.value
+		var sha256 = response.items[0].value.payload.value.hash_entry.value.sha256.value
+
+		// Decode hashes
+		md5 = String2Hex($.base64.decode(md5))
+		sha1 = String2Hex($.base64.decode(sha1))
+		sha256 = String2Hex($.base64.decode(sha256))
+
+		$('#alert_file_table').append(
+			"<tr><th>Hashes</th><td>"+
+				"<div class='row'><div class='col-sm-2'>MD5</div><div class='col-sm-10'>"+md5+"</div></div>" +
+				"<div class='row'><div class='col-sm-2'>SHA1</div><div class='col-sm-10'>"+sha1+"</div></div>" +
+				"<div class='row'><div class='col-sm-2'>SHA256</div><div class='col-sm-10'>"+sha256+"</div></div>" +
+			"</td></tr>"
+		)
+
+		// file path
+		var path = response.items[0].value.payload.value.stat_entry.value.pathspec.value.path.value
+
+		$('#alert_file_table').append(
+			"<tr><th>Path</th><td>"+path+"</td></tr>"
+		)
+
+		// file size
+		var file_size = response.items[0].value.payload.value.stat_entry.value.st_size.value
+		$('#alert_file_table').append(
+			"<tr><th>FIle Size</th><td>"+file_size+"</td></tr>"
+		)
+
+		file_flow_set = true;
+	}).fail(function(response, textStatus, jqXHR){
+
+	})
+}
+
+function check_flow_status(){
+	$.ajax({
+		url: "{% url 'get_alert_file_status' alert_id=alert.alert_id %}",
+		type: "GET",
+	}).success(function(response, textStatus, jqXHR){
+		if (response.complete){
+			file_flow_complete = response.complete
+			if (! file_flow_set){
+				load_file_flow_result()
+			}
+		}
+	}).fail(function(response, textStatus, jqXHR){
+		console.log(response)
+	})
+
+	if( !file_flow_complete ){
+		console.log('Sleeping.. 5 seocnds');
+        setTimeout(check_flow_status, 5000 );
+    }
+}
+{% endif %}
+
+{% if file_status and file_status.complete %}
+	load_file_flow_result()
+{% else %}
+	var file_flow_complete = false;
+	check_flow_status()
+{% endif %}
+</script>
+{% endif %}{% endblock %}

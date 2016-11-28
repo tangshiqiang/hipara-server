@@ -3,9 +3,10 @@ from rest_framework.response import Response
 from rest_framework.authentication import BasicAuthentication, SessionAuthentication
 import json
 import datetime
-from .models import Alert, Host, Interface, LiveResponse
+from .models import Alert, Host, Interface, LiveResponse, LiveResponseFlow
 from .tasks import process_alert, cancel_lr, perform_lr
 from .utils import url_decode
+from .grr_utils import get_file_status, flow_to_operation, get_flow_result
 
 
 class CsrfExemptSessionAuthentication(SessionAuthentication):
@@ -61,7 +62,8 @@ class LogsViewSet(viewsets.ViewSet):
 							try:
 								_interface = Interface.objects.get(host=host, mac=url_decode(_mac))
 								_interface.name = url_decode(_name)if _name else _interface.name
-								_interface.address = url_decode(_address) if _address else _interface.address
+								_interface.mac = url_decode(_mac)
+								#_interface.address = url_decode(_address) if _address else _interface.address
 								_interface.ipv4 = url_decode(_ipv4) if _ipv4 else _interface.ipv4
 								_interface.ipv6 = url_decode(_ipv6) if _ipv6 else _interface.ipv6
 
@@ -267,6 +269,50 @@ class LogsViewSet(viewsets.ViewSet):
 				result = {'data': "Not Allowed to Service User", 'status': 401}
 		return Response(data=result['data'], status=result['status'])
 
+	def view_lr(self, request, lr_id=None):
+		result = {'data': {'error': "You have to login First"}, 'status': 403}
+		if request.user.is_authenticated():
+			if request.user.metadata.role_id < 3:
+				lr = LiveResponse.objects.filter(id=lr_id).first()
+				flows = []
+				for flow in lr.flows.all():
+					f = {
+						'type': LiveResponseFlow.FLOW_TYPES[flow.type][1],
+						'flow_id': flow.flow_id,
+						'state': LiveResponseFlow.STATE_TYPES[flow.state][1],
+						'state_messages': flow.state_messages,
+					}
+					flows.append(f)
+				data = {'flows': flows}
+				result = {'data': data, 'status': 200}
+			else:
+				result = {'data': "Not Allowed to Service User", 'status': 401}
+		return Response(data=result['data'], status=result['status'])
+
+	def get_alert_file_status(self, request, alert_id):
+		result = {'data': {'error': "You have to login First"}, 'status': 403}
+		if request.user.is_authenticated():
+			if request.user.metadata.role_id < 3:
+				alert = Alert.objects.filter(alert_id=alert_id).first()
+				if alert:
+					operation_id = flow_to_operation(alert.host.grr_um, alert.grr_file_flow_id)
+					data = get_file_status(operation_id)
+					result = {'data': data, 'status': 200}
+				else:
+					result = {'data': {'error': 'Alert object not found'}, 'status': 403}
+			else:
+				result = {'data': "Not Allowed to Service User", 'status': 401}
+		return Response(data=result['data'], status=result['status'])
+
+	def get_flow_result(self, request, client_id, flow_id):
+		result = {'data': {'error': "You have to login First"}, 'status': 403}
+		if request.user.is_authenticated():
+			if request.user.metadata.role_id < 3:
+				data = get_flow_result(client_id, flow_id)
+				result = {'data': data, 'status': 200}
+			else:
+				result = {'data': "Not Allowed to Service User", 'status': 401}
+		return Response(data=result['data'], status=result['status'])
 def validate_date(date_text):
 	try:
 		return datetime.datetime.strptime(date_text, '%H:%M, %d/%m/%Y').strftime("%Y-%m-%d %H:%M")

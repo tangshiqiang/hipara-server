@@ -124,7 +124,7 @@ CELERY_SEND_EVENTS = True
 CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
 
 # add following lines to the end of settings.py
-import djcelery
+import djcelery#
 djcelery.setup_loader()
 
 # GRR server settings

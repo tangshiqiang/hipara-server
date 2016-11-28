@@ -79,7 +79,6 @@ def get_file(host_urn, file_path):
 
 	# Get CSRF Auth Header
 	headers, cookies = gen_auth_headers()
-
 	data = {"hostname": host_urn, "paths": [file_path]}
 
 	r = requests.post(host_url + "/api/robot-actions/get-files", cookies=cookies, headers=headers,
@@ -135,6 +134,46 @@ def operation_to_flow(operation_id):
 	return None
 
 
+def flow_to_operation(client_id, flow_id):
+	"""
+	Function to merge a client id and a flow id into an operation id
+	:param client_id: The GRR Client ID. Ex: C.1000000000000000
+	:param flow_id: The GRR flow ID. EX: F:ABCDEF12
+	:return: String - A GRR flow path: Ex: aff4:/C.1000000000000000/flows/F:ABCDEF12
+	"""
+	return "aff4:/%s/flows/%s" % (client_id, flow_id)
+
+
+def get_flow_result(client_id, flow_id):
+	"""
+	Function to get the results of a flow with given IDs
+	:param client_id: The GRR Client ID. Ex: C.1000000000000000
+	:param flow_id: The GRR flow ID. EX: F:ABCDEF12
+	:return: JSON - JSON result from GRR
+	"""
+	# Get CSRF Auth Header
+	headers, cookies = gen_auth_headers()
+	data = {
+		"flow": flow_to_operation(client_id, flow_id),
+		"id": "legacy_10",
+		"client_id": "aff4:/%s" % client_id
+	}
+
+	flow_url = "/api/clients/%s/flows/%s/results" % (client_id, flow_id)
+
+	r = requests.get(host_url + flow_url , cookies=cookies, headers=headers)
+
+	rtn = None
+	if r.status_code == 200:
+		for line in r.text.splitlines(True):
+			try:
+				js = json.loads(line)
+				rtn = js
+			except ValueError:
+				pass
+		return rtn
+
+
 def download_file(client_id, flow_id):
 	"""
 	Function to download a file from a GRR flow.
@@ -142,11 +181,14 @@ def download_file(client_id, flow_id):
 	:param flow_id: The GRR flow ID. EX: F:ABCDEF12
 	:return: Zip Archive file or None
 	"""
-	archive_url = "/api/clients/%s/flows/%s/results/files-archive" % (client_id, flow_id)
-	r = requests.get(host_url + archive_url, auth=(USER_NAME, PASSWORD))
+	#headers, cookies = gen_auth_headers()
+	archive_temp = "/api/clients/%s/flows/%s/results/files-archive?archive_format=ZIP" % (client_id, flow_id)
+	archive_url = str(host_url) + str(archive_temp)
+
+	r = requests.get(archive_url,  auth=(USER_NAME, PASSWORD))
 	rtn = None
 	if r.status_code == 200:
-		rtn = r.text
+		rtn = r
 	return rtn
 
 
@@ -174,11 +216,11 @@ def get_memory(client_id):
 	if r.status_code == 200:
 		for line in r.text.splitlines(True):
 			try:
-				if "flow_id" in line:
+				if "urn" in line:
 					js = json.loads(line)
 					val = js.get("value", {})
-					flow_id = val.get('flow_id')
-					rtn = flow_id.get('value')
+					operation_id = val.get('urn', {}).get('value')
+					rtn = operation_to_flow(operation_id)
 			except ValueError:
 				pass
 	return rtn
@@ -195,8 +237,16 @@ def get_processes(client_id):
 	# Get CSRF Auth Header
 	headers, cookies = gen_auth_headers()
 
-	data = {"flow": {"runner_args": {"flow_name": "ListProcesses", "priority": "HIGH_PRIORITY"},
-		"args": {"connection_states": [], "fetch_binaries": True}}}
+	data = {
+		"flow": {
+			"runner_args": {
+				"flow_name": "ListProcesses",
+				"output_plugins": [],
+				"priority": "HIGH_PRIORITY"
+			},
+			"args": {"fetch_binaries": True}
+		}
+	}
 	url = host_url + "/api/clients/%s/flows" % client_id
 	r = requests.post(url, cookies=cookies, headers=headers, data=json.dumps(data))
 
@@ -204,11 +254,11 @@ def get_processes(client_id):
 	if r.status_code == 200:
 		for line in r.text.splitlines(True):
 			try:
-				if "flow_id" in line:
+				if "urn" in line:
 					js = json.loads(line)
 					val = js.get("value", {})
-					flow_id = val.get('flow_id')
-					rtn = flow_id.get('value')
+					operation_id = val.get('urn', {}).get('value')
+					rtn = operation_to_flow(operation_id)
 			except ValueError:
 				pass
 	return rtn
@@ -233,11 +283,11 @@ def get_netstat(client_id):
 	if r.status_code == 200:
 		for line in r.text.splitlines(True):
 			try:
-				if "flow_id" in line:
+				if "urn" in line:
 					js = json.loads(line)
 					val = js.get("value", {})
-					flow_id = val.get('flow_id')
-					rtn = flow_id.get('value')
+					operation_id = val.get('urn', {}).get('value')
+					rtn = operation_to_flow(operation_id)
 			except ValueError:
 				pass
 	return rtn
@@ -276,11 +326,11 @@ def get_windows_logs(client_id):
 	if r.status_code == 200:
 		for line in r.text.splitlines(True):
 			try:
-				if "flow_id" in line:
+				if "urn" in line:
 					js = json.loads(line)
 					val = js.get("value", {})
-					flow_id = val.get('flow_id')
-					rtn = flow_id.get('value')
+					operation_id = val.get('urn', {}).get('value')
+					rtn = operation_to_flow(operation_id)
 			except ValueError:
 				pass
 	return rtn
@@ -315,11 +365,11 @@ def get_linux_logs(client_id):
 	if r.status_code == 200:
 		for line in r.text.splitlines(True):
 			try:
-				if "flow_id" in line:
+				if "urn" in line:
 					js = json.loads(line)
 					val = js.get("value", {})
-					flow_id = val.get('flow_id')
-					rtn = flow_id.get('value')
+					operation_id = val.get('urn', {}).get('value')
+					rtn = operation_to_flow(operation_id)
 			except ValueError:
 				pass
 	return rtn
@@ -356,11 +406,11 @@ def get_osx_logs(client_id):
 	if r.status_code == 200:
 		for line in r.text.splitlines(True):
 			try:
-				if "flow_id" in line:
+				if "urn" in line:
 					js = json.loads(line)
 					val = js.get("value", {})
-					flow_id = val.get('flow_id')
-					rtn = flow_id.get('value')
+					operation_id = val.get('urn', {}).get('value')
+					rtn = operation_to_flow(operation_id)
 			except ValueError:
 				pass
 	return rtn
@@ -411,7 +461,7 @@ def update_fs_listing(client_id):
 					js = json.loads(line)
 					operation_id = js.get("operation_id", {})
 					flow_id = operation_to_flow(operation_id)
-					rtn = flow_id.get('value')
+					rtn = flow_id
 			except ValueError:
 				pass
 	return rtn
@@ -463,11 +513,11 @@ def get_windows_registry(client_id):
 	if r.status_code == 200:
 		for line in r.text.splitlines(True):
 			try:
-				if "flow_id" in line:
+				if "urn" in line:
 					js = json.loads(line)
 					val = js.get("value", {})
-					flow_id = val.get('flow_id')
-					rtn = flow_id.get('value')
+					operation_id = val.get('urn', {}).get('value')
+					rtn = operation_to_flow(operation_id)
 			except ValueError:
 				pass
 	return rtn
@@ -502,11 +552,11 @@ def get_windows_scheduled_tasks(client_id):
 	if r.status_code == 200:
 		for line in r.text.splitlines(True):
 			try:
-				if "flow_id" in line:
+				if "urn" in line:
 					js = json.loads(line)
 					val = js.get("value", {})
-					flow_id = val.get('flow_id')
-					rtn = flow_id.get('value')
+					operation_id = val.get('urn', {}).get('value')
+					rtn = operation_to_flow(operation_id)
 			except ValueError:
 				pass
 	return rtn
@@ -553,7 +603,7 @@ def get_flow_status(client_id, flow_id):
 
 	# Get CSRF Auth Header
 	headers, cookies = gen_auth_headers()
-	url = host_url + '/api/clients/%s/flows/%s/' % (client_id, flow_id)
+	url = host_url + '/api/clients/%s/flows/%s' % (client_id, flow_id)
 	r = requests.get(url, cookies=cookies, headers=headers)
 	rtn = None
 	if r.status_code == 200:
@@ -578,6 +628,8 @@ def get_flow_status(client_id, flow_id):
 
 			except ValueError:
 				pass
+	elif r.status_code == 404:
+		rtn = {'complete': True, 'error': True, 'error_message': "flow not found"}
 
 	return rtn
 
