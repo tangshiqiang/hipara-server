@@ -55,7 +55,7 @@ $(function() {
                          +alerts[i].timeStamp.substring(12)+
                         "</span>\
                             <h3 class='timeline-header'><b>\
-                            <a href='#' class='alert_host_name' host_id="+alerts[i].host_id+">\
+                            <a href='/alert/"+alerts[i].alert_id+"/' class='alert_host_name' host_id="+alerts[i].host_id+">\
                             "+alerts[i].hostName+ "</a> - <a href='/alert/"+alerts[i].alert_id+"/'>\
                             <span class='file_name' style='word-break: break-word;'>"+alerts[i].fileName+ "</span></a>\
                             </b></h3>\
@@ -195,54 +195,54 @@ $(function() {
     });
 
 	// Host modal listener
-	$(document).on('click', '.alert_host_name', function(event){
-		$('#hostModal').modal('show');
-		$('#hostModal .modal-body').text("Loading....")
-
-		var host_id = event.target.attributes.host_id.value;
-		$.ajax({
-			url: "/api/v1/host/"+ host_id +"/",
-			type: "GET"
-		}).success(function(response, textStatus, jqXHR){
-			$('#hostModal .modal-body').text("")
-			var interfaces = ""
-			$.each(response.interfaces, function(k,v){
-				interfaces += "<br>Name: " + v.name + " - MAC: " + v.mac
-				+ " - IPV4: " + v.ipv4 + " - IPV6: " + v.ipv6
-			})
-
-			perform_lr = (response.perform_lr) ? "checked" : ""
-
-			$('#hostModal .modal-body').append(
-				"<b>Name: </b>" + response.name +
-				((response.uuid) ? ("<br><b>Uuid: </b>"	+response.uuid ) : "") +
-				((response.hardware_sn) ? ("<br><b>Hardware Serial Number : </b>"	+response.hardware_sn ) : "")+
-				((response.last_seen) ? ("<br><b>Last Seen: </b>"	+response.last_seen ) : "") +
-				((response.grr_um) ? ("<br><b>GRR ID: </b>"	+response.grr_um ) : "") +
-				((interfaces != "") ? ("<br><b>Interfaces: </b>"	+ interfaces ) : "") +
-
-				"<div class='form-group'>\
-					<input type='checkbox' host_id="+response.id+" \
-						class='checkbox_perform_lr' "+ perform_lr +" >\
-				</div>"
-			);
-
-			// Stylize the perform LR checkboxes
-			$('.checkbox_perform_lr').each(function(){
-				var sytel_class = (this.checked) ? "icheckbox_line-green": "icheckbox_line-aero"
-				var label_text =  (this.checked) ? "Live response pending on host": "Perform live response on host"
-				$(this).iCheck({
-					checkboxClass: sytel_class,
-					insert: '<div class="icheck_line-icon"></div><span class="perform_lr_label">' + label_text + "</span>"
-				})
-			});
-
-		}).fail(function(response, textStatus, jqXHR){
-
-		})
-
-
-	})
+//	$(document).on('click', '.alert_host_name', function(event){
+//		$('#hostModal').modal('show');
+//		$('#hostModal .modal-body').text("Loading....")
+//
+//		var host_id = event.target.attributes.host_id.value;
+//		$.ajax({
+//			url: "/api/v1/host/"+ host_id +"/",
+//			type: "GET"
+//		}).success(function(response, textStatus, jqXHR){
+//			$('#hostModal .modal-body').text("")
+//			var interfaces = ""
+//			$.each(response.interfaces, function(k,v){
+//				interfaces += "<br>Name: " + v.name + " - MAC: " + v.mac
+//				+ " - IPV4: " + v.ipv4 + " - IPV6: " + v.ipv6
+//			})
+//
+//			perform_lr = (response.perform_lr) ? "checked" : ""
+//
+//			$('#hostModal .modal-body').append(
+//				"<b>Name: </b>" + response.name +
+//				((response.uuid) ? ("<br><b>Uuid: </b>"	+response.uuid ) : "") +
+//				((response.hardware_sn) ? ("<br><b>Hardware Serial Number : </b>"	+response.hardware_sn ) : "")+
+//				((response.last_seen) ? ("<br><b>Last Seen: </b>"	+response.last_seen ) : "") +
+//				((response.grr_um) ? ("<br><b>GRR ID: </b>"	+response.grr_um ) : "") +
+//				((interfaces != "") ? ("<br><b>Interfaces: </b>"	+ interfaces ) : "") +
+//
+//				"<div class='form-group'>\
+//					<input type='checkbox' host_id="+response.id+" \
+//						class='checkbox_perform_lr' "+ perform_lr +" >\
+//				</div>"
+//			);
+//
+//			// Stylize the perform LR checkboxes
+//			$('.checkbox_perform_lr').each(function(){
+//				var sytel_class = (this.checked) ? "icheckbox_line-green": "icheckbox_line-aero"
+//				var label_text =  (this.checked) ? "Live response pending on host": "Perform live response on host"
+//				$(this).iCheck({
+//					checkboxClass: sytel_class,
+//					insert: '<div class="icheck_line-icon"></div><span class="perform_lr_label">' + label_text + "</span>"
+//				})
+//			});
+//
+//		}).fail(function(response, textStatus, jqXHR){
+//
+//		})
+//
+//
+//	})
     function init() {
         page_number = 0;
         dateCheck = '';

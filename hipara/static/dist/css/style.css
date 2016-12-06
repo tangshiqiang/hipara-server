@@ -320,3 +320,7 @@ footer a {
 .p-a-0 { padding: 0; }
 
 .alert_host_name { color: green }
+.label-label {position: relative;left: 0px;display: inline-block;background: rgba(0,0,0,0.15);border-radius: 3px 0 0 3px;}
+.btn-label {position: relative;left: -6px;display: inline-block;background: rgba(0,0,0,0.15);border-radius: 3px 0 0 3px;}
+.btn-labeled {padding-top: 0;padding-bottom: 0;}
+.btn { margin-bottom:10px; }

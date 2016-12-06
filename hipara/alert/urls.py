@@ -13,5 +13,7 @@ urlpatterns = [
 	url(r'api/v1/lr/(?P<lr_id>\d+)/$', LogsViewSet.as_view({'get': 'view_lr'}), name='view_lr'),
 	url(r'download/alert/file/(?P<client_id>\C.\w+)/(?P<flow_id>\F:\w+)/$', download_alert_file, name="download_alert_file"),
 	url(r'api/v1/alert/(?P<alert_id>\d+)/get_alert_file_status/$', LogsViewSet.as_view({'get': 'get_alert_file_status'}), name='get_alert_file_status'),
-	url(r'api/v1/client/(?P<client_id>\C.\w+)/flow/(?P<flow_id>\F:\w+)/result/$', LogsViewSet.as_view({'get': 'get_flow_result'}), name='get_flow_result')
+	url(r'api/v1/client/(?P<client_id>\C.\w+)/flow/(?P<flow_id>\F:\w+)/result/$', LogsViewSet.as_view({'get': 'get_flow_result'}), name='get_flow_result'),
+	url(r'api/v1/host/(?P<host_id>\d+)/get_host_lrs/$', LogsViewSet.as_view({'get': 'get_host_lrs'}), name='get_host_lrs'),
+	url(r'api/v1/lr/(?P<lr_id>\d+)/cancel_lr/$', LogsViewSet.as_view({'post': 'cancel_lr'}), name='cancel_lr')
 ]

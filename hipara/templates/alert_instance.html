@@ -253,19 +253,29 @@
 												<th>Actions</th>
 											</tr>
 										</thead>
-										<tbody>
+										<tbody id="host_lr_history">
 											{% for lr in alert.host.lrs.all %}
 											<tr>
 												<td>{{ lr.start_date }}</td>
-												<td>{% if lr.complete %}Complete{% else %}Running{% endif %}</td>
+												<td>{% if lr.complete %}
+													<div class="label-success">
+                										<span class="label-label">
+															<i class="glyphicon glyphicon-ok"></i></span>Complete</div>
+													{% else %}
+													<div class="label-warning">
+                										<span class="label-label">
+															<i class="fa fa-clock-o"></i></span>Running..</div>
+													{% endif %}
+												</td>
 												<td>
 													<a href="#"  class="view_grr_results">
 														<i lr_id="{{lr.id}}" class="fa fa-search-plus" aria-hidden="true"></i>
 													</a>
 													{% if not lr.complete %}
-													<button class="btn btn-xs btn-danger">
-														<i class="fa fa-times" aria-hidden="true"></i> Cancel
-													</button>
+													<button type="button" host_id="{{lr.host.id}}" lr_id="{{lr.id}}"
+															class="btn btn-xs btn-labeled btn-danger cancel_lr">
+                										<span class="btn-label"><i class="glyphicon glyphicon-remove"></i>
+														</span>Cancel</button>
 													{% endif %}
 												</td>
 											</tr>
@@ -314,6 +324,26 @@
 	</div>
 </div>
 
+<!-- lrf modal -->
+<div class="modal" id="lrfModal" data-backdrop="static">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				<h4 class="modal-title">Flow Details</h4>
+			</div>
+			<div class="container"></div>
+			<div class="modal-body">
+			...
+			</div>
+			<div class="modal-footer">
+				<a href="#" data-dismiss="modal" class="btn btn-default">Close</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+
 {% endblock %}
 {% block footer %} {% if alert %}
 <script src="{% static 'dist/js/alert_instance.js' %}"></script>
@@ -353,7 +383,7 @@ function load_file_flow_result(){
 		var dl_url = "{% url 'download_alert_file' client_id=alert.host.grr_um flow_id=alert.grr_file_flow_id %}"
 		$('#alert_file_table').append(
 			"<tr><th>File Download</th><td>" +
-			"<a href=" + dl_url + " <i class='fa fa-floppy-o' aria-hidden='true'></i></a>" +
+			"<a href='" + dl_url + "'><i class='fa fa-floppy-o' aria-hidden='true'></i></a>" +
 			"</td></tr>"
 		)
 

@@ -244,10 +244,12 @@ class LogsViewSet(viewsets.ViewSet):
 		if request.user.is_authenticated():
 			if request.user.metadata.role_id < 3:
 				host = Host.objects.filter(id=host_id).first()
+
 				if host:
 					lr_state = request.POST.get('lr_state')
-					if lr_state == 'true' or lr_state == 'false':
+					if lr_state and lr_state == 'true' or lr_state == 'false':
 						host_lrs = LiveResponse.objects.filter(host=host, complete=False)
+
 
 						if lr_state == 'true':
 							if host.perform_lr or host_lrs:
@@ -261,6 +263,8 @@ class LogsViewSet(viewsets.ViewSet):
 							for lr in host_lrs:
 								cancel_lr.delay(lr.id)
 							host.perform_lr = False
+							host.save()
+							result = {'data': "success", 'status': 200}
 					else:
 						result = {'data': {'error': "Live response state not found"}, 'status': 403}
 				else:
@@ -274,11 +278,13 @@ class LogsViewSet(viewsets.ViewSet):
 		if request.user.is_authenticated():
 			if request.user.metadata.role_id < 3:
 				lr = LiveResponse.objects.filter(id=lr_id).first()
+				client_id = lr.host.grr_um
 				flows = []
 				for flow in lr.flows.all():
 					f = {
 						'type': LiveResponseFlow.FLOW_TYPES[flow.type][1],
 						'flow_id': flow.flow_id,
+						'client_id': client_id,
 						'state': LiveResponseFlow.STATE_TYPES[flow.state][1],
 						'state_messages': flow.state_messages,
 					}
@@ -313,6 +319,46 @@ class LogsViewSet(viewsets.ViewSet):
 			else:
 				result = {'data': "Not Allowed to Service User", 'status': 401}
 		return Response(data=result['data'], status=result['status'])
+
+	def get_host_lrs(self, request, host_id=None):
+		result = {'data': {'error': "You have to login First"}, 'status': 403}
+		if request.user.is_authenticated():
+			if request.user.metadata.role_id < 3:
+				host = Host.objects.filter(id=host_id).first()
+
+				if host:
+					data = []
+					for lr in host.lrs.all():
+						data.append({
+							'lr_id': lr.id,
+							'start_date': lr.start_date.strftime('%b. %d, %Y, %I:%M %p'),
+							'complete': lr.complete
+						})
+
+					result = {'data': data, 'status': 200}
+				else:
+					result = {'data': "Host not found", 'status': 404}
+			else:
+				result = {'data': "Not Allowed to Service User", 'status': 401}
+		return Response(data=result['data'], status=result['status'])
+
+	def cancel_lr(self, request, lr_id=None):
+		result = {'data': {'error': "You have to login First"}, 'status': 403}
+		if request.user.is_authenticated():
+			if request.user.metadata.role_id < 3:
+				lr = LiveResponse.objects.filter(id=lr_id).first()
+				if lr:
+					cancel_lr.delay(lr.id)
+					host = lr.host
+					host.perform_lr = False
+					host.save()
+					result = {'data': "success", 'status': 200}
+				else:
+					result = {'data': "Live Response not found", 'status': 404}
+			else:
+				result = {'data': "Not Allowed to Service User", 'status': 401}
+		return Response(data=result['data'], status=result['status'])
+
 def validate_date(date_text):
 	try:
 		return datetime.datetime.strptime(date_text, '%H:%M, %d/%m/%Y').strftime("%Y-%m-%d %H:%M")

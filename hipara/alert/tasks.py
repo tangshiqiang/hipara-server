@@ -172,16 +172,17 @@ def cancel_lr(lr_id):
 		client_id = lr.host.grr_um
 
 		for lrf in lr.flows.all():
-			if lrf.state != LiveResponseFlow.Running:
+			if lrf.state == LiveResponseFlow.Running:
 				if gu.cancel_flow(client_id, lrf.flow_id):
-					lrf.state = LiveResponseFlow.Error
+					lrf.state = LiveResponseFlow.Canceled
 					lrf.save()
 				else:
-					logger.error("host: %s - Unable to cancel flow %s" % lr.host.name, lrf.flow_id)
+					lrf.state = LiveResponseFlow.Error
+					lrf.save()
+					logger.error("host: %s - Unable to cancel flow %s" % (lr.host.name, lrf.flow_id))
 
 		lr.complete = True
 		lr.save()
-
 
 @periodic_task(run_every=timedelta(seconds=30), name="check_lrs")
 def check_lrs():
