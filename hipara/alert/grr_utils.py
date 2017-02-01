@@ -695,10 +695,13 @@ def get_client_binary(os, platform, linux_type=None):
 	if os == "darwin":
 		ext = "pkg"
 
-	binary_url = '/api/config/binaries/EXECUTABLE/%s/installers/%s_%s_%s.%s' % (os, pre, gv, platform, ext)
+	download_url = '%s/render/Download/DownloadView' % host_url
+	binary_url = 'aff4:/config/executables/%s/installers/%s_%s_%s.%s' % (os, pre, gv, platform, ext)
 
-	r = requests.get(host_url + binary_url, cookies=cookies, headers=headers)
+	data = {'aff4_path': binary_url, 'csrfmiddlewaretoken': headers.get('x-csrftoken'), 'safe_extension': True}
+
+	r = requests.post(download_url, cookies=cookies, headers=headers, data=data)
 	rtn = None
 	if r.status_code == 200:
-		rtn = r.text
+		rtn = r
 	return rtn
